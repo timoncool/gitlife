@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { GridStats } from "@/lib/types";
 
 interface StatsPanelProps {
@@ -10,7 +9,7 @@ interface StatsPanelProps {
 
 function ProgressBar({ value }: { value: number }) {
   return (
-    <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+    <div className="w-full h-2 bg-muted rounded-full overflow-hidden mt-2">
       <div
         className="h-full bg-primary rounded-full transition-all duration-500"
         style={{ width: `${Math.min(value, 100)}%` }}
@@ -49,19 +48,20 @@ export function StatsPanel({ stats }: StatsPanelProps) {
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       {items.map((item) => (
-        <Card key={item.label}>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              {item.label}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{item.value}</div>
-            {item.progress !== undefined && (
-              <ProgressBar value={item.progress} />
-            )}
-          </CardContent>
-        </Card>
+        <div
+          key={item.label}
+          className="rounded-xl border border-border bg-card p-5 hover:bg-secondary/50 transition-colors"
+        >
+          <div className="text-xs text-muted-foreground uppercase tracking-wider">
+            {item.label}
+          </div>
+          <div className="font-mono text-2xl font-bold tabular-nums mt-1">
+            {item.value}
+          </div>
+          {item.progress !== undefined && (
+            <ProgressBar value={item.progress} />
+          )}
+        </div>
       ))}
     </div>
   );

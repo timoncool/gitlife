@@ -24,7 +24,7 @@ export function SignInButton() {
     <Button
       onClick={() => signIn.social({ provider: "github" })}
       size="lg"
-      className="gap-2"
+      className="gap-2 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
     >
       <GitHubIcon className="h-5 w-5" />
       {t("signIn")}

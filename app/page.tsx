@@ -152,7 +152,7 @@ function DemoSection() {
   return (
     <section className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold mb-2">{t("demoTitle")}</h2>
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">{t("demoTitle")}</h2>
       </div>
       <form
         onSubmit={handleSubmit}
@@ -222,7 +222,7 @@ function FamousDevCard({
         if (entry.isIntersecting && !fetched.current) {
           fetched.current = true;
           setLoading(true);
-          fetch(`/api/demo?username=${encodeURIComponent(dev.username)}`)
+          fetch(`/data/devs/${encodeURIComponent(dev.username)}.json`)
             .then((res) => (res.ok ? res.json() : null))
             .then((json) => {
               if (json) setData(json);
@@ -271,7 +271,7 @@ function FamousDevsSection() {
   return (
     <section className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold mb-2">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
           {t("famousTitle")}
         </h2>
         <p className="text-muted-foreground">{t("famousSubtitle")}</p>
@@ -290,10 +290,7 @@ const ALLOWED_LOCALES = LANGUAGES.map((l) => l.value);
 function LanguageFooterSelector() {
   const currentLocale =
     typeof document !== "undefined"
-      ? (document.cookie
-          .split("; ")
-          .find((c) => c.startsWith("locale="))
-          ?.split("=")[1] ?? "en")
+      ? (document.documentElement.lang || "en")
       : "en";
 
   function handleChange(value: string | null) {
@@ -335,11 +332,10 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-full">
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-20 md:pt-36 md:pb-28 overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-background to-cyan-500/10 dark:from-emerald-500/5 dark:via-background dark:to-cyan-500/5" />
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-emerald-400/20 to-transparent rounded-full blur-3xl dark:from-emerald-400/10" />
-          <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gradient-to-tl from-cyan-400/15 to-transparent rounded-full blur-3xl dark:from-cyan-400/5" />
+        {/* Gradient mesh background orbs */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-[-20%] left-[20%] w-[600px] h-[600px] rounded-full bg-emerald-500/[0.07] blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[10%] w-[500px] h-[500px] rounded-full bg-cyan-500/[0.05] blur-[120px]" />
         </div>
 
         {/* Glass card hero */}
@@ -349,11 +345,11 @@ export default function LandingPage() {
             GitHub-powered life tracker
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6 bg-gradient-to-r from-foreground via-foreground/90 to-foreground/70 bg-clip-text text-transparent">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
             {t("title")}
           </h1>
 
-          <p className="text-lg md:text-xl text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg text-muted-foreground max-w-[600px] mx-auto mb-10 leading-relaxed">
             {t("heroSubtitle")}
           </p>
 

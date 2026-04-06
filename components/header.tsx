@@ -38,10 +38,7 @@ const ALLOWED_LOCALES = LANGUAGES.map((l) => l.value);
 function LanguageSelector() {
   const currentLocale =
     typeof document !== "undefined"
-      ? (document.cookie
-          .split("; ")
-          .find((c) => c.startsWith("locale="))
-          ?.split("=")[1] ?? "en")
+      ? (document.documentElement.lang || "en")
       : "en";
 
   function handleChange(value: string | null) {
@@ -96,7 +93,7 @@ export function Header() {
   const user = session?.user;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg">
       <div className="container flex h-14 items-center justify-between px-4">
         {/* Left: Logo + nav (desktop) */}
         <div className="flex items-center gap-6">

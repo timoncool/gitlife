@@ -67,8 +67,12 @@ export function OnboardingForm() {
   }
 
   return (
-    <div className="flex flex-col gap-6 max-w-md mx-auto">
-      <h2 className="text-2xl font-bold">{t("welcome")}</h2>
+    <div className="min-h-[80vh] flex items-center justify-center">
+    <div className="rounded-xl border border-border bg-card p-8 max-w-lg mx-auto flex flex-col gap-6">
+      <div>
+        <h2 className="text-3xl font-bold tracking-tight">{t("welcome")}</h2>
+        <p className="text-muted-foreground mt-1">{t("birthDate")}</p>
+      </div>
 
       {/* Birth date */}
       <div className="flex flex-col gap-2">
@@ -141,6 +145,7 @@ export function OnboardingForm() {
         onClick={handleSubmit}
         disabled={!birthDate || !gender || !country || saving}
         size="lg"
+        className="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
       >
         {saving ? "..." : t("start")}
       </Button>
@@ -151,6 +156,7 @@ export function OnboardingForm() {
       >
         {t("customize")}
       </Link>
+    </div>
     </div>
   );
 }

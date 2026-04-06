@@ -122,7 +122,7 @@ export default function DashboardPage() {
     return (
       <>
         <Header />
-        <main className="flex-1 container mx-auto px-4 py-8">
+        <main className="flex-1 container mx-auto p-6">
           <div className="flex items-center justify-center min-h-[50vh]">
             <div className="text-muted-foreground animate-pulse text-lg">
               {t("loading")}
@@ -140,7 +140,7 @@ export default function DashboardPage() {
     return (
       <>
         <Header />
-        <main className="flex-1 container mx-auto px-4 py-16">
+        <main className="flex-1 container mx-auto p-6">
           <OnboardingForm />
         </main>
       </>
@@ -150,7 +150,7 @@ export default function DashboardPage() {
   return (
     <>
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8 flex flex-col gap-8">
+      <main className="flex-1 container mx-auto p-6 flex flex-col gap-8">
         <StatsPanel stats={stats} />
         <LifeGrid
           cells={cells}

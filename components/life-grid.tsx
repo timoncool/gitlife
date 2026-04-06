@@ -167,6 +167,8 @@ function GridCell({
   const strokeColor = isDark ? CURRENT_STROKE_DARK : CURRENT_STROKE_LIGHT;
   const tapTarget = cellSize < 8 ? TAP_TARGET_MOBILE : cellSize;
 
+  const hasGlow = cell.state === "level-3" || cell.state === "level-4";
+
   const tooltipContent = `${formatDateRange(cell.date)} | ${t("age")}: ${cell.year} | ${t("week")}: ${cell.week}${
     cell.commits !== undefined ? ` | ${t("commits")}: ${cell.commits}` : ""
   }`;
@@ -187,6 +189,20 @@ function GridCell({
               height={tapTarget}
               fill="transparent"
             />
+            {/* Glow effect for high-activity cells */}
+            {hasGlow && isDark && (
+              <rect
+                x={px - 1}
+                y={py - 1}
+                width={cellSize + 2}
+                height={cellSize + 2}
+                rx={3}
+                fill="none"
+                stroke="rgba(57,211,83,0.3)"
+                strokeWidth={2}
+                filter="url(#glow)"
+              />
+            )}
             <rect
               x={px}
               y={py}
@@ -255,6 +271,17 @@ export function LifeGrid({ cells, expectedAge, loading }: LifeGridProps) {
           role="img"
           aria-label="Life in weeks grid"
         >
+          {/* SVG glow filter */}
+          <defs>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
           {/* X-axis labels */}
           {X_LABELS.map((w) => (
             <text
@@ -262,7 +289,8 @@ export function LifeGrid({ cells, expectedAge, loading }: LifeGridProps) {
               x={LABEL_WIDTH + (w - 1) * cellStep + cellSize / 2}
               y={LABEL_HEIGHT - 4}
               textAnchor="middle"
-              className="fill-muted-foreground text-[8px]"
+              className="fill-muted-foreground"
+              fontSize={10}
             >
               {w}
             </text>
@@ -275,7 +303,8 @@ export function LifeGrid({ cells, expectedAge, loading }: LifeGridProps) {
               x={LABEL_WIDTH - 4}
               y={LABEL_HEIGHT + age * cellStep + cellSize / 2 + 3}
               textAnchor="end"
-              className="fill-muted-foreground text-[8px]"
+              className="fill-muted-foreground"
+              fontSize={10}
             >
               {age}
             </text>
