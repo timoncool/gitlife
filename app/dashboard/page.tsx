@@ -106,14 +106,14 @@ export default function DashboardPage() {
   );
 
   const cells = useMemo(() => {
-    if (!profile?.birthDate) return [];
+    if (!profile?.birthDate || loading) return [];
     return generateGridCells(
       new Date(profile.birthDate),
       profile.expectedAge ?? 75,
       profile.githubCreatedAt ? new Date(profile.githubCreatedAt) : null,
       weekMap,
     );
-  }, [profile, weekMap]);
+  }, [profile, weekMap, loading]);
 
   const stats = useMemo(() => calculateStats(cells), [cells]);
 
