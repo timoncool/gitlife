@@ -21,7 +21,10 @@ import {
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
+import dynamic from "next/dynamic";
 import type { CalculatorAnswers, LifeExpectancyData } from "@/lib/types";
+
+const ReactFlagsSelect = dynamic(() => import("react-flags-select"), { ssr: false });
 
 // DOI URLs for study links
 const FACTOR_URLS: Record<string, string | null> = {
@@ -399,15 +402,25 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
     return tc("bmiObese2");
   };
 
-  // Flag emoji from ISO code
-  const countryFlag = useCallback((code: string): string => {
-    return String.fromCodePoint(
-      ...code
-        .toUpperCase()
-        .split("")
-        .map((c) => 127397 + c.charCodeAt(0)),
-    );
-  }, []);
+  // ISO3 -> ISO2 mapping for ReactFlagsSelect
+  const [iso3ToIso2, setIso3ToIso2] = useState<Record<string, string>>({});
+  const [iso2ToIso3, setIso2ToIso3] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    import("i18n-iso-countries").then((mod) => {
+      const map3to2: Record<string, string> = {};
+      const map2to3: Record<string, string> = {};
+      for (const c of countries) {
+        const iso2 = mod.alpha3ToAlpha2(c.code);
+        if (iso2) {
+          map3to2[c.code] = iso2;
+          map2to3[iso2] = c.code;
+        }
+      }
+      setIso3ToIso2(map3to2);
+      setIso2ToIso3(map2to3);
+    });
+  }, [countries]);
 
   // Filtered countries for search
   const filteredCountries = useMemo(() => {
@@ -659,37 +672,16 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
         </div>
         <div className="flex flex-col gap-2">
           <Label>{tc("country")}</Label>
-          <Select value={country} onValueChange={(v) => { if (v) setCountry(v); }}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={tc("country")}>
-                {country
-                  ? `${countries.find((c) => c.code === country)?.name || country}`
-                  : tc("country")}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <div className="sticky top-0 z-10 bg-popover border-b border-white/[0.08] p-2">
-                <div className="flex items-center gap-2">
-                  <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-                  <input
-                    type="text"
-                    value={countrySearch}
-                    onChange={(e) => setCountrySearch(e.target.value)}
-                    placeholder={tc("searchCountry")}
-                    className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                    autoFocus
-                  />
-                </div>
-              </div>
-              <div className="max-h-[300px] overflow-y-auto">
-                {filteredCountries.map((c) => (
-                  <SelectItem key={c.code} value={c.code}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </div>
-            </SelectContent>
-          </Select>
+          <ReactFlagsSelect
+            selected={iso3ToIso2[country] || ""}
+            onSelect={(iso2: string) => {
+              const iso3 = iso2ToIso3[iso2];
+              if (iso3) setCountry(iso3);
+            }}
+            searchable
+            searchPlaceholder={tc("searchCountry")}
+            className="country-flags-select"
+          />
         </div>
       </div>
     );

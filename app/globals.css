@@ -156,3 +156,36 @@
 .animate-glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite;
 }
+/* ReactFlagsSelect dark theme overrides */
+.country-flags-select button {
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 8px !important;
+  color: rgba(255,255,255,0.87) !important;
+  padding: 8px 12px !important;
+}
+.country-flags-select button:hover {
+  border-color: rgba(255,255,255,0.12) !important;
+}
+.country-flags-select ul {
+  background: #0A0A0A !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 8px !important;
+  max-height: 300px !important;
+}
+.country-flags-select li {
+  color: rgba(255,255,255,0.87) !important;
+}
+.country-flags-select li:hover,
+.country-flags-select li.selected {
+  background: rgba(255,255,255,0.08) !important;
+}
+.country-flags-select input {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+  color: rgba(255,255,255,0.87) !important;
+}
+.country-flags-select input::placeholder {
+  color: rgba(255,255,255,0.38) !important;
+}
+
