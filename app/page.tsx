@@ -347,12 +347,7 @@ export default function LandingPage() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  // If already logged in, redirect to dashboard
-  useEffect(() => {
-    if (session?.user) {
-      router.push("/dashboard");
-    }
-  }, [session, router]);
+  // Show dashboard link in hero if logged in, but DON'T redirect — let user see landing
 
   return (
     <div className="flex flex-col min-h-full">

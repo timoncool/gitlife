@@ -115,19 +115,51 @@ function SkeletonGrid({ expectedAge }: { expectedAge: number }) {
   const cellSize = useCellSize();
   const cellStep = cellSize + CELL_GAP;
   const rows = Math.min(expectedAge, 90);
-  const width = LABEL_WIDTH + 52 * cellStep;
-  const height = LABEL_HEIGHT + rows * cellStep;
+  const svgWidth = LABEL_WIDTH + 52 * cellStep;
+  const svgHeight = LABEL_HEIGHT + rows * cellStep;
+
+  // Y-axis labels every 5 years
+  const yLabels: number[] = [];
+  for (let age = 0; age <= rows; age += 5) yLabels.push(age);
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className="w-full">
       <svg
-        width={width}
-        height={height}
-        className="animate-pulse"
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        className="w-full h-auto"
         role="img"
         aria-label="Loading grid"
       >
-        {Array.from({ length: Math.min(rows, 20) }, (_, y) =>
+        {/* X-axis labels */}
+        {X_LABELS.map((w) => (
+          <text
+            key={`sxl-${w}`}
+            x={LABEL_WIDTH + (w - 1) * cellStep + cellSize / 2}
+            y={LABEL_HEIGHT - 4}
+            textAnchor="middle"
+            className="fill-muted-foreground"
+            fontSize={10}
+          >
+            {w}
+          </text>
+        ))}
+
+        {/* Y-axis labels */}
+        {yLabels.map((age) => (
+          <text
+            key={`syl-${age}`}
+            x={LABEL_WIDTH - 4}
+            y={LABEL_HEIGHT + age * cellStep + cellSize / 2 + 3}
+            textAnchor="end"
+            className="fill-muted-foreground"
+            fontSize={10}
+          >
+            {age}
+          </text>
+        ))}
+
+        {/* All cells as skeleton */}
+        {Array.from({ length: rows }, (_, y) =>
           Array.from({ length: 52 }, (_, x) => (
             <rect
               key={`${y}-${x}`}
@@ -136,10 +168,36 @@ function SkeletonGrid({ expectedAge }: { expectedAge: number }) {
               width={cellSize}
               height={cellSize}
               rx={2}
-              className="fill-muted"
+              fill="transparent"
+              stroke="#1b1f27"
+              strokeWidth={0.5}
+              opacity={0.4 + Math.random() * 0.3}
             />
           )),
         )}
+
+        {/* Shimmer animation overlay */}
+        <rect
+          x={0}
+          y={0}
+          width={svgWidth}
+          height={svgHeight}
+          fill="url(#shimmer)"
+          opacity={0.15}
+        />
+        <defs>
+          <linearGradient id="shimmer" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="transparent">
+              <animate attributeName="offset" values="-1;2" dur="2s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="50%" stopColor="white" stopOpacity="0.1">
+              <animate attributeName="offset" values="-0.5;2.5" dur="2s" repeatCount="indefinite" />
+            </stop>
+            <stop offset="100%" stopColor="transparent">
+              <animate attributeName="offset" values="0;3" dur="2s" repeatCount="indefinite" />
+            </stop>
+          </linearGradient>
+        </defs>
       </svg>
     </div>
   );
