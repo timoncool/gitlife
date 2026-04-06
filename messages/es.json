@@ -15,7 +15,15 @@
     "famousSubtitle": "See how the legends spend their weeks",
     "footerText": "Life in Weeks",
     "weeksLived": "weeks lived",
-    "expectedAge": "expected age"
+    "expectedAge": "expected age",
+    "viewGrid": "View full life grid",
+    "age": "y.o.",
+    "legendFuture": "Future",
+    "legendNoCommits": "Lived, no commits",
+    "legendLow": "Few commits",
+    "legendMedium": "Moderate",
+    "legendHigh": "Many commits",
+    "legendCurrent": "Current week"
   },
   "dashboard": {
     "weeksLived": "Weeks Lived",

@@ -15,7 +15,15 @@
     "famousSubtitle": "Посмотри, как легенды проводят свои недели",
     "footerText": "Жизнь в неделях",
     "weeksLived": "недель прожито",
-    "expectedAge": "ожидаемый возраст"
+    "expectedAge": "ожидаемый возраст",
+    "viewGrid": "Посмотреть полную сетку",
+    "age": "лет",
+    "legendFuture": "Будущее",
+    "legendNoCommits": "Прожито, без коммитов",
+    "legendLow": "Мало коммитов",
+    "legendMedium": "Средне",
+    "legendHigh": "Много коммитов",
+    "legendCurrent": "Текущая неделя"
   },
   "dashboard": {
     "weeksLived": "Прожито недель",

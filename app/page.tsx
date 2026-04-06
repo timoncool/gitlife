@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { SignInButton } from "@/components/sign-in-button";
-import { LifeGrid } from "@/components/life-grid";
 import { useSession } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,6 +17,7 @@ import {
 import { ArrowRight, Search, Globe, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { MiniLifeGrid } from "@/components/mini-life-grid";
 import {
   generateGridCells,
   mapContributionsToWeeks,
@@ -66,11 +66,11 @@ const FAMOUS_DEVS = [
 ];
 
 const DEFAULT_EXPECTED_AGE = 80;
-const DEMO_YEARS_BACK = 10;
 
 interface DemoData {
   username: string;
   createdAt: string;
+  avatarUrl?: string;
   contributions: Record<number, ContributionWeek[]>;
 }
 
@@ -89,38 +89,28 @@ function flattenContributions(
 function DemoMiniGrid({
   data,
   birthYear,
+  expectedAge = DEFAULT_EXPECTED_AGE,
 }: {
   data: DemoData;
   birthYear: number;
+  expectedAge?: number;
 }) {
   const birthDate = useMemo(() => new Date(birthYear, 0, 1), [birthYear]);
   const githubCreated = useMemo(() => new Date(data.createdAt), [data.createdAt]);
   const flat = useMemo(() => flattenContributions(data.contributions), [data]);
   const weekMap = useMemo(() => mapContributionsToWeeks(flat), [flat]);
 
-  // Only show recent years for demo
-  const currentYear = new Date().getFullYear();
-  const startAge = Math.max(0, currentYear - birthYear - DEMO_YEARS_BACK);
-  const endAge = currentYear - birthYear + 1;
-  const displayAge = endAge - startAge;
-
   const cells = useMemo(() => {
-    const allCells = generateGridCells(
+    return generateGridCells(
       birthDate,
-      DEFAULT_EXPECTED_AGE,
+      expectedAge,
       githubCreated,
       weekMap,
     );
-    // Filter to only show the recent slice
-    return allCells.filter(
-      (c) => c.year >= startAge && c.year < endAge,
-    ).map((c) => ({ ...c, year: c.year - startAge }));
-  }, [birthDate, githubCreated, weekMap, startAge, endAge]);
+  }, [birthDate, expectedAge, githubCreated, weekMap]);
 
   return (
-    <div className="w-full overflow-x-auto">
-      <LifeGrid cells={cells} expectedAge={displayAge} />
-    </div>
+    <MiniLifeGrid cells={cells} expectedAge={expectedAge} />
   );
 }
 
@@ -212,9 +202,6 @@ function DemoSection() {
           <div className="flex items-center gap-3 mb-4">
             <GitHubIcon className="h-5 w-5" />
             <span className="font-semibold text-lg">{data.username}</span>
-            <span className="text-sm text-muted-foreground">
-              Last {DEMO_YEARS_BACK} years
-            </span>
           </div>
           <DemoMiniGrid data={data} birthYear={birthYear} />
         </div>
@@ -226,8 +213,9 @@ function DemoSection() {
 function FamousDevCard({
   dev,
 }: {
-  dev: { username: string; label: string; tag: string };
+  dev: (typeof FAMOUS_DEVS)[number];
 }) {
+  const t = useTranslations("landing");
   const [data, setData] = useState<DemoData | null>(null);
   const [loading, setLoading] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -254,9 +242,8 @@ function FamousDevCard({
     return () => observer.disconnect();
   }, [dev.username]);
 
-  const birthYear = data
-    ? new Date(data.createdAt).getFullYear() - 30
-    : 1970;
+  const currentAge = new Date().getFullYear() - dev.birthYear;
+  const avatarUrl = data?.avatarUrl;
 
   return (
     <div ref={ref}>
@@ -265,10 +252,24 @@ function FamousDevCard({
         className="group rounded-xl border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5 cursor-pointer"
       >
         <div className="flex items-center gap-3">
-          <GitHubIcon className="h-4 w-4 text-muted-foreground" />
-          <span className="font-semibold">{dev.label}</span>
-          <span className="text-xs text-muted-foreground">@{dev.username}</span>
-          <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt={dev.label}
+              className="h-7 w-7 rounded-full"
+              loading="lazy"
+            />
+          ) : (
+            <GitHubIcon className="h-5 w-5 text-muted-foreground" />
+          )}
+          <div className="flex flex-col min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="font-semibold truncate">{dev.label}</span>
+              <span className="text-xs text-muted-foreground shrink-0">{currentAge} {t("age")}</span>
+            </div>
+            <span className="text-xs text-muted-foreground">@{dev.username}</span>
+          </div>
+          <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 shrink-0">
             {dev.tag}
           </span>
         </div>
@@ -277,17 +278,56 @@ function FamousDevCard({
             Loading...
           </div>
         )}
-        {data && <DemoMiniGrid data={data} birthYear={birthYear} />}
+        {data && (
+          <DemoMiniGrid
+            data={data}
+            birthYear={dev.birthYear}
+            expectedAge={dev.expectedAge}
+          />
+        )}
         {!loading && !data && (
           <div className="h-24 flex items-center justify-center text-muted-foreground text-sm">
             Scroll to load
           </div>
         )}
         <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-          <span>View full life grid</span>
+          <span>{t("viewGrid")}</span>
           <ExternalLink className="h-3 w-3" />
         </div>
       </Link>
+    </div>
+  );
+}
+
+function ColorLegend() {
+  const t = useTranslations("landing");
+
+  const items = [
+    { color: "transparent", border: true, label: t("legendFuture") },
+    { color: "#21262d", border: false, label: t("legendNoCommits") },
+    { color: "#0e4429", border: false, label: t("legendLow") },
+    { color: "#26a641", border: false, label: t("legendMedium") },
+    { color: "#39d353", border: false, label: t("legendHigh") },
+    { color: "rgba(240,136,62,0.5)", border: true, borderColor: "#f0883e", label: t("legendCurrent") },
+  ];
+
+  return (
+    <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 mt-10 text-xs text-muted-foreground">
+      {items.map((item) => (
+        <div key={item.label} className="flex items-center gap-1.5">
+          <span
+            className="inline-block w-3 h-3 rounded-sm shrink-0"
+            style={{
+              backgroundColor: item.color,
+              border: item.border
+                ? `1.5px solid ${item.borderColor || (typeof document !== "undefined" && document.documentElement.classList.contains("dark") ? "#1b1f27" : "#d0d7de")}`
+                : "none",
+              ...(item.borderColor ? { borderColor: item.borderColor } : {}),
+            }}
+          />
+          <span>{item.label}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -308,6 +348,7 @@ function FamousDevsSection() {
           <FamousDevCard key={dev.username} dev={dev} />
         ))}
       </div>
+      <ColorLegend />
     </section>
   );
 }
