@@ -886,8 +886,6 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
             </div>
           </div>
         )}
-
-        </div>
       </div>
     );
   }
