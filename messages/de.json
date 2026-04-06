@@ -1,0 +1,74 @@
+{
+  "landing": {
+    "title": "Commit Your Life",
+    "tagline": "Visualize your life in weeks. Track what matters.",
+    "signIn": "Sign In",
+    "tryDemo": "Try Demo",
+    "placeholder": "See your life from a new perspective"
+  },
+  "dashboard": {
+    "weeksLived": "Weeks Lived",
+    "weeksTotal": "Total Weeks",
+    "lifeLived": "Life Lived",
+    "activeWeeks": "Active Weeks",
+    "currentStreak": "Current Streak",
+    "longestStreak": "Longest Streak",
+    "commits": "Commits",
+    "week": "Week",
+    "age": "Age",
+    "loading": "Loading...",
+    "noData": "No data available",
+    "noCommits": "No commits yet"
+  },
+  "settings": {
+    "title": "Settings",
+    "birthDate": "Birth Date",
+    "lifeExpectancy": "Life Expectancy",
+    "calculator": "Calculator",
+    "manualOverride": "Manual Override",
+    "save": "Save",
+    "saved": "Saved",
+    "baseline": "Baseline",
+    "yourEstimate": "Your Estimate",
+    "years": "years",
+    "impact": "Impact",
+    "learnMore": "Learn More"
+  },
+  "onboarding": {
+    "welcome": "Welcome",
+    "birthDate": "When were you born?",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "country": "Country",
+    "start": "Get Started",
+    "customize": "Customize your experience"
+  },
+  "header": {
+    "dashboard": "Dashboard",
+    "settings": "Settings",
+    "signOut": "Sign Out"
+  },
+  "factors": {
+    "smoking": "Smoking",
+    "alcohol": "Alcohol Consumption",
+    "activity": "Physical Activity",
+    "bmi": "BMI",
+    "sleep": "Sleep Quality",
+    "diet": "Diet",
+    "social": "Social Connections",
+    "diabetes": "Diabetes",
+    "family": "Family History",
+    "stress": "Stress Level",
+    "education": "Education",
+    "marital": "Marital Status",
+    "hypertension": "Hypertension",
+    "heartCancer": "Heart Disease / Cancer Risk",
+    "depression": "Depression",
+    "sitting": "Sedentary Time",
+    "optimism": "Optimism",
+    "purpose": "Sense of Purpose",
+    "coffee": "Coffee Consumption",
+    "airPollution": "Air Pollution Exposure"
+  }
+}

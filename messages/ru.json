@@ -1,0 +1,74 @@
+{
+  "landing": {
+    "title": "Commit Your Life",
+    "tagline": "Визуализируй свою жизнь по неделям. Отслеживай важное.",
+    "signIn": "Войти",
+    "tryDemo": "Попробовать демо",
+    "placeholder": "Взгляни на свою жизнь с новой стороны"
+  },
+  "dashboard": {
+    "weeksLived": "Прожито недель",
+    "weeksTotal": "Всего недель",
+    "lifeLived": "Прожито жизни",
+    "activeWeeks": "Активных недель",
+    "currentStreak": "Текущая серия",
+    "longestStreak": "Лучшая серия",
+    "commits": "Коммиты",
+    "week": "Неделя",
+    "age": "Возраст",
+    "loading": "Загрузка...",
+    "noData": "Нет данных",
+    "noCommits": "Пока нет коммитов"
+  },
+  "settings": {
+    "title": "Настройки",
+    "birthDate": "Дата рождения",
+    "lifeExpectancy": "Ожидаемая продолжительность жизни",
+    "calculator": "Калькулятор",
+    "manualOverride": "Ручной ввод",
+    "save": "Сохранить",
+    "saved": "Сохранено",
+    "baseline": "Базовая оценка",
+    "yourEstimate": "Ваша оценка",
+    "years": "лет",
+    "impact": "Влияние",
+    "learnMore": "Подробнее"
+  },
+  "onboarding": {
+    "welcome": "Добро пожаловать",
+    "birthDate": "Когда вы родились?",
+    "gender": "Пол",
+    "male": "Мужской",
+    "female": "Женский",
+    "country": "Страна",
+    "start": "Начать",
+    "customize": "Настройте под себя"
+  },
+  "header": {
+    "dashboard": "Дашборд",
+    "settings": "Настройки",
+    "signOut": "Выйти"
+  },
+  "factors": {
+    "smoking": "Курение",
+    "alcohol": "Употребление алкоголя",
+    "activity": "Физическая активность",
+    "bmi": "Индекс массы тела",
+    "sleep": "Качество сна",
+    "diet": "Питание",
+    "social": "Социальные связи",
+    "diabetes": "Диабет",
+    "family": "Семейная история",
+    "stress": "Уровень стресса",
+    "education": "Образование",
+    "marital": "Семейное положение",
+    "hypertension": "Гипертония",
+    "heartCancer": "Риск сердечных заболеваний / рака",
+    "depression": "Депрессия",
+    "sitting": "Сидячий образ жизни",
+    "optimism": "Оптимизм",
+    "purpose": "Чувство цели",
+    "coffee": "Потребление кофе",
+    "airPollution": "Загрязнение воздуха"
+  }
+}
