@@ -887,36 +887,6 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
           </div>
         )}
 
-        <Separator />
-
-        {/* Manual override */}
-        <div className="flex flex-col gap-3">
-          <Label className="text-sm text-muted-foreground">
-            {tc("orEnterManually")}
-          </Label>
-          <Slider
-            min={50}
-            max={110}
-            step={1}
-            value={[manualOverride ?? Math.round(calculatedAge)]}
-            onValueChange={(val) => {
-              const v = Array.isArray(val) ? val[0] : val;
-              setManualOverride(v);
-            }}
-          />
-          <div className="text-center text-sm text-muted-foreground">
-            {manualOverride ?? Math.round(calculatedAge)}
-          </div>
-          {manualOverride !== null && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setManualOverride(null)}
-              className="self-center"
-            >
-              {tc("useCalculator")}
-            </Button>
-          )}
         </div>
       </div>
     );

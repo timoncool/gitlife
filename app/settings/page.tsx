@@ -6,6 +6,9 @@ import { useTranslations } from "next-intl";
 import { Header } from "@/components/header";
 import { CalculatorForm } from "@/components/calculator-form";
 import { useSession } from "@/lib/auth-client";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import type { CalculatorAnswers } from "@/lib/types";
 
 interface UserProfile {
@@ -23,6 +26,8 @@ export default function SettingsPage() {
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [useManual, setUseManual] = useState(false);
+  const [manualAge, setManualAge] = useState(75);
 
   // Redirect if not authenticated
   useEffect(() => {
@@ -87,14 +92,60 @@ export default function SettingsPage() {
             )}
           </div>
 
-          <CalculatorForm
-            mode="full"
-            initialValues={
-              profile?.calculatorAnswers ? profile.calculatorAnswers : undefined
-            }
-            initialBirthDate={profile?.birthDate ?? undefined}
-            onSaved={fetchProfile}
-          />
+          {/* Toggle: calculator OR manual */}
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setUseManual(false)}
+              className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${!useManual ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              {t("calculator")}
+            </button>
+            <span className="text-muted-foreground text-sm">{t("manualDescription")}</span>
+            <button
+              onClick={() => setUseManual(true)}
+              className={`text-sm font-medium px-4 py-2 rounded-lg transition-colors ${useManual ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+            >
+              {t("manualOverride")}
+            </button>
+          </div>
+
+          {useManual ? (
+            <div className="rounded-lg border border-white/[0.08] bg-card p-6 flex flex-col gap-6">
+              <h2 className="text-xl font-semibold tracking-tight">{t("manualOverride")}</h2>
+              <Slider
+                min={50}
+                max={110}
+                step={1}
+                value={[manualAge]}
+                onValueChange={(val) => setManualAge(Array.isArray(val) ? val[0] ?? 75 : val)}
+              />
+              <div className="text-center text-3xl font-semibold text-primary font-mono tabular-nums">
+                {manualAge} {t("years")}
+              </div>
+              <Button
+                onClick={async () => {
+                  await fetch("/api/user", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ expectedAge: manualAge }),
+                  });
+                  fetchProfile();
+                }}
+                className="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white"
+              >
+                {t("save")}
+              </Button>
+            </div>
+          ) : (
+            <CalculatorForm
+              mode="full"
+              initialValues={
+                profile?.calculatorAnswers ? profile.calculatorAnswers : undefined
+              }
+              initialBirthDate={profile?.birthDate ?? undefined}
+              onSaved={fetchProfile}
+            />
+          )}
         </div>
       </main>
     </>
