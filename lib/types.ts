@@ -78,3 +78,9 @@ export interface YearContribution {
   date: string;
   count: number;
 }
+
+export interface ContributionWeek {
+  weekNumber: number;
+  startDate: string;
+  totalCommits: number;
+}
