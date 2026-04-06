@@ -157,35 +157,43 @@
   animation: glow-pulse 2s ease-in-out infinite;
 }
 /* ReactFlagsSelect dark theme overrides */
-.country-flags-select button {
+.dark [class*="flagsSelect"] button,
+.dark [class*="selectBtn"] {
   background: transparent !important;
   border: 1px solid rgba(255,255,255,0.08) !important;
   border-radius: 8px !important;
   color: rgba(255,255,255,0.87) !important;
   padding: 8px 12px !important;
 }
-.country-flags-select button:hover {
+.dark [class*="flagsSelect"] button:hover {
   border-color: rgba(255,255,255,0.12) !important;
 }
-.country-flags-select ul {
+.dark [class*="selectOptions"] {
   background: #0A0A0A !important;
   border: 1px solid rgba(255,255,255,0.08) !important;
   border-radius: 8px !important;
   max-height: 300px !important;
+  overflow-y: auto !important;
 }
-.country-flags-select li {
+.dark [class*="selectOption"] {
   color: rgba(255,255,255,0.87) !important;
+  padding: 8px 12px !important;
 }
-.country-flags-select li:hover,
-.country-flags-select li.selected {
+.dark [class*="selectOption"]:hover {
   background: rgba(255,255,255,0.08) !important;
 }
-.country-flags-select input {
-  background: transparent !important;
+.dark [class*="filterBox"] {
+  background: #0A0A0A !important;
   border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+}
+.dark [class*="filterBox"] input {
+  background: transparent !important;
   color: rgba(255,255,255,0.87) !important;
 }
-.country-flags-select input::placeholder {
+.dark [class*="filterBox"] input::placeholder {
   color: rgba(255,255,255,0.38) !important;
+}
+.dark [class*="label"] {
+  color: rgba(255,255,255,0.87) !important;
 }
 
