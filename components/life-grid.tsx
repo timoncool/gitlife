@@ -40,7 +40,7 @@ const CELL_SIZES = { desktop: 8, tablet: 6, mobile: 5 } as const;
 const CELL_GAP = 2;
 const TAP_TARGET_MOBILE = 12;
 
-const LABEL_WIDTH = 30;
+const LABEL_WIDTH = 36;
 const LABEL_HEIGHT = 16;
 
 // X-axis labels
@@ -248,10 +248,10 @@ export function LifeGrid({ cells, expectedAge, loading }: LifeGridProps) {
   }
 
   return (
-      <div className="w-full overflow-x-auto">
+      <div className="w-full">
         <svg
-          width={svgWidth}
-          height={svgHeight}
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          className="w-full h-auto"
           role="img"
           aria-label="Life in weeks grid"
         >

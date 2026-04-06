@@ -101,7 +101,7 @@ export function Header() {
         {/* Left: Logo + nav (desktop) */}
         <div className="flex items-center gap-6">
           <Link href="/" className="text-lg font-bold tracking-tight">
-            Life in Weeks
+            Commit Your Life
           </Link>
           {user && (
             <NavLinks className="hidden md:flex items-center gap-4" />
@@ -148,7 +148,7 @@ export function Header() {
             />
             <SheetContent side="right" className="w-[280px]">
               <SheetHeader>
-                <SheetTitle>Life in Weeks</SheetTitle>
+                <SheetTitle>Commit Your Life</SheetTitle>
               </SheetHeader>
               <div className="flex flex-col gap-4 mt-6">
                 {user && (
