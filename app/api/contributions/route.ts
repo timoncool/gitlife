@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
         cached
           .filter((c) => {
             const year = parseInt(c.id.split(":")[1], 10);
-            const age = now - new Date(c.cachedAt).getTime();
+            const age = now - new Date(c.cachedAt ?? Date.now()).getTime();
             const ttl = year === currentYear ? TTL_CURRENT_YEAR : TTL_HISTORICAL;
             return age < ttl;
           })

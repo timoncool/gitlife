@@ -47,7 +47,7 @@ const LABEL_HEIGHT = 16;
 const X_LABELS = [1, 10, 20, 30, 40, 50];
 
 function useCellSize() {
-  const [size, setSize] = useState(CELL_SIZES.desktop);
+  const [size, setSize] = useState<number>(CELL_SIZES.desktop);
 
   useEffect(() => {
     function update() {
