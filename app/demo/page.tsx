@@ -12,11 +12,30 @@ import Link from "next/link";
 import {
   generateGridCells,
   mapContributionsToWeeks,
+  calculateStats,
 } from "@/lib/grid-utils";
+import { StatsPanel } from "@/components/stats-panel";
 import type { ContributionWeek, YearContribution } from "@/lib/types";
 
 const DEFAULT_EXPECTED_AGE = 80;
-const DEMO_YEARS_BACK = 10;
+
+// Known dev data — used when viewing a famous dev's grid
+const KNOWN_DEVS: Record<string, { birthYear: number; country: string; expectedAge: number; label: string }> = {
+  torvalds: { birthYear: 1969, country: "Finland/USA", expectedAge: 80, label: "Linus Torvalds — Creator of Linux & Git" },
+  yyx990803: { birthYear: 1990, country: "China/USA", expectedAge: 82, label: "Evan You — Creator of Vue.js & Vite" },
+  rauchg: { birthYear: 1990, country: "Argentina/USA", expectedAge: 80, label: "Guillermo Rauch — CEO of Vercel, creator of Socket.io" },
+  sindresorhus: { birthYear: 1990, country: "Norway/Thailand", expectedAge: 84, label: "Sindre Sorhus — 1000+ npm packages, macOS apps" },
+  tj: { birthYear: 1988, country: "Canada", expectedAge: 82, label: "TJ Holowaychuk — Express.js, Koa, Co, Apex" },
+  addyosmani: { birthYear: 1985, country: "UK/USA", expectedAge: 80, label: "Addy Osmani — Engineering Lead at Google Chrome" },
+  ThePrimeagen: { birthYear: 1988, country: "USA", expectedAge: 78, label: "ThePrimeagen — Netflix engineer, content creator" },
+  antirez: { birthYear: 1977, country: "Italy", expectedAge: 83, label: "Salvatore Sanfilippo — Creator of Redis" },
+  defunkt: { birthYear: 1985, country: "USA", expectedAge: 80, label: "Chris Wanstrath — Co-founder & former CEO of GitHub" },
+  mitchellh: { birthYear: 1990, country: "USA", expectedAge: 80, label: "Mitchell Hashimoto — Co-founder of HashiCorp, creator of Vagrant, Terraform" },
+  "rich-harris": { birthYear: 1985, country: "UK/USA", expectedAge: 81, label: "Rich Harris — Creator of Svelte, works at Vercel" },
+  "dan-abramov": { birthYear: 1992, country: "Russia/UK", expectedAge: 81, label: "Dan Abramov — Co-creator of Redux, React team at Meta" },
+  kentcdodds: { birthYear: 1990, country: "USA", expectedAge: 78, label: "Kent C. Dodds — Testing Library, educator" },
+  tannerlinsley: { birthYear: 1990, country: "USA", expectedAge: 80, label: "Tanner Linsley — Creator of TanStack (React Query, Router, Table)" },
+};
 
 interface DemoData {
   username: string;
@@ -89,9 +108,9 @@ function DemoPageContent() {
       .catch(() => {});
   }, [initialUsername]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const birthYear = data
-    ? new Date(data.createdAt).getFullYear() - 25
-    : 1990;
+  const knownDev = KNOWN_DEVS[initialUsername] || null;
+  const birthYear = knownDev?.birthYear ?? (data ? new Date(data.createdAt).getFullYear() - 25 : 1990);
+  const expectedAge = knownDev?.expectedAge ?? DEFAULT_EXPECTED_AGE;
 
   const birthDate = useMemo(() => new Date(birthYear, 0, 1), [birthYear]);
   const githubCreated = useMemo(
@@ -108,11 +127,15 @@ function DemoPageContent() {
     if (!data) return [];
     return generateGridCells(
       birthDate,
-      DEFAULT_EXPECTED_AGE,
+      expectedAge,
       githubCreated,
       weekMap,
     );
-  }, [data, birthDate, githubCreated, weekMap]);
+  }, [data, birthDate, expectedAge, githubCreated, weekMap]);
+
+  const stats = useMemo(() => calculateStats(cells), [cells]);
+
+  const age = new Date().getFullYear() - birthYear;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -168,28 +191,47 @@ function DemoPageContent() {
         )}
 
         {data && (
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center gap-4 mb-6">
+          <div className="max-w-6xl mx-auto space-y-6">
+            {/* Dev info */}
+            <div className="flex items-center gap-4">
               {data.avatarUrl && (
                 <img
                   src={data.avatarUrl}
                   alt={data.username}
-                  className="h-12 w-12 rounded-full"
+                  className="h-14 w-14 rounded-full border-2 border-primary/30"
                 />
               )}
               <div>
-                <h1 className="text-2xl font-bold text-foreground">
-                  {data.username}
+                <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                  {knownDev?.label || data.username}
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                  GitHub member since{" "}
-                  {new Date(data.createdAt).getFullYear()} — Full life
-                  grid ({DEFAULT_EXPECTED_AGE} years)
+                  {knownDev ? `${knownDev.country} · ${age} лет · ` : ""}
+                  GitHub с {new Date(data.createdAt).getFullYear()} · Ожидаемая продолжительность: {expectedAge} лет
                 </p>
               </div>
             </div>
-            <div className="rounded-xl border bg-card/50 backdrop-blur-sm p-6 overflow-x-auto">
-              <LifeGrid cells={cells} expectedAge={DEFAULT_EXPECTED_AGE} />
+
+            {/* Progress bar */}
+            <div className="w-full">
+              <div className="flex items-center justify-between text-sm text-muted-foreground mb-1.5">
+                <span>{stats.percentLived}% жизни прожито</span>
+                <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} недель</span>
+              </div>
+              <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-emerald-500 rounded-full transition-all duration-700"
+                  style={{ width: `${Math.min(stats.percentLived, 100)}%` }}
+                />
+              </div>
+            </div>
+
+            {/* Stats */}
+            <StatsPanel stats={stats} />
+
+            {/* Grid */}
+            <div className="rounded-xl border border-border bg-card/50 p-4">
+              <LifeGrid cells={cells} expectedAge={expectedAge} />
             </div>
           </div>
         )}

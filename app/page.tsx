@@ -47,21 +47,22 @@ const LANGUAGES = [
   { value: "ja", label: "日本語" },
 ] as const;
 
+// Public data from Wikipedia, interviews, public profiles
 const FAMOUS_DEVS = [
-  { username: "torvalds", label: "Linus Torvalds", tag: "Linux" },
-  { username: "yyx990803", label: "Evan You", tag: "Vue.js" },
-  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel" },
-  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm packages" },
-  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js" },
-  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome" },
-  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Content creator" },
-  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis" },
-  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub co-founder" },
-  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp" },
-  { username: "rich-harris", label: "Rich Harris", tag: "Svelte" },
-  { username: "dan-abramov", label: "Dan Abramov", tag: "React" },
-  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing/React" },
-  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack" },
+  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 80 },
+  { username: "yyx990803", label: "Evan You", tag: "Vue.js", birthYear: 1990, country: "USA", expectedAge: 82 },
+  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel", birthYear: 1990, country: "USA", expectedAge: 80 },
+  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84 },
+  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82 },
+  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1985, country: "USA", expectedAge: 80 },
+  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Streamer", birthYear: 1988, country: "USA", expectedAge: 78 },
+  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83 },
+  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub", birthYear: 1985, country: "USA", expectedAge: 80 },
+  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp", birthYear: 1990, country: "USA", expectedAge: 80 },
+  { username: "rich-harris", label: "Rich Harris", tag: "Svelte", birthYear: 1985, country: "USA", expectedAge: 81 },
+  { username: "dan-abramov", label: "Dan Abramov", tag: "React", birthYear: 1992, country: "GBR", expectedAge: 81 },
+  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing", birthYear: 1990, country: "USA", expectedAge: 78 },
+  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1990, country: "USA", expectedAge: 80 },
 ];
 
 const DEFAULT_EXPECTED_AGE = 80;
