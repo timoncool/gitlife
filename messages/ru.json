@@ -32,7 +32,17 @@
     "featureGithub": "GitHub коммиты",
     "featureGithubDesc": "Зелёные клетки для недель, когда ты писал код. Увидь свой путь разработчика.",
     "featureCalculator": "Калькулятор продолжительности",
-    "featureCalculatorDesc": "Калькулятор на основе здоровья, чтобы оценить, сколько недель осталось."
+    "featureCalculatorDesc": "Калькулятор на основе здоровья, чтобы оценить, сколько недель осталось.",
+    "goToDashboard": "Перейти в дашборд",
+    "heroBadge": "Трекер жизни на базе GitHub"
+  },
+  "demo": {
+    "backToHome": "На главную",
+    "githubSince": "GitHub с",
+    "lifeExpectancy": "Ожидаемая продолжительность",
+    "yearsOld": "лет",
+    "lifeLived": "жизни прожито",
+    "weeks": "недель"
   },
   "dashboard": {
     "weeksLived": "Прожито недель",
@@ -46,7 +56,9 @@
     "age": "Возраст",
     "loading": "Загрузка...",
     "noData": "Нет данных",
-    "noCommits": "Пока нет коммитов"
+    "noCommits": "Пока нет коммитов",
+    "lifeLivedProgress": "жизни прожито",
+    "weeksShort": "недель"
   },
   "settings": {
     "title": "Настройки",

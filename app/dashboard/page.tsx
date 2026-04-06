@@ -154,8 +154,8 @@ export default function DashboardPage() {
         {/* Life progress bar */}
         <div className="w-full">
           <div className="flex items-center justify-between text-sm text-muted-foreground mb-1.5">
-            <span>{stats.percentLived}% of life lived</span>
-            <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} weeks</span>
+            <span>{stats.percentLived}% {t("lifeLivedProgress")}</span>
+            <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} {t("weeksShort")}</span>
           </div>
           <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
             <div

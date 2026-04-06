@@ -23,7 +23,17 @@
     "legendLow": "Few commits",
     "legendMedium": "Moderate",
     "legendHigh": "Many commits",
-    "legendCurrent": "Current week"
+    "legendCurrent": "Current week",
+    "goToDashboard": "进入仪表板",
+    "heroBadge": "基于GitHub的生命追踪器"
+  },
+  "demo": {
+    "backToHome": "返回首页",
+    "githubSince": "GitHub注册于",
+    "lifeExpectancy": "预期寿命",
+    "yearsOld": "岁",
+    "lifeLived": "的人生已过",
+    "weeks": "周"
   },
   "dashboard": {
     "weeksLived": "Weeks Lived",
@@ -37,7 +47,9 @@
     "age": "Age",
     "loading": "Loading...",
     "noData": "No data available",
-    "noCommits": "No commits yet"
+    "noCommits": "No commits yet",
+    "lifeLivedProgress": "的人生已过",
+    "weeksShort": "周"
   },
   "settings": {
     "title": "Settings",

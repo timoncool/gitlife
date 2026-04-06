@@ -12,7 +12,7 @@ import type { CellData, CellState } from "@/lib/types";
 // Color maps per theme
 const COLORS_DARK: Record<CellState, string> = {
   future: "transparent",
-  "pre-github": "#0A0A0A",
+  "pre-github": "#12100A",
   "no-commits": "#1A1A1A",
   "level-1": "#0e4429",
   "level-2": "#006d32",

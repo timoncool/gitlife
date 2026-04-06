@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { LifeGrid } from "@/components/life-grid";
-import { ThemeToggle } from "@/components/theme-toggle";
+import { Header } from "@/components/header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ArrowRight, Search } from "lucide-react";
@@ -59,6 +59,7 @@ function flattenContributions(
 function DemoPageContent() {
   const searchParams = useSearchParams();
   const t = useTranslations("landing");
+  const td = useTranslations("demo");
   const initialUsername = searchParams.get("username") || "";
 
   const [username, setUsername] = useState(initialUsername);
@@ -139,22 +140,17 @@ function DemoPageContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to home
-          </Link>
-          <ThemeToggle />
-        </div>
-      </header>
+      <Header />
 
-      {/* Search bar */}
+      {/* Back link + Search bar */}
       <div className="container mx-auto px-4 py-8">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          {td("backToHome")}
+        </Link>
         <form
           onSubmit={handleSubmit}
           className="flex gap-3 max-w-md mx-auto mb-8"
@@ -206,8 +202,8 @@ function DemoPageContent() {
                   {knownDev?.label || data.username}
                 </h1>
                 <p className="text-sm text-muted-foreground">
-                  {knownDev ? `${knownDev.country} · ${age} лет · ` : ""}
-                  GitHub с {new Date(data.createdAt).getFullYear()} · Ожидаемая продолжительность: {expectedAge} лет
+                  {knownDev ? `${knownDev.country} · ${age} ${td("yearsOld")} · ` : ""}
+                  {td("githubSince")} {new Date(data.createdAt).getFullYear()} · {td("lifeExpectancy")}: {expectedAge} {td("yearsOld")}
                 </p>
               </div>
             </div>
@@ -215,8 +211,8 @@ function DemoPageContent() {
             {/* Progress bar */}
             <div className="w-full">
               <div className="flex items-center justify-between text-sm text-muted-foreground mb-1.5">
-                <span>{stats.percentLived}% жизни прожито</span>
-                <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} недель</span>
+                <span>{stats.percentLived}% {td("lifeLived")}</span>
+                <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} {td("weeks")}</span>
               </div>
               <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
                 <div

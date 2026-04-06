@@ -32,7 +32,17 @@
     "featureGithub": "GitHub Commits",
     "featureGithubDesc": "Green cells for weeks when you pushed code. See your coding journey.",
     "featureCalculator": "Life Expectancy",
-    "featureCalculatorDesc": "Health-based calculator to estimate how many weeks you have left."
+    "featureCalculatorDesc": "Health-based calculator to estimate how many weeks you have left.",
+    "goToDashboard": "Go to Dashboard",
+    "heroBadge": "GitHub-powered life tracker"
+  },
+  "demo": {
+    "backToHome": "Back to home",
+    "githubSince": "GitHub since",
+    "lifeExpectancy": "Life expectancy",
+    "yearsOld": "years",
+    "lifeLived": "of life lived",
+    "weeks": "weeks"
   },
   "dashboard": {
     "weeksLived": "Weeks Lived",
@@ -46,7 +56,9 @@
     "age": "Age",
     "loading": "Loading...",
     "noData": "No data available",
-    "noCommits": "No commits yet"
+    "noCommits": "No commits yet",
+    "lifeLivedProgress": "of life lived",
+    "weeksShort": "weeks"
   },
   "settings": {
     "title": "Settings",

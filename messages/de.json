@@ -23,7 +23,17 @@
     "legendLow": "Few commits",
     "legendMedium": "Moderate",
     "legendHigh": "Many commits",
-    "legendCurrent": "Current week"
+    "legendCurrent": "Current week",
+    "goToDashboard": "Zum Dashboard",
+    "heroBadge": "GitHub-basierter Lebenstracker"
+  },
+  "demo": {
+    "backToHome": "Zur Startseite",
+    "githubSince": "GitHub seit",
+    "lifeExpectancy": "Lebenserwartung",
+    "yearsOld": "Jahre",
+    "lifeLived": "des Lebens gelebt",
+    "weeks": "Wochen"
   },
   "dashboard": {
     "weeksLived": "Weeks Lived",
@@ -37,7 +47,9 @@
     "age": "Age",
     "loading": "Loading...",
     "noData": "No data available",
-    "noCommits": "No commits yet"
+    "noCommits": "No commits yet",
+    "lifeLivedProgress": "des Lebens gelebt",
+    "weeksShort": "Wochen"
   },
   "settings": {
     "title": "Settings",

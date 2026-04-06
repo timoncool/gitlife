@@ -14,9 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowRight, Search, Globe, ExternalLink } from "lucide-react";
+import { ArrowRight, Search, Globe, ExternalLink, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Header } from "@/components/header";
 import { MiniLifeGrid } from "@/components/mini-life-grid";
 import {
   generateGridCells,
@@ -452,6 +453,7 @@ export default function LandingPage() {
 
   return (
     <div className="flex flex-col min-h-full">
+      <Header />
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-20 md:pt-36 md:pb-28 overflow-hidden">
         {/* Gradient mesh background orbs */}
@@ -464,7 +466,7 @@ export default function LandingPage() {
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-8 backdrop-blur-sm">
             <GitHubIcon className="h-4 w-4" />
-            GitHub-powered life tracker
+            {t("heroBadge")}
           </div>
 
           <h1 className="relative z-10 text-4xl md:text-6xl font-semibold tracking-tight mb-6 text-foreground dark:bg-gradient-to-r dark:from-white dark:to-white/80 dark:bg-clip-text dark:text-transparent">
@@ -476,8 +478,18 @@ export default function LandingPage() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <SignInButton />
-            <ThemeToggle />
+            {session?.user ? (
+              <Button
+                onClick={() => router.push("/dashboard")}
+                size="lg"
+                className="gap-2 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
+              >
+                <LayoutDashboard className="h-5 w-5" />
+                {t("goToDashboard")}
+              </Button>
+            ) : (
+              <SignInButton />
+            )}
           </div>
         </div>
 

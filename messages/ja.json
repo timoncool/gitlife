@@ -23,7 +23,17 @@
     "legendLow": "Few commits",
     "legendMedium": "Moderate",
     "legendHigh": "Many commits",
-    "legendCurrent": "Current week"
+    "legendCurrent": "Current week",
+    "goToDashboard": "ダッシュボードへ",
+    "heroBadge": "GitHubベースのライフトラッカー"
+  },
+  "demo": {
+    "backToHome": "ホームに戻る",
+    "githubSince": "GitHub登録",
+    "lifeExpectancy": "予想寿命",
+    "yearsOld": "歳",
+    "lifeLived": "の人生を過ごした",
+    "weeks": "週"
   },
   "dashboard": {
     "weeksLived": "Weeks Lived",
@@ -37,7 +47,9 @@
     "age": "Age",
     "loading": "Loading...",
     "noData": "No data available",
-    "noCommits": "No commits yet"
+    "noCommits": "No commits yet",
+    "lifeLivedProgress": "の人生を過ごした",
+    "weeksShort": "週"
   },
   "settings": {
     "title": "Settings",
