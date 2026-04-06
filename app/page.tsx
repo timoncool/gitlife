@@ -15,7 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowRight, Search, Globe } from "lucide-react";
+import { ArrowRight, Search, Globe, ExternalLink } from "lucide-react";
+import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import {
   generateGridCells,
@@ -47,11 +48,20 @@ const LANGUAGES = [
 ] as const;
 
 const FAMOUS_DEVS = [
-  { username: "torvalds", label: "Linus Torvalds" },
-  { username: "yyx990803", label: "Evan You" },
-  { username: "rauchg", label: "Guillermo Rauch" },
-  { username: "sindresorhus", label: "Sindre Sorhus" },
-  { username: "tj", label: "TJ Holowaychuk" },
+  { username: "torvalds", label: "Linus Torvalds", tag: "Linux" },
+  { username: "yyx990803", label: "Evan You", tag: "Vue.js" },
+  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel" },
+  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm packages" },
+  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js" },
+  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome" },
+  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Content creator" },
+  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis" },
+  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub co-founder" },
+  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp" },
+  { username: "rich-harris", label: "Rich Harris", tag: "Svelte" },
+  { username: "dan-abramov", label: "Dan Abramov", tag: "React" },
+  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing/React" },
+  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack" },
 ];
 
 const DEFAULT_EXPECTED_AGE = 80;
@@ -208,7 +218,7 @@ function DemoSection() {
 function FamousDevCard({
   dev,
 }: {
-  dev: { username: string; label: string };
+  dev: { username: string; label: string; tag: string };
 }) {
   const [data, setData] = useState<DemoData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -241,26 +251,35 @@ function FamousDevCard({
     : 1970;
 
   return (
-    <div
-      ref={ref}
-      className="rounded-xl border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3"
-    >
-      <div className="flex items-center gap-3">
-        <GitHubIcon className="h-4 w-4 text-muted-foreground" />
-        <span className="font-semibold">{dev.label}</span>
-        <span className="text-xs text-muted-foreground">@{dev.username}</span>
-      </div>
-      {loading && (
-        <div className="h-24 flex items-center justify-center text-muted-foreground animate-pulse text-sm">
-          Loading...
+    <div ref={ref}>
+      <Link
+        href={`/demo?username=${encodeURIComponent(dev.username)}`}
+        className="group rounded-xl border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5 cursor-pointer"
+      >
+        <div className="flex items-center gap-3">
+          <GitHubIcon className="h-4 w-4 text-muted-foreground" />
+          <span className="font-semibold">{dev.label}</span>
+          <span className="text-xs text-muted-foreground">@{dev.username}</span>
+          <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
+            {dev.tag}
+          </span>
         </div>
-      )}
-      {data && <DemoMiniGrid data={data} birthYear={birthYear} />}
-      {!loading && !data && (
-        <div className="h-24 flex items-center justify-center text-muted-foreground text-sm">
-          Scroll to load
+        {loading && (
+          <div className="h-24 flex items-center justify-center text-muted-foreground animate-pulse text-sm">
+            Loading...
+          </div>
+        )}
+        {data && <DemoMiniGrid data={data} birthYear={birthYear} />}
+        {!loading && !data && (
+          <div className="h-24 flex items-center justify-center text-muted-foreground text-sm">
+            Scroll to load
+          </div>
+        )}
+        <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+          <span>View full life grid</span>
+          <ExternalLink className="h-3 w-3" />
         </div>
-      )}
+      </Link>
     </div>
   );
 }
@@ -269,14 +288,14 @@ function FamousDevsSection() {
   const t = useTranslations("landing");
 
   return (
-    <section className="w-full max-w-5xl mx-auto px-4">
+    <section className="w-full max-w-7xl mx-auto px-4">
       <div className="text-center mb-8">
         <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
           {t("famousTitle")}
         </h2>
         <p className="text-muted-foreground">{t("famousSubtitle")}</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {FAMOUS_DEVS.map((dev) => (
           <FamousDevCard key={dev.username} dev={dev} />
         ))}
@@ -333,19 +352,19 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-20 md:pt-36 md:pb-28 overflow-hidden">
         {/* Gradient mesh background orbs */}
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div className="absolute top-[-20%] left-[20%] w-[600px] h-[600px] rounded-full bg-emerald-500/[0.07] blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[10%] w-[500px] h-[500px] rounded-full bg-cyan-500/[0.05] blur-[120px]" />
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+          <div className="absolute top-[-20%] left-[20%] w-[600px] h-[600px] rounded-full bg-emerald-500/[0.12] blur-[120px]" />
+          <div className="absolute bottom-[-10%] right-[10%] w-[500px] h-[500px] rounded-full bg-cyan-500/[0.08] blur-[120px]" />
         </div>
 
         {/* Glass card hero */}
-        <div className="relative max-w-3xl mx-auto text-center">
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-8 backdrop-blur-sm">
             <GitHubIcon className="h-4 w-4" />
             GitHub-powered life tracker
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground">
             {t("title")}
           </h1>
 
@@ -359,8 +378,8 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Decorative grid dots */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+        {/* Decorative fade to background */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {/* Demo Section */}
