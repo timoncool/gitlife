@@ -402,23 +402,39 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
     return tc("bmiObese2");
   };
 
-  // ISO3 -> ISO2 mapping for ReactFlagsSelect
+  // ISO3 -> ISO2 mapping + translated labels for ReactFlagsSelect
   const [iso3ToIso2, setIso3ToIso2] = useState<Record<string, string>>({});
   const [iso2ToIso3, setIso2ToIso3] = useState<Record<string, string>>({});
+  const [countryLabels, setCountryLabels] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    import("i18n-iso-countries").then((mod) => {
+    import("i18n-iso-countries").then(async (mod) => {
+      const lang = document.documentElement.lang || "en";
+      // Register locale
+      try {
+        const localeData = await import(`i18n-iso-countries/langs/${lang}.json`);
+        mod.registerLocale(localeData);
+      } catch {
+        const enData = await import("i18n-iso-countries/langs/en.json");
+        mod.registerLocale(enData);
+      }
+
       const map3to2: Record<string, string> = {};
       const map2to3: Record<string, string> = {};
+      const labels: Record<string, string> = {};
+
       for (const c of countries) {
         const iso2 = mod.alpha3ToAlpha2(c.code);
         if (iso2) {
           map3to2[c.code] = iso2;
           map2to3[iso2] = c.code;
+          const localName = mod.getName(c.code, lang) || mod.getName(c.code, "en") || c.name;
+          labels[iso2] = localName;
         }
       }
       setIso3ToIso2(map3to2);
       setIso2ToIso3(map2to3);
+      setCountryLabels(labels);
     });
   }, [countries]);
 
@@ -680,6 +696,8 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
             }}
             searchable
             searchPlaceholder={tc("searchCountry")}
+            customLabels={countryLabels}
+            fullWidth
             className="country-flags-select"
           />
         </div>
