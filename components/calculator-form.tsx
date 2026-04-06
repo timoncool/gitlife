@@ -352,16 +352,44 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
     },
   );
 
+  // Get browser locale for country name translation
+  const browserLocale = typeof navigator !== "undefined" ? navigator.language : "en";
+
   useEffect(() => {
     fetch("/data/life-expectancy.json")
       .then((res) => res.json())
       .then((data: LifeExpectancyData) => {
+        // Use Intl.DisplayNames to translate country names to current locale
+        let displayNames: Intl.DisplayNames | null = null;
+        try {
+          displayNames = new Intl.DisplayNames([browserLocale], { type: "region" });
+        } catch { /* fallback to English names */ }
+
+        const isoMap: Record<string, string> = {
+          RUS: "RU", USA: "US", GBR: "GB", DEU: "DE", FRA: "FR", JPN: "JP",
+          CHN: "CN", BRA: "BR", IND: "IN", CAN: "CA", AUS: "AU", ESP: "ES",
+          ITA: "IT", KOR: "KR", MEX: "MX", NOR: "NO", SWE: "SE", NLD: "NL",
+          PRT: "PT", POL: "PL", UKR: "UA", TUR: "TR", ARG: "AR", CHL: "CL",
+          COL: "CO", PER: "PE", VEN: "VE", EGY: "EG", ZAF: "ZA", NGA: "NG",
+          KEN: "KE", THA: "TH", VNM: "VN", PHL: "PH", IDN: "ID", MYS: "MY",
+          SGP: "SG", NZL: "NZ", IRL: "IE", AUT: "AT", BEL: "BE", CHE: "CH",
+          DNK: "DK", FIN: "FI", GRC: "GR", CZE: "CZ", ROU: "RO", HUN: "HU",
+          ISR: "IL", SAU: "SA", ARE: "AE", PAK: "PK", BGD: "BD", LKA: "LK",
+        };
+
         const list = Object.entries(data)
-          .map(([code, entry]) => ({ code, name: entry.name }))
-          .sort((a, b) => a.name.localeCompare(b.name));
+          .map(([code, entry]) => {
+            let name = entry.name;
+            const iso2 = isoMap[code] || code.substring(0, 2);
+            if (displayNames) {
+              try { name = displayNames.of(iso2) || entry.name; } catch { /* keep original */ }
+            }
+            return { code, name };
+          })
+          .sort((a, b) => a.name.localeCompare(b.name, browserLocale));
         setCountries(list);
       });
-  }, []);
+  }, [browserLocale]);
 
   // BMI calculation
   const bmi = useMemo(() => {

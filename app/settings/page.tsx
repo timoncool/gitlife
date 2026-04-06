@@ -71,29 +71,31 @@ export default function SettingsPage() {
   return (
     <>
       <Header />
-      <main className="flex-1 container mx-auto px-4 py-8 flex flex-col gap-8">
-        <div className="flex flex-col gap-2 max-w-2xl mx-auto w-full">
-          <h1 className="text-3xl font-bold">{t("title")}</h1>
-          {profile && (
-            <div className="flex items-center gap-3">
-              <span className="text-lg text-muted-foreground">
-                {t("estimatedAge")}:
-              </span>
-              <span className="text-3xl font-bold text-primary">
-                {profile.expectedAge ?? 75} {t("years")}
-              </span>
-            </div>
-          )}
-        </div>
+      <main className="flex-1 container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto w-full flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-3xl font-semibold tracking-tight">{t("title")}</h1>
+            {profile && (
+              <div className="flex items-center gap-3">
+                <span className="text-lg text-muted-foreground">
+                  {t("estimatedAge")}:
+                </span>
+                <span className="text-3xl font-semibold text-primary font-mono tabular-nums">
+                  {profile.expectedAge ?? 75} {t("years")}
+                </span>
+              </div>
+            )}
+          </div>
 
-        <CalculatorForm
-          mode="full"
-          initialValues={
-            profile?.calculatorAnswers ? profile.calculatorAnswers : undefined
-          }
-          initialBirthDate={profile?.birthDate ?? undefined}
-          onSaved={fetchProfile}
-        />
+          <CalculatorForm
+            mode="full"
+            initialValues={
+              profile?.calculatorAnswers ? profile.calculatorAnswers : undefined
+            }
+            initialBirthDate={profile?.birthDate ?? undefined}
+            onSaved={fetchProfile}
+          />
+        </div>
       </main>
     </>
   );
