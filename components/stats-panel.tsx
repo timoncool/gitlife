@@ -50,15 +50,14 @@ export function StatsPanel({ stats }: StatsPanelProps) {
       {items.map((item) => (
         <div
           key={item.label}
-          className="rounded-xl border border-border bg-card p-5 hover:bg-secondary/50 transition-colors relative overflow-hidden"
+          className="rounded-lg border border-white/[0.08] bg-card p-5 hover:border-white/[0.12] hover:bg-[#0E0E0E] transition-colors relative overflow-hidden"
         >
-          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500/40 rounded-l-xl" />
+          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500/40 rounded-l-lg" />
           <div className="text-xs text-muted-foreground uppercase tracking-wider">
             {item.label}
           </div>
           <div
-            className="font-mono text-2xl font-bold tabular-nums mt-1"
-            style={{ textShadow: "0 0 20px rgba(57,211,83,0.15)" }}
+            className="font-mono text-2xl font-semibold tabular-nums mt-1"
           >
             {item.value}
           </div>

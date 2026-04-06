@@ -143,13 +143,13 @@ function WhatIsThisSection() {
   return (
     <section className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-10">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">{t("whatIsThisTitle")}</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">{t("whatIsThisTitle")}</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto mb-2 leading-relaxed">{t("whatIsThisDesc1")}</p>
         <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">{t("whatIsThisDesc2")}</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {features.map((f) => (
-          <div key={f.title} className="rounded-xl border bg-card/50 backdrop-blur-sm p-6 text-center flex flex-col items-center gap-3">
+          <div key={f.title} className="rounded-lg border bg-card/50 backdrop-blur-sm p-6 text-center flex flex-col items-center gap-3">
             <span className="text-3xl">{f.icon}</span>
             <h3 className="font-semibold text-lg">{f.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
@@ -206,7 +206,7 @@ function DemoSection() {
   return (
     <section className="w-full max-w-5xl mx-auto px-4">
       <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">{t("demoTitle")}</h2>
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{t("demoTitle")}</h2>
       </div>
       <form
         onSubmit={handleSubmit}
@@ -244,7 +244,7 @@ function DemoSection() {
       )}
 
       {data && (
-        <div className="rounded-xl border bg-card/50 backdrop-blur-sm p-6">
+        <div className="rounded-lg border bg-card/50 backdrop-blur-sm p-6">
           <div className="flex items-center gap-3 mb-4">
             <GitHubIcon className="h-5 w-5" />
             <span className="font-semibold text-lg">{data.username}</span>
@@ -292,7 +292,7 @@ function FamousDevCard({
   const avatarUrl = data?.avatarUrl;
 
   return (
-    <div ref={ref} className="group rounded-xl border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
+    <div ref={ref} className="group rounded-lg border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
       <div className="flex items-center gap-3">
         {avatarUrl ? (
           <img
@@ -367,7 +367,7 @@ function ColorLegend() {
     { color: "#0e4429", border: false, label: t("legendLow") },
     { color: "#26a641", border: false, label: t("legendMedium") },
     { color: "#39d353", border: false, label: t("legendHigh") },
-    { color: "rgba(240,136,62,0.5)", border: true, borderColor: "#f0883e", label: t("legendCurrent") },
+    { color: "rgba(57,211,83,0.3)", border: true, borderColor: "#39D353", label: t("legendCurrent") },
   ];
 
   return (
@@ -379,7 +379,7 @@ function ColorLegend() {
             style={{
               backgroundColor: item.color,
               border: item.border
-                ? `1.5px solid ${item.borderColor || (typeof document !== "undefined" && document.documentElement.classList.contains("dark") ? "#1b1f27" : "#d0d7de")}`
+                ? `1.5px solid ${item.borderColor || (typeof document !== "undefined" && document.documentElement.classList.contains("dark") ? "rgba(255,255,255,0.04)" : "#d0d7de")}`
                 : "none",
               ...(item.borderColor ? { borderColor: item.borderColor } : {}),
             }}
@@ -397,7 +397,7 @@ function FamousDevsSection() {
   return (
     <section className="w-full max-w-7xl mx-auto px-4">
       <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
           {t("famousTitle")}
         </h2>
         <p className="text-muted-foreground">{t("famousSubtitle")}</p>
@@ -467,7 +467,7 @@ export default function LandingPage() {
             GitHub-powered life tracker
           </div>
 
-          <h1 className="relative z-10 text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground dark:bg-gradient-to-r dark:from-white dark:to-white/80 dark:bg-clip-text dark:text-transparent">
+          <h1 className="relative z-10 text-4xl md:text-6xl font-semibold tracking-tight mb-6 text-foreground dark:bg-gradient-to-r dark:from-white dark:to-white/80 dark:bg-clip-text dark:text-transparent">
             {t("title")}
           </h1>
 

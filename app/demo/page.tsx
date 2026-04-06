@@ -230,7 +230,7 @@ function DemoPageContent() {
             <StatsPanel stats={stats} />
 
             {/* Grid */}
-            <div className="rounded-xl border border-border bg-card/50 p-4">
+            <div className="rounded-lg border border-border bg-card/50 p-4">
               <LifeGrid cells={cells} expectedAge={expectedAge} />
             </div>
           </div>

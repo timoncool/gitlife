@@ -167,7 +167,7 @@ export default function DashboardPage() {
 
         <StatsPanel stats={stats} />
 
-        <div className="rounded-xl border border-border bg-card/50 p-4">
+        <div className="rounded-lg border border-white/[0.08] bg-card/50 p-4">
           <LifeGrid
             cells={cells}
             expectedAge={profile.expectedAge ?? 75}

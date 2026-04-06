@@ -93,7 +93,7 @@ export function Header() {
   const user = session?.user;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/80 backdrop-blur-md">
       <div className="container flex h-14 items-center justify-between px-4">
         {/* Left: Logo + nav (desktop) */}
         <div className="flex items-center gap-6">

@@ -68,7 +68,7 @@ export function OnboardingForm() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center">
-    <div className="rounded-xl border border-border bg-card p-8 max-w-lg mx-auto flex flex-col gap-6">
+    <div className="rounded-lg border border-border bg-card p-8 max-w-lg mx-auto flex flex-col gap-6">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">{t("welcome")}</h2>
         <p className="text-muted-foreground mt-1">{t("birthDate")}</p>

@@ -5,13 +5,13 @@ import type { CellData, CellState } from "@/lib/types";
 
 const COLORS_DARK: Record<CellState, string> = {
   future: "transparent",
-  "pre-github": "#0d1117",
-  "no-commits": "#21262d",
+  "pre-github": "#0A0A0A",
+  "no-commits": "#1A1A1A",
   "level-1": "#0e4429",
   "level-2": "#006d32",
   "level-3": "#26a641",
   "level-4": "#39d353",
-  current: "#21262d",
+  current: "#1A1A1A",
 };
 
 const COLORS_LIGHT: Record<CellState, string> = {
@@ -25,7 +25,7 @@ const COLORS_LIGHT: Record<CellState, string> = {
   current: "#ebedf0",
 };
 
-const CURRENT_STROKE_DARK = "#f0883e";
+const CURRENT_STROKE_DARK = "#39D353";
 const CURRENT_STROKE_LIGHT = "#e16f24";
 
 function useIsDark() {
@@ -86,7 +86,7 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
           const isCurrent = cell.state === "current";
           const isFuture = cell.state === "future";
           const fill = isCurrent
-            ? (isDark ? "rgba(240,136,62,0.5)" : "rgba(225,111,36,0.35)")
+            ? (isDark ? "rgba(57,211,83,0.3)" : "rgba(225,111,36,0.35)")
             : colors[cell.state];
 
           return (
@@ -102,7 +102,7 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
                 isCurrent
                   ? currentStroke
                   : isFuture
-                    ? (isDark ? "#1b1f27" : "#d0d7de")
+                    ? (isDark ? "rgba(255,255,255,0.04)" : "#d0d7de")
                     : "none"
               }
               strokeWidth={isCurrent ? 0.5 : isFuture ? 0.2 : 0}

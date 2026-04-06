@@ -12,13 +12,13 @@ import type { CellData, CellState } from "@/lib/types";
 // Color maps per theme
 const COLORS_DARK: Record<CellState, string> = {
   future: "transparent",
-  "pre-github": "#0d1117",
-  "no-commits": "#21262d",
+  "pre-github": "#0A0A0A",
+  "no-commits": "#1A1A1A",
   "level-1": "#0e4429",
   "level-2": "#006d32",
   "level-3": "#26a641",
   "level-4": "#39d353",
-  current: "#21262d",
+  current: "#1A1A1A",
 };
 
 const COLORS_LIGHT: Record<CellState, string> = {
@@ -32,7 +32,7 @@ const COLORS_LIGHT: Record<CellState, string> = {
   current: "#ebedf0",
 };
 
-const CURRENT_STROKE_DARK = "#f0883e";
+const CURRENT_STROKE_DARK = "#39D353";
 const CURRENT_STROKE_LIGHT = "#e16f24";
 
 // Responsive cell sizing
@@ -169,7 +169,7 @@ function SkeletonGrid({ expectedAge }: { expectedAge: number }) {
               height={cellSize}
               rx={2}
               fill="transparent"
-              stroke="#1b1f27"
+              stroke="rgba(255,255,255,0.04)"
               strokeWidth={0.5}
               opacity={0.4 + Math.random() * 0.3}
             />
@@ -225,9 +225,9 @@ function GridCell({
   const strokeColor = isDark ? CURRENT_STROKE_DARK : CURRENT_STROKE_LIGHT;
   const tapTarget = cellSize < 8 ? TAP_TARGET_MOBILE : cellSize;
 
-  // Current week: orange fill with low opacity
+  // Current week: green fill with glow
   const fill = isCurrent
-    ? (isDark ? "rgba(240,136,62,0.3)" : "rgba(225,111,36,0.2)")
+    ? (isDark ? "rgba(57,211,83,0.3)" : "rgba(225,111,36,0.2)")
     : colors[cell.state];
 
   const hasGlow = cell.state === "level-3" || cell.state === "level-4";
@@ -273,7 +273,7 @@ function GridCell({
               height={cellSize}
               rx={2}
               fill={fill}
-              stroke={isCurrent ? strokeColor : isFuture ? (isDark ? "#1b1f27" : "#d0d7de") : "none"}
+              stroke={isCurrent ? strokeColor : isFuture ? (isDark ? "rgba(255,255,255,0.04)" : "#d0d7de") : "none"}
               strokeWidth={isCurrent ? 1.5 : isFuture ? 0.5 : 0}
             />
           </g>
