@@ -94,6 +94,7 @@
     "sectionFamily": "家族",
     "gender": "性別",
     "country": "国",
+    "searchCountry": "国を検索...",
     "height": "身長 (cm)",
     "weight": "体重 (kg)",
     "bmiLabel": "BMI",

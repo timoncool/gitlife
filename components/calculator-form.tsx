@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslations } from "next-intl";
-import { Info, ChevronRight, ChevronLeft, ArrowRight } from "lucide-react";
+import { Info, ChevronRight, ChevronLeft, ArrowRight, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -323,6 +323,7 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
   const [countries, setCountries] = useState<{ code: string; name: string }[]>([]);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [countrySearch, setCountrySearch] = useState("");
 
   // Form state
   const [birthDate, setBirthDate] = useState(initialBirthDate ?? "");
@@ -379,6 +380,23 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
     if (bmiVal < 35) return tc("bmiObese1");
     return tc("bmiObese2");
   };
+
+  // Flag emoji from ISO code
+  const countryFlag = useCallback((code: string): string => {
+    return String.fromCodePoint(
+      ...code
+        .toUpperCase()
+        .split("")
+        .map((c) => 127397 + c.charCodeAt(0)),
+    );
+  }, []);
+
+  // Filtered countries for search
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch.trim()) return countries;
+    const q = countrySearch.toLowerCase();
+    return countries.filter((c) => c.name.toLowerCase().includes(q));
+  }, [countries, countrySearch]);
 
   // Baseline from country
   const [lifeData, setLifeData] = useState<Record<string, { name: string; male: number; female: number }> | null>(null);
@@ -571,8 +589,12 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
           value={factorValues[factor] ?? ""}
           onValueChange={(v) => setFactor(factor, v)}
         >
-          <SelectTrigger>
-            <SelectValue placeholder={factorLabel(factor)} />
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={factorLabel(factor)}>
+              {factorValues[factor]
+                ? tc(config.options.find((o) => o.value === factorValues[factor])?.labelKey || factor)
+                : factorLabel(factor)}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             {config.options.map((opt) => (
@@ -600,13 +622,16 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
             value={birthDate}
             onChange={(e) => setBirthDate(e.target.value)}
             max={new Date().toISOString().split("T")[0]}
+            className="w-full"
           />
         </div>
         <div className="flex flex-col gap-2">
           <Label>{tc("gender")}</Label>
           <Select value={sex} onValueChange={(v) => { if (v) setSex(v); }}>
-            <SelectTrigger>
-              <SelectValue placeholder={tc("gender")} />
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={tc("gender")}>
+                {sex ? tc(sex === "male" ? "male" : "female") : tc("gender")}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="male">{tc("male")}</SelectItem>
@@ -617,13 +642,28 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
         <div className="flex flex-col gap-2">
           <Label>{tc("country")}</Label>
           <Select value={country} onValueChange={(v) => { if (v) setCountry(v); }}>
-            <SelectTrigger>
-              <SelectValue placeholder={tc("country")} />
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={tc("country")}>
+                {country
+                  ? `${countryFlag(country)} ${countries.find((c) => c.code === country)?.name || country}`
+                  : tc("country")}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              {countries.map((c) => (
+              <div className="flex items-center gap-2 px-2 pb-2 sticky top-0 bg-popover">
+                <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+                <input
+                  type="text"
+                  value={countrySearch}
+                  onChange={(e) => setCountrySearch(e.target.value)}
+                  placeholder={tc("searchCountry")}
+                  className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                  autoFocus
+                />
+              </div>
+              {filteredCountries.map((c) => (
                 <SelectItem key={c.code} value={c.code}>
-                  {c.name}
+                  {countryFlag(c.code)} {c.name}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -653,6 +693,7 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
                 value={height}
                 onChange={(e) => setHeight(e.target.value)}
                 placeholder="175"
+                className="w-full"
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -664,6 +705,7 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
                 placeholder="70"
+                className="w-full"
               />
             </div>
           </div>

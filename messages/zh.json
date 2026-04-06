@@ -94,6 +94,7 @@
     "sectionFamily": "家族",
     "gender": "性别",
     "country": "国家",
+    "searchCountry": "搜索国家...",
     "height": "身高 (cm)",
     "weight": "体重 (kg)",
     "bmiLabel": "BMI",

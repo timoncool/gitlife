@@ -105,6 +105,7 @@
     "sectionResults": "Results",
     "gender": "Gender",
     "country": "Country",
+    "searchCountry": "Search country...",
     "birthDate": "Date of birth",
     "height": "Height (cm)",
     "weight": "Weight (kg)",

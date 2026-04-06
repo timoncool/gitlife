@@ -94,6 +94,7 @@
     "sectionFamily": "Familia",
     "gender": "Genero",
     "country": "Pais",
+    "searchCountry": "Buscar pais...",
     "height": "Altura (cm)",
     "weight": "Peso (kg)",
     "bmiLabel": "IMC",

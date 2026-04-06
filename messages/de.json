@@ -94,6 +94,7 @@
     "sectionFamily": "Familie",
     "gender": "Geschlecht",
     "country": "Land",
+    "searchCountry": "Land suchen...",
     "height": "Groesse (cm)",
     "weight": "Gewicht (kg)",
     "bmiLabel": "BMI",
