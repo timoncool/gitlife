@@ -13,42 +13,47 @@ async function fetchPublicProfile(username: string) {
 }
 
 // Fetch contribution calendar from GitHub's public page — NO auth, NO token
-async function fetchPublicContributions(username: string): Promise<Record<number, ContributionWeek[]>> {
-  const url = `https://github.com/users/${encodeURIComponent(username)}/contributions`;
-  const res = await fetch(url, {
-    headers: { Accept: "text/html" },
-    next: { revalidate: 86400 },
-  });
-  if (!res.ok) return {};
+// Fetches ALL years from account creation to now
+async function fetchPublicContributions(username: string, joinYear: number): Promise<Record<number, ContributionWeek[]>> {
+  const currentYear = new Date().getFullYear();
+  const allDayData: { date: string; level: number }[] = [];
 
-  const html = await res.text();
-  const contributions: Record<number, ContributionWeek[]> = {};
-
-  // Parse contribution data from HTML
-  // GitHub serves contribution cells as <td> elements with data-date and data-level attributes
-  // Or as <tool-tip> elements with contribution counts
-  const dateRegex = /data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d)"/g;
-  let match;
-
-  const dayData: { date: string; level: number }[] = [];
-  while ((match = dateRegex.exec(html)) !== null) {
-    dayData.push({ date: match[1], level: parseInt(match[2], 10) });
+  // Fetch each year in parallel
+  const yearPromises = [];
+  for (let y = joinYear; y <= currentYear; y++) {
+    yearPromises.push(
+      fetch(`https://github.com/users/${encodeURIComponent(username)}/contributions?from=${y}-01-01&to=${y}-12-31`, {
+        headers: { Accept: "text/html" },
+        next: { revalidate: 86400 },
+      }).then(r => r.ok ? r.text() : "")
+    );
   }
+  const htmlPages = await Promise.all(yearPromises);
 
-  // If data-date/data-level parsing didn't work, try alternative format
-  if (dayData.length === 0) {
-    // Try parsing from the newer GitHub contribution graph format
-    const altRegex = /data-date="(\d{4}-\d{2}-\d{2})"[^>]*?(?:data-count="(\d+)"|data-level="(\d)")/g;
-    while ((match = altRegex.exec(html)) !== null) {
-      const count = match[2] ? parseInt(match[2], 10) : parseInt(match[3] || "0", 10);
-      dayData.push({ date: match[1], level: count > 0 ? Math.min(count, 4) : 0 });
+  for (const html of htmlPages) {
+    if (!html) continue;
+
+    const dateRegex = /data-date="(\d{4}-\d{2}-\d{2})"[^>]*data-level="(\d)"/g;
+    let match;
+    while ((match = dateRegex.exec(html)) !== null) {
+      allDayData.push({ date: match[1], level: parseInt(match[2], 10) });
+    }
+    // Alternative format
+    if (allDayData.length === 0) {
+      const altRegex = /data-date="(\d{4}-\d{2}-\d{2})"[^>]*?(?:data-count="(\d+)"|data-level="(\d)")/g;
+      while ((match = altRegex.exec(html)) !== null) {
+        const count = match[2] ? parseInt(match[2], 10) : parseInt(match[3] || "0", 10);
+        allDayData.push({ date: match[1], level: count > 0 ? Math.min(count, 4) : 0 });
+      }
     }
   }
 
-  // Group by year and week
-  const weekMap = new Map<string, number>(); // "YYYY-WW" -> estimated commits
+  const contributions: Record<number, ContributionWeek[]> = {};
 
-  for (const { date, level } of dayData) {
+  // Group by year and week
+  const weekMap = new Map<string, number>();
+
+  for (const { date, level } of allDayData) {
     const d = new Date(date);
     const year = d.getFullYear();
     const week = getWeekNumber(d);
@@ -97,7 +102,8 @@ export async function GET(request: NextRequest) {
     }
 
     const createdAt = profile.created_at as string;
-    const contributions = await fetchPublicContributions(username);
+    const joinYear = new Date(createdAt).getFullYear();
+    const contributions = await fetchPublicContributions(username, joinYear);
     const years = Object.keys(contributions).map(Number).sort();
 
     return NextResponse.json({
