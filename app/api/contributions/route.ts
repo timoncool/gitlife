@@ -52,19 +52,31 @@ export async function GET(request: NextRequest) {
     if (force) {
       yearsToFetch = allYears;
     } else {
-      // Check which years are already cached
+      // Check which years are already cached, with TTL validation
       const cacheKeys = allYears.map((y) => `${githubId}:${y}`);
       const cached = cacheKeys.length > 0
         ? await db
-            .select({ id: contributionCache.id })
+            .select({ id: contributionCache.id, cachedAt: contributionCache.cachedAt })
             .from(contributionCache)
             .where(inArray(contributionCache.id, cacheKeys))
         : [];
 
-      const cachedYears = new Set(
-        cached.map((c) => parseInt(c.id.split(":")[1], 10)),
+      const now = Date.now();
+      const currentYear = new Date().getFullYear();
+      const TTL_CURRENT_YEAR = 86400000; // 24 hours
+      const TTL_HISTORICAL = 2592000000; // 30 days
+
+      const freshYears = new Set(
+        cached
+          .filter((c) => {
+            const year = parseInt(c.id.split(":")[1], 10);
+            const age = now - new Date(c.cachedAt).getTime();
+            const ttl = year === currentYear ? TTL_CURRENT_YEAR : TTL_HISTORICAL;
+            return age < ttl;
+          })
+          .map((c) => parseInt(c.id.split(":")[1], 10)),
       );
-      yearsToFetch = allYears.filter((y) => !cachedYears.has(y));
+      yearsToFetch = allYears.filter((y) => !freshYears.has(y));
     }
 
     // Fetch missing years from GitHub API

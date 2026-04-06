@@ -606,7 +606,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                 onChange={(e) => setFamilyLongevity(e.target.checked)}
                 className="h-4 w-4 rounded border-input"
               />
-              <span className="text-sm">Parent/grandparent lived to 90+</span>
+              <span className="text-sm">Parent lived to 85+</span>
             </label>
           </CardContent>
         </Card>

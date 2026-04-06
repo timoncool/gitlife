@@ -76,14 +76,19 @@ export function calculateLifeExpectancy(
     breakdown.push({ factor: "familyLongevity", modifier: 2.5 });
   }
 
-  // Conditions — worst wins for overlapping categories
+  // Conditions — additive, but active_cancer dominates if present
   if (answers.conditions.length > 0) {
-    // Find the worst (most negative) modifier among selected conditions
-    const worstModifier = Math.min(
-      ...answers.conditions.map((c) => CONDITION_MODIFIERS[c] ?? 0),
-    );
-    if (worstModifier !== 0) {
-      breakdown.push({ factor: "conditions", modifier: worstModifier });
+    let conditionModifier: number;
+    if (answers.conditions.includes("active_cancer")) {
+      conditionModifier = CONDITION_MODIFIERS["active_cancer"];
+    } else {
+      conditionModifier = answers.conditions.reduce(
+        (sum, c) => sum + (CONDITION_MODIFIERS[c] ?? 0),
+        0,
+      );
+    }
+    if (conditionModifier !== 0) {
+      breakdown.push({ factor: "conditions", modifier: conditionModifier });
     }
   }
 
