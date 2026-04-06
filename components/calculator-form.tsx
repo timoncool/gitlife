@@ -918,7 +918,7 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
     return (
       <div className="max-w-2xl mx-auto flex flex-col gap-6">
         {sections.map((section) => (
-          <Card key={section.key} className="overflow-hidden">
+          <Card key={section.key} className="overflow-visible">
             <CardContent className="p-6 sm:p-8">
               <h2 className="text-xl font-bold mb-5">{tc(section.titleKey)}</h2>
               {section.render()}
@@ -967,7 +967,7 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
       </div>
 
       {/* Step card */}
-      <Card className="overflow-hidden">
+      <Card className="overflow-visible">
         <CardContent className="p-6 sm:p-8">
           <h2 className="text-2xl font-bold mb-6">{tc(currentStep.titleKey)}</h2>
 
