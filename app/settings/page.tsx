@@ -87,6 +87,7 @@ export default function SettingsPage() {
         </div>
 
         <CalculatorForm
+          mode="full"
           initialValues={
             profile?.calculatorAnswers ? profile.calculatorAnswers : undefined
           }

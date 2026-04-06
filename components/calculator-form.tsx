@@ -308,12 +308,14 @@ function getBMIModifier(bmi: number): number {
 }
 
 interface CalculatorFormProps {
+  mode?: "wizard" | "full";
   initialValues?: Partial<CalculatorAnswers>;
   initialBirthDate?: string | null;
   onSaved?: () => void;
+  onComplete?: () => void;
 }
 
-export function CalculatorForm({ initialValues, initialBirthDate, onSaved }: CalculatorFormProps) {
+export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDate, onSaved, onComplete }: CalculatorFormProps) {
   const tf = useTranslations("factors");
   const tc = useTranslations("calculator");
 
@@ -507,7 +509,11 @@ export function CalculatorForm({ initialValues, initialBirthDate, onSaved }: Cal
       if (res.ok) {
         setSaved(true);
         onSaved?.();
-        setTimeout(() => setSaved(false), 2000);
+        if (onComplete) {
+          onComplete();
+        } else {
+          setTimeout(() => setSaved(false), 2000);
+        }
       }
     } finally {
       setSaving(false);
@@ -583,6 +589,309 @@ export function CalculatorForm({ initialValues, initialBirthDate, onSaved }: Cal
   const progressPercent = ((step + 1) / TOTAL_STEPS) * 100;
   const currentStep = WIZARD_STEPS[step];
 
+  // Shared section renderers
+  function renderBasicSection() {
+    return (
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <Label>{tc("birthDate")}</Label>
+          <Input
+            type="date"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            max={new Date().toISOString().split("T")[0]}
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label>{tc("gender")}</Label>
+          <Select value={sex} onValueChange={(v) => { if (v) setSex(v); }}>
+            <SelectTrigger>
+              <SelectValue placeholder={tc("gender")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="male">{tc("male")}</SelectItem>
+              <SelectItem value="female">{tc("female")}</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label>{tc("country")}</Label>
+          <Select value={country} onValueChange={(v) => { if (v) setCountry(v); }}>
+            <SelectTrigger>
+              <SelectValue placeholder={tc("country")} />
+            </SelectTrigger>
+            <SelectContent>
+              {countries.map((c) => (
+                <SelectItem key={c.code} value={c.code}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+    );
+  }
+
+  function renderLifestyleSection() {
+    const lifestyleStep = WIZARD_STEPS[1];
+    return (
+      <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {lifestyleStep.factors.map((factor) => renderFactor(factor))}
+        </div>
+        <Separator />
+        <div className="flex flex-col gap-4">
+          <Label className="text-sm font-medium">{tc("bmiLabel")}</Label>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-2">
+              <Label className="text-xs text-muted-foreground">{tc("height")}</Label>
+              <Input
+                type="number"
+                min={100}
+                max={250}
+                value={height}
+                onChange={(e) => setHeight(e.target.value)}
+                placeholder="175"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label className="text-xs text-muted-foreground">{tc("weight")}</Label>
+              <Input
+                type="number"
+                min={30}
+                max={300}
+                value={weight}
+                onChange={(e) => setWeight(e.target.value)}
+                placeholder="70"
+              />
+            </div>
+          </div>
+          {bmi !== null && (
+            <div className="text-sm">
+              {tc("bmiLabel")}: <span className="font-bold">{bmi.toFixed(1)}</span>{" "}
+              <span className="text-muted-foreground">({getBMICategory(bmi)})</span>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  function renderMedicalSection() {
+    const medicalStep = WIZARD_STEPS[2];
+    return (
+      <div className="flex flex-col gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+          {medicalStep.factors.map((factor) => renderFactor(factor))}
+        </div>
+        <Separator />
+        <div className="flex flex-col gap-3">
+          <Label className="text-sm font-medium">{tf("heartCancer")}</Label>
+          {CONDITION_OPTIONS.map((opt) => (
+            <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={conditions.includes(opt.value)}
+                onChange={() => toggleCondition(opt.value)}
+                className="h-4 w-4 rounded border-input"
+              />
+              <span className="text-sm">{tc(opt.labelKey)}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  function renderSocialSection() {
+    const socialStep = WIZARD_STEPS[3];
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {socialStep.factors.map((factor) => renderFactor(factor))}
+      </div>
+    );
+  }
+
+  function renderEnvironmentalSection() {
+    const envStep = WIZARD_STEPS[4];
+    return (
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {envStep.factors.map((factor) => renderFactor(factor))}
+      </div>
+    );
+  }
+
+  function renderFamilySection() {
+    return (
+      <div className="flex flex-col gap-4">
+        <label className="flex items-center gap-3 cursor-pointer p-4 rounded-lg border hover:bg-muted/50 transition-colors">
+          <input
+            type="checkbox"
+            checked={familyLongevity}
+            onChange={(e) => setFamilyLongevity(e.target.checked)}
+            className="h-5 w-5 rounded border-input"
+          />
+          <span className="text-base">{tc("familyLongevity")}</span>
+        </label>
+      </div>
+    );
+  }
+
+  function renderResultsSection() {
+    return (
+      <div className="flex flex-col gap-6">
+        {/* Main calculated age */}
+        <div className="text-center py-6">
+          <div className="text-6xl font-bold text-green-600 dark:text-green-400">
+            {manualOverride ?? Math.round(calculatedAge)}
+          </div>
+          <div className="text-lg text-muted-foreground mt-2">
+            {tc("calculatedAge")}
+          </div>
+          {sex && country && (
+            <div className="text-sm text-muted-foreground mt-1">
+              {tc("baselineAge")}: {baseline}
+            </div>
+          )}
+        </div>
+
+        <Separator />
+
+        {/* Breakdown */}
+        {impacts.length > 0 && (
+          <div className="flex flex-col gap-3">
+            <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
+              {tc("totalImpact")}
+            </h3>
+
+            {impacts.filter((i) => i.modifier > 0).length > 0 && (
+              <div className="flex flex-col gap-1.5">
+                <span className="text-xs text-green-600 dark:text-green-400 font-medium">
+                  {tc("positiveFactors")}
+                </span>
+                {impacts
+                  .filter((i) => i.modifier > 0)
+                  .sort((a, b) => b.modifier - a.modifier)
+                  .map((item) => (
+                    <div key={item.factor} className="flex items-center justify-between text-sm pl-2">
+                      <span>{factorLabel(item.factor)}</span>
+                      <span className="text-green-600 dark:text-green-400 font-medium">
+                        +{item.modifier}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {impacts.filter((i) => i.modifier < 0).length > 0 && (
+              <div className="flex flex-col gap-1.5 mt-2">
+                <span className="text-xs text-red-600 dark:text-red-400 font-medium">
+                  {tc("negativeFactors")}
+                </span>
+                {impacts
+                  .filter((i) => i.modifier < 0)
+                  .sort((a, b) => a.modifier - b.modifier)
+                  .map((item) => (
+                    <div key={item.factor} className="flex items-center justify-between text-sm pl-2">
+                      <span>{factorLabel(item.factor)}</span>
+                      <span className="text-red-600 dark:text-red-400 font-medium">
+                        {item.modifier}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            <Separator className="my-2" />
+            <div className="flex items-center justify-between font-bold text-base">
+              <span>{tc("total")}</span>
+              <span className={cappedImpact >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}>
+                {cappedImpact > 0 ? "+" : ""}{cappedImpact.toFixed(1)}
+              </span>
+            </div>
+          </div>
+        )}
+
+        <Separator />
+
+        {/* Manual override */}
+        <div className="flex flex-col gap-3">
+          <Label className="text-sm text-muted-foreground">
+            {tc("orEnterManually")}
+          </Label>
+          <Slider
+            min={50}
+            max={110}
+            step={1}
+            value={[manualOverride ?? Math.round(calculatedAge)]}
+            onValueChange={(val) => {
+              const v = Array.isArray(val) ? val[0] : val;
+              setManualOverride(v);
+            }}
+          />
+          <div className="text-center text-sm text-muted-foreground">
+            {manualOverride ?? Math.round(calculatedAge)}
+          </div>
+          {manualOverride !== null && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setManualOverride(null)}
+              className="self-center"
+            >
+              {tc("useCalculator")}
+            </Button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ─── FULL MODE ─────────────────────────────────────────────────────────────
+  if (mode === "full") {
+    const sections = [
+      { key: "basic", titleKey: "sectionBasic", render: renderBasicSection },
+      { key: "lifestyle", titleKey: "sectionLifestyle", render: renderLifestyleSection },
+      { key: "medical", titleKey: "sectionMedical", render: renderMedicalSection },
+      { key: "social", titleKey: "sectionSocial", render: renderSocialSection },
+      { key: "environmental", titleKey: "sectionEnvironmental", render: renderEnvironmentalSection },
+      { key: "family", titleKey: "sectionFamily", render: renderFamilySection },
+    ];
+
+    return (
+      <div className="max-w-2xl mx-auto flex flex-col gap-6">
+        {sections.map((section) => (
+          <Card key={section.key} className="overflow-hidden">
+            <CardContent className="p-6 sm:p-8">
+              <h2 className="text-xl font-bold mb-5">{tc(section.titleKey)}</h2>
+              {section.render()}
+            </CardContent>
+          </Card>
+        ))}
+
+        {/* Results / Impact preview */}
+        <Card className="overflow-hidden border-green-500/30">
+          <CardContent className="p-6 sm:p-8">
+            <h2 className="text-xl font-bold mb-5">{tc("sectionResults")}</h2>
+            {renderResultsSection()}
+          </CardContent>
+        </Card>
+
+        {/* Save button */}
+        <Button
+          onClick={handleSave}
+          disabled={saving}
+          size="lg"
+          className="w-full bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
+        >
+          {saved ? tc("saved") : saving ? tc("saving") : tc("save")}
+        </Button>
+      </div>
+    );
+  }
+
+  // ─── WIZARD MODE ───────────────────────────────────────────────────────────
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-6">
       {/* Progress bar */}
@@ -606,257 +915,19 @@ export function CalculatorForm({ initialValues, initialBirthDate, onSaved }: Cal
         <CardContent className="p-6 sm:p-8">
           <h2 className="text-2xl font-bold mb-6">{tc(currentStep.titleKey)}</h2>
 
-          {/* Step 0: Basic */}
-          {step === 0 && (
-            <div className="flex flex-col gap-5 animate-in fade-in duration-300">
-              <div className="flex flex-col gap-2">
-                <Label>{tc("birthDate")}</Label>
-                <Input
-                  type="date"
-                  value={birthDate}
-                  onChange={(e) => setBirthDate(e.target.value)}
-                  max={new Date().toISOString().split("T")[0]}
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label>{tc("gender")}</Label>
-                <Select value={sex} onValueChange={(v) => { if (v) setSex(v); }}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={tc("gender")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="male">{tc("male")}</SelectItem>
-                    <SelectItem value="female">{tc("female")}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Label>{tc("country")}</Label>
-                <Select value={country} onValueChange={(v) => { if (v) setCountry(v); }}>
-                  <SelectTrigger>
-                    <SelectValue placeholder={tc("country")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {countries.map((c) => (
-                      <SelectItem key={c.code} value={c.code}>
-                        {c.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          )}
-
-          {/* Step 1: Lifestyle */}
-          {step === 1 && (
-            <div className="flex flex-col gap-5 animate-in fade-in duration-300">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {currentStep.factors.map((factor) => renderFactor(factor))}
-              </div>
-              {/* BMI */}
-              <Separator />
-              <div className="flex flex-col gap-4">
-                <Label className="text-sm font-medium">{tc("bmiLabel")}</Label>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-2">
-                    <Label className="text-xs text-muted-foreground">{tc("height")}</Label>
-                    <Input
-                      type="number"
-                      min={100}
-                      max={250}
-                      value={height}
-                      onChange={(e) => setHeight(e.target.value)}
-                      placeholder="175"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <Label className="text-xs text-muted-foreground">{tc("weight")}</Label>
-                    <Input
-                      type="number"
-                      min={30}
-                      max={300}
-                      value={weight}
-                      onChange={(e) => setWeight(e.target.value)}
-                      placeholder="70"
-                    />
-                  </div>
-                </div>
-                {bmi !== null && (
-                  <div className="text-sm">
-                    {tc("bmiLabel")}: <span className="font-bold">{bmi.toFixed(1)}</span>{" "}
-                    <span className="text-muted-foreground">({getBMICategory(bmi)})</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Step 2: Health */}
-          {step === 2 && (
-            <div className="flex flex-col gap-5 animate-in fade-in duration-300">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {currentStep.factors.map((factor) => renderFactor(factor))}
-              </div>
-              {/* Conditions */}
-              <Separator />
-              <div className="flex flex-col gap-3">
-                <Label className="text-sm font-medium">{tf("heartCancer")}</Label>
-                {CONDITION_OPTIONS.map((opt) => (
-                  <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={conditions.includes(opt.value)}
-                      onChange={() => toggleCondition(opt.value)}
-                      className="h-4 w-4 rounded border-input"
-                    />
-                    <span className="text-sm">{tc(opt.labelKey)}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Step 3: Social & Psychology */}
-          {step === 3 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-in fade-in duration-300">
-              {currentStep.factors.map((factor) => renderFactor(factor))}
-            </div>
-          )}
-
-          {/* Step 4: Environment */}
-          {step === 4 && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 animate-in fade-in duration-300">
-              {currentStep.factors.map((factor) => renderFactor(factor))}
-            </div>
-          )}
-
-          {/* Step 5: Family */}
-          {step === 5 && (
-            <div className="flex flex-col gap-4 animate-in fade-in duration-300">
-              <label className="flex items-center gap-3 cursor-pointer p-4 rounded-lg border hover:bg-muted/50 transition-colors">
-                <input
-                  type="checkbox"
-                  checked={familyLongevity}
-                  onChange={(e) => setFamilyLongevity(e.target.checked)}
-                  className="h-5 w-5 rounded border-input"
-                />
-                <span className="text-base">{tc("familyLongevity")}</span>
-              </label>
-            </div>
-          )}
+          {step === 0 && <div className="animate-in fade-in duration-300">{renderBasicSection()}</div>}
+          {step === 1 && <div className="animate-in fade-in duration-300">{renderLifestyleSection()}</div>}
+          {step === 2 && <div className="animate-in fade-in duration-300">{renderMedicalSection()}</div>}
+          {step === 3 && <div className="animate-in fade-in duration-300">{renderSocialSection()}</div>}
+          {step === 4 && <div className="animate-in fade-in duration-300">{renderEnvironmentalSection()}</div>}
+          {step === 5 && <div className="animate-in fade-in duration-300">{renderFamilySection()}</div>}
 
           {/* Step 6: Results */}
           {step === 6 && (
-            <div className="flex flex-col gap-6 animate-in fade-in duration-300">
-              {/* Main calculated age */}
-              <div className="text-center py-6">
-                <div className="text-6xl font-bold text-green-600 dark:text-green-400">
-                  {manualOverride ?? Math.round(calculatedAge)}
-                </div>
-                <div className="text-lg text-muted-foreground mt-2">
-                  {tc("calculatedAge")}
-                </div>
-                {sex && country && (
-                  <div className="text-sm text-muted-foreground mt-1">
-                    {tc("baselineAge")}: {baseline}
-                  </div>
-                )}
-              </div>
-
-              <Separator />
-
-              {/* Breakdown */}
-              {impacts.length > 0 && (
-                <div className="flex flex-col gap-3">
-                  <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">
-                    {tc("totalImpact")}
-                  </h3>
-
-                  {/* Positive factors */}
-                  {impacts.filter((i) => i.modifier > 0).length > 0 && (
-                    <div className="flex flex-col gap-1.5">
-                      <span className="text-xs text-green-600 dark:text-green-400 font-medium">
-                        {tc("positiveFactors")}
-                      </span>
-                      {impacts
-                        .filter((i) => i.modifier > 0)
-                        .sort((a, b) => b.modifier - a.modifier)
-                        .map((item) => (
-                          <div key={item.factor} className="flex items-center justify-between text-sm pl-2">
-                            <span>{factorLabel(item.factor)}</span>
-                            <span className="text-green-600 dark:text-green-400 font-medium">
-                              +{item.modifier}
-                            </span>
-                          </div>
-                        ))}
-                    </div>
-                  )}
-
-                  {/* Negative factors */}
-                  {impacts.filter((i) => i.modifier < 0).length > 0 && (
-                    <div className="flex flex-col gap-1.5 mt-2">
-                      <span className="text-xs text-red-600 dark:text-red-400 font-medium">
-                        {tc("negativeFactors")}
-                      </span>
-                      {impacts
-                        .filter((i) => i.modifier < 0)
-                        .sort((a, b) => a.modifier - b.modifier)
-                        .map((item) => (
-                          <div key={item.factor} className="flex items-center justify-between text-sm pl-2">
-                            <span>{factorLabel(item.factor)}</span>
-                            <span className="text-red-600 dark:text-red-400 font-medium">
-                              {item.modifier}
-                            </span>
-                          </div>
-                        ))}
-                    </div>
-                  )}
-
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between font-bold text-base">
-                    <span>{tc("total")}</span>
-                    <span className={cappedImpact >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}>
-                      {cappedImpact > 0 ? "+" : ""}{cappedImpact.toFixed(1)}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              <Separator />
-
-              {/* Manual override at bottom */}
-              <div className="flex flex-col gap-3">
-                <Label className="text-sm text-muted-foreground">
-                  {tc("orEnterManually")}
-                </Label>
-                <Slider
-                  min={50}
-                  max={110}
-                  step={1}
-                  value={[manualOverride ?? Math.round(calculatedAge)]}
-                  onValueChange={(val) => {
-                    const v = Array.isArray(val) ? val[0] : val;
-                    setManualOverride(v);
-                  }}
-                />
-                <div className="text-center text-sm text-muted-foreground">
-                  {manualOverride ?? Math.round(calculatedAge)}
-                </div>
-                {manualOverride !== null && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setManualOverride(null)}
-                    className="self-center"
-                  >
-                    {tc("useCalculator")}
-                  </Button>
-                )}
-              </div>
-
+            <div className="animate-in fade-in duration-300">
+              {renderResultsSection()}
               {/* Save button */}
-              <Button onClick={handleSave} disabled={saving} size="lg" className="w-full mt-2">
+              <Button onClick={handleSave} disabled={saving} size="lg" className="w-full mt-6">
                 {saved ? tc("saved") : saving ? tc("saving") : tc("save")}
               </Button>
             </div>
