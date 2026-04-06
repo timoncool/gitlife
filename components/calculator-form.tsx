@@ -352,44 +352,34 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
     },
   );
 
-  // Get browser locale for country name translation
-  const browserLocale = typeof navigator !== "undefined" ? navigator.language : "en";
-
   useEffect(() => {
-    fetch("/data/life-expectancy.json")
-      .then((res) => res.json())
-      .then((data: LifeExpectancyData) => {
-        // Use Intl.DisplayNames to translate country names to current locale
-        let displayNames: Intl.DisplayNames | null = null;
+    Promise.all([
+      fetch("/data/life-expectancy.json").then((r) => r.json()),
+      import("i18n-iso-countries").then(async (mod) => {
+        // Register locale dynamically
+        const lang = document.documentElement.lang || "en";
         try {
-          displayNames = new Intl.DisplayNames([browserLocale], { type: "region" });
-        } catch { /* fallback to English names */ }
-
-        const isoMap: Record<string, string> = {
-          RUS: "RU", USA: "US", GBR: "GB", DEU: "DE", FRA: "FR", JPN: "JP",
-          CHN: "CN", BRA: "BR", IND: "IN", CAN: "CA", AUS: "AU", ESP: "ES",
-          ITA: "IT", KOR: "KR", MEX: "MX", NOR: "NO", SWE: "SE", NLD: "NL",
-          PRT: "PT", POL: "PL", UKR: "UA", TUR: "TR", ARG: "AR", CHL: "CL",
-          COL: "CO", PER: "PE", VEN: "VE", EGY: "EG", ZAF: "ZA", NGA: "NG",
-          KEN: "KE", THA: "TH", VNM: "VN", PHL: "PH", IDN: "ID", MYS: "MY",
-          SGP: "SG", NZL: "NZ", IRL: "IE", AUT: "AT", BEL: "BE", CHE: "CH",
-          DNK: "DK", FIN: "FI", GRC: "GR", CZE: "CZ", ROU: "RO", HUN: "HU",
-          ISR: "IL", SAU: "SA", ARE: "AE", PAK: "PK", BGD: "BD", LKA: "LK",
-        };
-
-        const list = Object.entries(data)
-          .map(([code, entry]) => {
-            let name = entry.name;
-            const iso2 = isoMap[code] || code.substring(0, 2);
-            if (displayNames) {
-              try { name = displayNames.of(iso2) || entry.name; } catch { /* keep original */ }
-            }
-            return { code, name };
-          })
-          .sort((a, b) => a.name.localeCompare(b.name, browserLocale));
-        setCountries(list);
-      });
-  }, [browserLocale]);
+          const localeData = await import(`i18n-iso-countries/langs/${lang}.json`);
+          mod.registerLocale(localeData);
+        } catch {
+          const enData = await import("i18n-iso-countries/langs/en.json");
+          mod.registerLocale(enData);
+        }
+        return mod;
+      }),
+    ]).then(([data, countries_lib]: [LifeExpectancyData, typeof import("i18n-iso-countries")]) => {
+      const lang = document.documentElement.lang || "en";
+      const list = Object.entries(data)
+        .map(([iso3, entry]) => {
+          const name = countries_lib.getName(iso3, lang, { select: "official" })
+            || countries_lib.getName(iso3, "en", { select: "official" })
+            || entry.name;
+          return { code: iso3, name };
+        })
+        .sort((a, b) => a.name.localeCompare(b.name, lang));
+      setCountries(list);
+    });
+  }, []);
 
   // BMI calculation
   const bmi = useMemo(() => {
@@ -673,27 +663,31 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
             <SelectTrigger className="w-full">
               <SelectValue placeholder={tc("country")}>
                 {country
-                  ? `${countryFlag(country)} ${countries.find((c) => c.code === country)?.name || country}`
+                  ? `${countries.find((c) => c.code === country)?.name || country}`
                   : tc("country")}
               </SelectValue>
             </SelectTrigger>
             <SelectContent>
-              <div className="flex items-center gap-2 px-2 pb-2 sticky top-0 bg-popover">
-                <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-                <input
-                  type="text"
-                  value={countrySearch}
-                  onChange={(e) => setCountrySearch(e.target.value)}
-                  placeholder={tc("searchCountry")}
-                  className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                  autoFocus
-                />
+              <div className="sticky top-0 z-10 bg-popover border-b border-white/[0.08] p-2">
+                <div className="flex items-center gap-2">
+                  <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+                  <input
+                    type="text"
+                    value={countrySearch}
+                    onChange={(e) => setCountrySearch(e.target.value)}
+                    placeholder={tc("searchCountry")}
+                    className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                    autoFocus
+                  />
+                </div>
               </div>
-              {filteredCountries.map((c) => (
-                <SelectItem key={c.code} value={c.code}>
-                  {countryFlag(c.code)} {c.name}
-                </SelectItem>
-              ))}
+              <div className="max-h-[300px] overflow-y-auto">
+                {filteredCountries.map((c) => (
+                  <SelectItem key={c.code} value={c.code}>
+                    {c.name}
+                  </SelectItem>
+                ))}
+              </div>
             </SelectContent>
           </Select>
         </div>
