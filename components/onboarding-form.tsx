@@ -55,8 +55,7 @@ export function OnboardingForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           birthDate: birthDate.toISOString().split("T")[0],
-          sex: gender,
-          country,
+          calculatorAnswers: { sex: gender, country },
         }),
       });
       if (res.ok) {

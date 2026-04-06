@@ -82,8 +82,8 @@ function DemoMiniGrid({
   data: DemoData;
   birthYear: number;
 }) {
-  const birthDate = new Date(birthYear, 0, 1);
-  const githubCreated = new Date(data.createdAt);
+  const birthDate = useMemo(() => new Date(birthYear, 0, 1), [birthYear]);
+  const githubCreated = useMemo(() => new Date(data.createdAt), [data.createdAt]);
   const flat = useMemo(() => flattenContributions(data.contributions), [data]);
   const weekMap = useMemo(() => mapContributionsToWeeks(flat), [flat]);
 
@@ -285,6 +285,8 @@ function FamousDevsSection() {
   );
 }
 
+const ALLOWED_LOCALES = LANGUAGES.map((l) => l.value);
+
 function LanguageFooterSelector() {
   const currentLocale =
     typeof document !== "undefined"
@@ -295,8 +297,8 @@ function LanguageFooterSelector() {
       : "en";
 
   function handleChange(value: string | null) {
-    if (!value) return;
-    document.cookie = `locale=${value};path=/;max-age=31536000`;
+    if (!value || !ALLOWED_LOCALES.includes(value as typeof ALLOWED_LOCALES[number])) return;
+    document.cookie = `locale=${value};path=/;max-age=31536000;SameSite=Lax`;
     window.location.reload();
   }
 

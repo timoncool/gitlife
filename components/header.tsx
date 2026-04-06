@@ -33,6 +33,8 @@ const LANGUAGES = [
   { value: "ja", label: "日本語" },
 ] as const;
 
+const ALLOWED_LOCALES = LANGUAGES.map((l) => l.value);
+
 function LanguageSelector() {
   const currentLocale =
     typeof document !== "undefined"
@@ -43,8 +45,8 @@ function LanguageSelector() {
       : "en";
 
   function handleChange(value: string | null) {
-    if (!value) return;
-    document.cookie = `locale=${value};path=/;max-age=31536000`;
+    if (!value || !ALLOWED_LOCALES.includes(value as typeof ALLOWED_LOCALES[number])) return;
+    document.cookie = `locale=${value};path=/;max-age=31536000;SameSite=Lax`;
     window.location.reload();
   }
 

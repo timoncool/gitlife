@@ -12,14 +12,14 @@ export interface GHWeek {
   contributionDays: ContributionDay[];
 }
 
-async function graphql<T>(token: string, query: string): Promise<T> {
+async function graphql<T>(token: string, query: string, variables?: Record<string, unknown>): Promise<T> {
   const res = await fetch(GITHUB_GRAPHQL, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ query }),
+    body: JSON.stringify(variables ? { query, variables } : { query }),
   });
 
   if (!res.ok) {
@@ -127,11 +127,11 @@ export async function fetchPublicContributions(
   for (let i = 0; i < years.length; i += 5) {
     const chunk = years.slice(i, i + 5);
     const fragments = buildContributionFragments(chunk);
-    const query = `{ user(login: "${username}") { ${fragments} } }`;
+    const query = `query($login: String!) { user(login: $login) { ${fragments} } }`;
 
     const data = await graphql<{
       user: Record<string, { contributionCalendar: { weeks: GHWeek[] } }> | null;
-    }>(pat, query);
+    }>(pat, query, { login: username });
 
     if (data.user) {
       Object.assign(result, extractYearsFromResponse(data.user, chunk));

@@ -5,7 +5,6 @@ import { useTranslations } from "next-intl";
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import type { CellData, CellState } from "@/lib/types";
@@ -249,7 +248,6 @@ export function LifeGrid({ cells, expectedAge, loading }: LifeGridProps) {
   }
 
   return (
-    <TooltipProvider delay={100}>
       <div className="w-full overflow-x-auto">
         <svg
           width={svgWidth}
@@ -311,6 +309,5 @@ export function LifeGrid({ cells, expectedAge, loading }: LifeGridProps) {
           )}
         </svg>
       </div>
-    </TooltipProvider>
   );
 }

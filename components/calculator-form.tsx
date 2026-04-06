@@ -372,7 +372,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
     setSaving(true);
     setSaved(false);
     try {
-      const body: Record<string, unknown> = {
+      const calculatorAnswers: Record<string, unknown> = {
         sex,
         country,
         height: parseFloat(height) || 0,
@@ -381,8 +381,9 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
         conditions,
         ...factorValues,
       };
+      const body: Record<string, unknown> = { calculatorAnswers };
       if (manualOverride !== null) {
-        body.manualOverride = manualOverride;
+        body.expectedAge = manualOverride;
       }
       const res = await fetch("/api/user", {
         method: "PUT",

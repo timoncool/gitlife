@@ -24,19 +24,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Validate session by calling Better Auth's getSession endpoint
-  const baseUrl = request.nextUrl.origin;
-  const res = await fetch(`${baseUrl}/api/auth/get-session`, {
-    headers: {
-      cookie: request.headers.get("cookie") ?? "",
-    },
-  });
-
-  if (!res.ok || !(await res.json())?.session) {
-    const loginUrl = new URL("/", request.url);
-    return NextResponse.redirect(loginUrl);
-  }
-
+  // Cookie exists — allow through. Full session validation happens in API routes.
   return NextResponse.next();
 }
 
