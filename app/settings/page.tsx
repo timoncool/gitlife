@@ -92,10 +92,10 @@ export default function SettingsPage() {
             )}
           </div>
 
-          <Tabs defaultValue="calculator">
-            <TabsList>
-              <TabsTrigger value="calculator">{t("calculator")}</TabsTrigger>
-              <TabsTrigger value="manual">{t("manualOverride")}</TabsTrigger>
+          <Tabs defaultValue="calculator" className="w-full">
+            <TabsList className="w-full">
+              <TabsTrigger value="calculator" className="flex-1">{t("calculator")}</TabsTrigger>
+              <TabsTrigger value="manual" className="flex-1">{t("manualOverride")}</TabsTrigger>
             </TabsList>
             <TabsContent value="calculator">
               <CalculatorForm
