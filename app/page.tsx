@@ -21,6 +21,7 @@ import { MiniLifeGrid } from "@/components/mini-life-grid";
 import {
   generateGridCells,
   mapContributionsToWeeks,
+  calculateStats,
 } from "@/lib/grid-utils";
 import type { ContributionWeek, YearContribution } from "@/lib/types";
 
@@ -49,20 +50,20 @@ const LANGUAGES = [
 
 // Public data from Wikipedia, interviews, public profiles
 const FAMOUS_DEVS = [
-  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 80 },
-  { username: "yyx990803", label: "Evan You", tag: "Vue.js", birthYear: 1990, country: "USA", expectedAge: 82 },
-  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel", birthYear: 1990, country: "USA", expectedAge: 80 },
-  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84 },
-  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82 },
-  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1985, country: "USA", expectedAge: 80 },
-  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Streamer", birthYear: 1988, country: "USA", expectedAge: 78 },
-  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83 },
-  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub", birthYear: 1985, country: "USA", expectedAge: 80 },
-  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp", birthYear: 1990, country: "USA", expectedAge: 80 },
-  { username: "rich-harris", label: "Rich Harris", tag: "Svelte", birthYear: 1985, country: "USA", expectedAge: 81 },
-  { username: "dan-abramov", label: "Dan Abramov", tag: "React", birthYear: 1992, country: "GBR", expectedAge: 81 },
-  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing", birthYear: 1990, country: "USA", expectedAge: 78 },
-  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1990, country: "USA", expectedAge: 80 },
+  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 80, description: "Creator of Linux and Git. Changed the world of open source." },
+  { username: "yyx990803", label: "Evan You", tag: "Vue.js", birthYear: 1990, country: "USA", expectedAge: 82, description: "Creator of Vue.js and Vite. One of the most popular JS frameworks." },
+  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel", birthYear: 1990, country: "USA", expectedAge: 80, description: "CEO of Vercel, creator of Socket.io and Next.js visionary." },
+  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84, description: "Mass producer of open source. 1000+ npm packages and counting." },
+  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of Express.js, Koa, and dozens of foundational Node.js tools." },
+  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1985, country: "USA", expectedAge: 80, description: "Engineering lead on Google Chrome. Author of web performance best practices." },
+  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Streamer", birthYear: 1988, country: "USA", expectedAge: 78, description: "Developer streamer and content creator. Ex-Netflix senior engineer." },
+  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83, description: "Creator of Redis — the most popular in-memory database in the world." },
+  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub", birthYear: 1985, country: "USA", expectedAge: 80, description: "Co-founder of GitHub. Changed the way software is built." },
+  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp", birthYear: 1990, country: "USA", expectedAge: 80, description: "Co-founder of HashiCorp. Creator of Vagrant, Terraform, and Vault." },
+  { username: "rich-harris", label: "Rich Harris", tag: "Svelte", birthYear: 1985, country: "USA", expectedAge: 81, description: "Creator of Svelte and SvelteKit. Rethinking frontend frameworks." },
+  { username: "dan-abramov", label: "Dan Abramov", tag: "React", birthYear: 1992, country: "GBR", expectedAge: 81, description: "Co-creator of Redux, React core team member at Meta." },
+  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing", birthYear: 1990, country: "USA", expectedAge: 78, description: "Testing guru. Creator of Testing Library and Epic React." },
+  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1990, country: "USA", expectedAge: 80, description: "Creator of TanStack Query, Table, Router. Full-stack open source." },
 ];
 
 const DEFAULT_EXPECTED_AGE = 80;
@@ -90,10 +91,12 @@ function DemoMiniGrid({
   data,
   birthYear,
   expectedAge = DEFAULT_EXPECTED_AGE,
+  showStats = false,
 }: {
   data: DemoData;
   birthYear: number;
   expectedAge?: number;
+  showStats?: boolean;
 }) {
   const birthDate = useMemo(() => new Date(birthYear, 0, 1), [birthYear]);
   const githubCreated = useMemo(() => new Date(data.createdAt), [data.createdAt]);
@@ -109,8 +112,51 @@ function DemoMiniGrid({
     );
   }, [birthDate, expectedAge, githubCreated, weekMap]);
 
+  const stats = useMemo(() => calculateStats(cells), [cells]);
+  const commitPercent = stats.weeksLived > 0
+    ? Math.round((stats.activeWeeks / stats.weeksLived) * 1000) / 10
+    : 0;
+
   return (
-    <MiniLifeGrid cells={cells} expectedAge={expectedAge} />
+    <div>
+      <MiniLifeGrid cells={cells} expectedAge={expectedAge} />
+      {showStats && (
+        <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground font-mono tabular-nums">
+          <span>{stats.weeksLived}/{stats.weeksTotal} wks</span>
+          <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks} active</span>
+          <span>{commitPercent}% coded</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function WhatIsThisSection() {
+  const t = useTranslations("landing");
+
+  const features = [
+    { icon: "\u{1F4CA}", title: t("featureVisualization"), desc: t("featureVisualizationDesc") },
+    { icon: "\u{1F49A}", title: t("featureGithub"), desc: t("featureGithubDesc") },
+    { icon: "\u{1F9EE}", title: t("featureCalculator"), desc: t("featureCalculatorDesc") },
+  ];
+
+  return (
+    <section className="w-full max-w-5xl mx-auto px-4">
+      <div className="text-center mb-10">
+        <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-4">{t("whatIsThisTitle")}</h2>
+        <p className="text-muted-foreground max-w-2xl mx-auto mb-2 leading-relaxed">{t("whatIsThisDesc1")}</p>
+        <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">{t("whatIsThisDesc2")}</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {features.map((f) => (
+          <div key={f.title} className="rounded-xl border bg-card/50 backdrop-blur-sm p-6 text-center flex flex-col items-center gap-3">
+            <span className="text-3xl">{f.icon}</span>
+            <h3 className="font-semibold text-lg">{f.title}</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -246,33 +292,45 @@ function FamousDevCard({
   const avatarUrl = data?.avatarUrl;
 
   return (
-    <div ref={ref}>
-      <Link
-        href={`/demo?username=${encodeURIComponent(dev.username)}`}
-        className="group rounded-xl border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5 cursor-pointer"
-      >
-        <div className="flex items-center gap-3">
-          {avatarUrl ? (
-            <img
-              src={avatarUrl}
-              alt={dev.label}
-              className="h-7 w-7 rounded-full"
-              loading="lazy"
-            />
-          ) : (
-            <GitHubIcon className="h-5 w-5 text-muted-foreground" />
-          )}
-          <div className="flex flex-col min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="font-semibold truncate">{dev.label}</span>
-              <span className="text-xs text-muted-foreground shrink-0">{currentAge} {t("age")}</span>
-            </div>
-            <span className="text-xs text-muted-foreground">@{dev.username}</span>
+    <div ref={ref} className="group rounded-xl border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
+      <div className="flex items-center gap-3">
+        {avatarUrl ? (
+          <img
+            src={avatarUrl}
+            alt={dev.label}
+            className="h-7 w-7 rounded-full"
+            loading="lazy"
+          />
+        ) : (
+          <GitHubIcon className="h-5 w-5 text-muted-foreground" />
+        )}
+        <div className="flex flex-col min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="font-semibold truncate">{dev.label}</span>
+            <span className="text-xs text-muted-foreground shrink-0">{currentAge} {t("age")}</span>
           </div>
-          <span className="ml-auto text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 shrink-0">
+          <span className="text-xs text-muted-foreground">@{dev.username}</span>
+        </div>
+        <div className="ml-auto flex items-center gap-2 shrink-0">
+          <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
             {dev.tag}
           </span>
+          <a
+            href={`https://github.com/${dev.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+            onClick={(e) => e.stopPropagation()}
+            aria-label={`${dev.label} on GitHub`}
+          >
+            <GitHubIcon className="h-4 w-4" />
+          </a>
         </div>
+      </div>
+      {dev.description && (
+        <p className="text-xs text-muted-foreground leading-relaxed">{dev.description}</p>
+      )}
+      <Link href={`/demo?username=${encodeURIComponent(dev.username)}`} className="flex flex-col gap-3 cursor-pointer">
         {loading && (
           <div className="h-24 flex items-center justify-center text-muted-foreground animate-pulse text-sm">
             Loading...
@@ -283,6 +341,7 @@ function FamousDevCard({
             data={data}
             birthYear={dev.birthYear}
             expectedAge={dev.expectedAge}
+            showStats
           />
         )}
         {!loading && !data && (
@@ -408,7 +467,7 @@ export default function LandingPage() {
             GitHub-powered life tracker
           </div>
 
-          <h1 className="relative z-10 text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground bg-gradient-to-r from-white to-white/80 bg-clip-text dark:text-transparent">
+          <h1 className="relative z-10 text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground dark:bg-gradient-to-r dark:from-white dark:to-white/80 dark:bg-clip-text dark:text-transparent">
             {t("title")}
           </h1>
 
@@ -424,6 +483,11 @@ export default function LandingPage() {
 
         {/* Decorative fade to background */}
         <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
+      </section>
+
+      {/* What is this? */}
+      <section className="py-16 md:py-24">
+        <WhatIsThisSection />
       </section>
 
       {/* Demo Section */}

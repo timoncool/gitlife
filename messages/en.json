@@ -23,7 +23,16 @@
     "legendLow": "Few commits",
     "legendMedium": "Moderate",
     "legendHigh": "Many commits",
-    "legendCurrent": "Current week"
+    "legendCurrent": "Current week",
+    "whatIsThisTitle": "What is this?",
+    "whatIsThisDesc1": "Every week of your life is one cell. Green if you committed that day. Gray if not. Empty — your future.",
+    "whatIsThisDesc2": "Connect GitHub, answer health questions, and see your entire life at a glance.",
+    "featureVisualization": "Life Visualization",
+    "featureVisualizationDesc": "Your entire life as a grid of weeks. Past, present, and future.",
+    "featureGithub": "GitHub Commits",
+    "featureGithubDesc": "Green cells for weeks when you pushed code. See your coding journey.",
+    "featureCalculator": "Life Expectancy",
+    "featureCalculatorDesc": "Health-based calculator to estimate how many weeks you have left."
   },
   "dashboard": {
     "weeksLived": "Weeks Lived",
