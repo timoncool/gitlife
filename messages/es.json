@@ -2,9 +2,20 @@
   "landing": {
     "title": "Commit Your Life",
     "tagline": "Visualize your life in weeks. Track what matters.",
-    "signIn": "Sign In",
+    "signIn": "Sign In with GitHub",
     "tryDemo": "Try Demo",
-    "placeholder": "See your life from a new perspective"
+    "placeholder": "See your life from a new perspective",
+    "heroSubtitle": "Every week of your life as a GitHub-style contribution grid. See how much time you have left — and make it count.",
+    "demoTitle": "Preview Any GitHub Profile",
+    "demoPlaceholder": "Enter a GitHub username",
+    "demoButton": "Preview",
+    "demoLoading": "Loading contributions...",
+    "demoError": "Could not load data for this user",
+    "famousTitle": "Famous Developers",
+    "famousSubtitle": "See how the legends spend their weeks",
+    "footerText": "Life in Weeks",
+    "weeksLived": "weeks lived",
+    "expectedAge": "expected age"
   },
   "dashboard": {
     "weeksLived": "Weeks Lived",
@@ -28,6 +39,10 @@
     "manualOverride": "Manual Override",
     "save": "Save",
     "saved": "Saved",
+    "tabCalculator": "Calculator",
+    "tabManual": "Manual",
+    "manualDescription": "Set your expected age manually with the slider below.",
+    "estimatedAge": "Estimated Age",
     "baseline": "Baseline",
     "yourEstimate": "Your Estimate",
     "years": "years",
