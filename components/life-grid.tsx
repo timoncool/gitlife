@@ -11,8 +11,8 @@ import type { CellData, CellState } from "@/lib/types";
 
 // Color maps per theme
 const COLORS_DARK: Record<CellState, string> = {
-  future: "#30363d",
-  "pre-github": "#161b22",
+  future: "transparent",
+  "pre-github": "#0d1117",
   "no-commits": "#21262d",
   "level-1": "#0e4429",
   "level-2": "#006d32",
@@ -22,7 +22,7 @@ const COLORS_DARK: Record<CellState, string> = {
 };
 
 const COLORS_LIGHT: Record<CellState, string> = {
-  future: "#d0d7de",
+  future: "transparent",
   "pre-github": "#f6f8fa",
   "no-commits": "#ebedf0",
   "level-1": "#9be9a8",
@@ -162,10 +162,15 @@ function GridCell({
 }) {
   const t = useTranslations("dashboard");
   const colors = isDark ? COLORS_DARK : COLORS_LIGHT;
-  const fill = colors[cell.state];
   const isCurrent = cell.state === "current";
+  const isFuture = cell.state === "future";
   const strokeColor = isDark ? CURRENT_STROKE_DARK : CURRENT_STROKE_LIGHT;
   const tapTarget = cellSize < 8 ? TAP_TARGET_MOBILE : cellSize;
+
+  // Current week: orange fill with low opacity
+  const fill = isCurrent
+    ? (isDark ? "rgba(240,136,62,0.3)" : "rgba(225,111,36,0.2)")
+    : colors[cell.state];
 
   const hasGlow = cell.state === "level-3" || cell.state === "level-4";
 
@@ -210,8 +215,8 @@ function GridCell({
               height={cellSize}
               rx={2}
               fill={fill}
-              stroke={isCurrent ? strokeColor : "none"}
-              strokeWidth={isCurrent ? 1.5 : 0}
+              stroke={isCurrent ? strokeColor : isFuture ? (isDark ? "#1b1f27" : "#d0d7de") : "none"}
+              strokeWidth={isCurrent ? 1.5 : isFuture ? 0.5 : 0}
             />
           </g>
         }

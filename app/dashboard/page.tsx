@@ -150,13 +150,30 @@ export default function DashboardPage() {
   return (
     <>
       <Header />
-      <main className="flex-1 container mx-auto p-6 flex flex-col gap-8">
+      <main className="flex-1 container mx-auto p-6 flex flex-col space-y-6">
+        {/* Life progress bar */}
+        <div className="w-full">
+          <div className="flex items-center justify-between text-sm text-muted-foreground mb-1.5">
+            <span>{stats.percentLived}% of life lived</span>
+            <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} weeks</span>
+          </div>
+          <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+            <div
+              className="h-full bg-emerald-500 rounded-full transition-all duration-700"
+              style={{ width: `${Math.min(stats.percentLived, 100)}%` }}
+            />
+          </div>
+        </div>
+
         <StatsPanel stats={stats} />
-        <LifeGrid
-          cells={cells}
-          expectedAge={profile.expectedAge ?? 75}
-          loading={loading}
-        />
+
+        <div className="rounded-xl border border-border bg-card/50 p-4">
+          <LifeGrid
+            cells={cells}
+            expectedAge={profile.expectedAge ?? 75}
+            loading={loading}
+          />
+        </div>
       </main>
     </>
   );

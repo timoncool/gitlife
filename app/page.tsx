@@ -139,10 +139,17 @@ function DemoSection() {
       const res = await fetch(
         `/api/demo?username=${encodeURIComponent(user.trim())}`,
       );
-      if (!res.ok) throw new Error("not found");
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error || `HTTP ${res.status}`);
+      }
       const json = await res.json();
+      if (!json?.username || !json?.contributions) {
+        throw new Error("Invalid response format");
+      }
       setData(json);
-    } catch {
+    } catch (err) {
+      console.error("Demo fetch error:", err);
       setError(t("demoError"));
     } finally {
       setLoading(false);
@@ -364,7 +371,7 @@ export default function LandingPage() {
             GitHub-powered life tracker
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground">
+          <h1 className="relative z-10 text-4xl md:text-6xl font-bold tracking-tight mb-6 text-foreground bg-gradient-to-r from-white to-white/80 bg-clip-text dark:text-transparent">
             {t("title")}
           </h1>
 
