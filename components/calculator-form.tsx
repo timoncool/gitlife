@@ -23,179 +23,179 @@ import { Slider } from "@/components/ui/slider";
 import { Separator } from "@/components/ui/separator";
 import type { CalculatorAnswers, LifeExpectancyData } from "@/lib/types";
 
-// Factor option definitions with study sources
+// Factor option definitions with study sources — labels are now translation keys
 const FACTOR_OPTIONS: Record<
   string,
-  { options: { value: string; label: string }[]; source: string }
+  { options: { value: string; labelKey: string }[]; source: string }
 > = {
   smoking: {
     options: [
-      { value: "never", label: "Never" },
-      { value: "quit_before_35", label: "Quit before 35" },
-      { value: "quit_35_54", label: "Quit at 35-54" },
-      { value: "quit_55plus", label: "Quit at 55+" },
-      { value: "current", label: "Current smoker" },
+      { value: "never", labelKey: "smokingNever" },
+      { value: "quit_before_35", labelKey: "smokingQuit35" },
+      { value: "quit_35_54", labelKey: "smokingQuit3554" },
+      { value: "quit_55plus", labelKey: "smokingQuit55" },
+      { value: "current", labelKey: "smokingCurrent" },
     ],
     source:
       "Jha P. et al., NEJM 2013 — Smoking cessation before age 40 reduces excess mortality by ~90%.",
   },
   alcohol: {
     options: [
-      { value: "none", label: "None" },
-      { value: "moderate", label: "Moderate (1-2/day)" },
-      { value: "heavy", label: "Heavy (3+/day)" },
+      { value: "none", labelKey: "alcoholNone" },
+      { value: "moderate", labelKey: "alcoholModerate" },
+      { value: "heavy", labelKey: "alcoholHeavy" },
     ],
     source:
       "GBD 2016 Alcohol Collaborators, Lancet 2018 — No safe level; heavy use reduces lifespan ~7 years.",
   },
   activity: {
     options: [
-      { value: "sedentary", label: "Sedentary" },
-      { value: "light", label: "Light" },
-      { value: "moderate", label: "Moderate" },
-      { value: "active", label: "Active (150+ min/week)" },
+      { value: "sedentary", labelKey: "activitySedentary" },
+      { value: "light", labelKey: "activityLight" },
+      { value: "moderate", labelKey: "activityModerate" },
+      { value: "active", labelKey: "activityActive" },
     ],
     source:
       "Arem H. et al., JAMA Internal Med 2015 — 150 min/week moderate activity adds ~3.4 years.",
   },
   sleep: {
     options: [
-      { value: "lt6", label: "< 6 hours" },
-      { value: "6_7", label: "6-7 hours" },
-      { value: "7_8", label: "7-8 hours" },
-      { value: "9plus", label: "9+ hours" },
+      { value: "lt6", labelKey: "sleepLt6" },
+      { value: "6_7", labelKey: "sleep67" },
+      { value: "7_8", labelKey: "sleep78" },
+      { value: "9plus", labelKey: "sleep9plus" },
     ],
     source:
       "Cappuccio F. et al., Sleep 2010 — Short and long sleep durations associated with higher mortality.",
   },
   diet: {
     options: [
-      { value: "poor", label: "Poor" },
-      { value: "average", label: "Average" },
-      { value: "good", label: "Good" },
-      { value: "excellent", label: "Excellent (Mediterranean)" },
+      { value: "poor", labelKey: "dietPoor" },
+      { value: "average", labelKey: "dietAverage" },
+      { value: "good", labelKey: "dietGood" },
+      { value: "excellent", labelKey: "dietExcellent" },
     ],
     source:
       "Sofi F. et al., BMJ 2008 — Mediterranean diet associated with +4-6 years life expectancy.",
   },
   social: {
     options: [
-      { value: "isolated", label: "Isolated" },
-      { value: "some", label: "Some connections" },
-      { value: "strong", label: "Strong social network" },
+      { value: "isolated", labelKey: "socialIsolated" },
+      { value: "some", labelKey: "socialSome" },
+      { value: "strong", labelKey: "socialStrong" },
     ],
     source:
       "Holt-Lunstad J. et al., PLoS Medicine 2010 — Social isolation comparable to smoking 15 cigarettes/day.",
   },
   stress: {
     options: [
-      { value: "low", label: "Low" },
-      { value: "moderate", label: "Moderate" },
-      { value: "high", label: "High" },
-      { value: "severe", label: "Severe/chronic" },
+      { value: "low", labelKey: "stressLow" },
+      { value: "moderate", labelKey: "stressModerate" },
+      { value: "high", labelKey: "stressHigh" },
+      { value: "severe", labelKey: "stressSevere" },
     ],
     source:
       "Kivimaki M. et al., BMJ 2012 — Chronic stress associated with 40% increased CVD mortality.",
   },
   education: {
     options: [
-      { value: "less_hs", label: "Less than high school" },
-      { value: "hs", label: "High school" },
-      { value: "college", label: "Some college" },
-      { value: "bachelor", label: "Bachelor's degree" },
-      { value: "graduate", label: "Graduate degree" },
+      { value: "less_hs", labelKey: "educationLessHs" },
+      { value: "hs", labelKey: "educationHs" },
+      { value: "college", labelKey: "educationCollege" },
+      { value: "bachelor", labelKey: "educationBachelor" },
+      { value: "graduate", labelKey: "educationGraduate" },
     ],
     source:
       "Hummer R. & Hernandez E., Demography 2013 — Education-mortality gradient ~4 years between HS and college.",
   },
   maritalStatus: {
     options: [
-      { value: "married", label: "Married" },
-      { value: "cohabiting", label: "Cohabiting" },
-      { value: "divorced", label: "Divorced" },
-      { value: "widowed", label: "Widowed" },
-      { value: "single", label: "Single/never married" },
+      { value: "married", labelKey: "maritalMarried" },
+      { value: "cohabiting", labelKey: "maritalCohabiting" },
+      { value: "divorced", labelKey: "maritalDivorced" },
+      { value: "widowed", labelKey: "maritalWidowed" },
+      { value: "single", labelKey: "maritalSingle" },
     ],
     source:
       "Roelfs D. et al., Soc Sci Med 2011 — Marriage associated with ~2.5 years increased longevity.",
   },
   hypertension: {
     options: [
-      { value: "normal", label: "Normal (<120/80)" },
-      { value: "elevated", label: "Elevated (120-129)" },
-      { value: "stage1", label: "Stage 1 (130-139)" },
-      { value: "stage2", label: "Stage 2 (140+)" },
-      { value: "unknown", label: "Unknown" },
+      { value: "normal", labelKey: "hypertensionNormal" },
+      { value: "elevated", labelKey: "hypertensionElevated" },
+      { value: "stage1", labelKey: "hypertensionStage1" },
+      { value: "stage2", labelKey: "hypertensionStage2" },
+      { value: "unknown", labelKey: "hypertensionUnknown" },
     ],
     source:
       "Lewington S. et al., Lancet 2002 — Each 20mmHg systolic increase doubles CVD mortality.",
   },
   depression: {
     options: [
-      { value: "none", label: "None" },
-      { value: "mild", label: "Mild" },
-      { value: "moderate", label: "Moderate" },
-      { value: "severe", label: "Severe" },
+      { value: "none", labelKey: "depressionNone" },
+      { value: "mild", labelKey: "depressionMild" },
+      { value: "moderate", labelKey: "depressionModerate" },
+      { value: "severe", labelKey: "depressionSevere" },
     ],
     source:
       "Cuijpers P. et al., Arch Gen Psychiatry 2014 — Depression linked to 1.5-6 year reduction.",
   },
   sittingHours: {
     options: [
-      { value: "lt4", label: "< 4 hours/day" },
-      { value: "4_6", label: "4-6 hours/day" },
-      { value: "7_9", label: "7-9 hours/day" },
-      { value: "10plus", label: "10+ hours/day" },
+      { value: "lt4", labelKey: "sittingLt4" },
+      { value: "4_6", labelKey: "sitting46" },
+      { value: "7_9", labelKey: "sitting79" },
+      { value: "10plus", labelKey: "sitting10plus" },
     ],
     source:
       "Chau J. et al., Int J Behav Nutr 2013 — Sitting >8h/day with no exercise: 60% higher mortality.",
   },
   optimism: {
     options: [
-      { value: "very", label: "Very optimistic" },
-      { value: "somewhat", label: "Somewhat optimistic" },
-      { value: "neutral", label: "Neutral" },
-      { value: "pessimistic", label: "Pessimistic" },
+      { value: "very", labelKey: "optimismVery" },
+      { value: "somewhat", labelKey: "optimismSomewhat" },
+      { value: "neutral", labelKey: "optimismNeutral" },
+      { value: "pessimistic", labelKey: "optimismPessimistic" },
     ],
     source:
       "Lee L. et al., PNAS 2019 — High optimism associated with 11-15% longer lifespan.",
   },
   purpose: {
     options: [
-      { value: "strong", label: "Strong sense of purpose" },
-      { value: "moderate", label: "Moderate" },
-      { value: "uncertain", label: "Uncertain" },
-      { value: "none", label: "No sense of purpose" },
+      { value: "strong", labelKey: "purposeStrong" },
+      { value: "moderate", labelKey: "purposeModerate" },
+      { value: "uncertain", labelKey: "purposeUncertain" },
+      { value: "none", labelKey: "purposeNone" },
     ],
     source:
       "Alimujiang A. et al., JAMA Network Open 2019 — Strong purpose linked to ~2 year gain.",
   },
   coffee: {
     options: [
-      { value: "0", label: "None" },
-      { value: "1_2", label: "1-2 cups/day" },
-      { value: "3_4", label: "3-4 cups/day" },
-      { value: "5plus", label: "5+ cups/day" },
+      { value: "0", labelKey: "coffeeNone" },
+      { value: "1_2", labelKey: "coffee12" },
+      { value: "3_4", labelKey: "coffee34" },
+      { value: "5plus", labelKey: "coffee5plus" },
     ],
     source:
       "Loftfield E. et al., JAMA Internal Med 2018 — 2-3 cups/day associated with lower all-cause mortality.",
   },
   airPollution: {
     options: [
-      { value: "clean", label: "Clean air" },
-      { value: "moderate", label: "Moderate" },
-      { value: "polluted", label: "Polluted" },
-      { value: "heavy", label: "Heavily polluted" },
+      { value: "clean", labelKey: "airClean" },
+      { value: "moderate", labelKey: "airModerate" },
+      { value: "polluted", labelKey: "airPolluted" },
+      { value: "heavy", labelKey: "airHeavy" },
     ],
     source:
       "Lelieveld J. et al., Cardiovascular Research 2020 — PM2.5 exposure reduces lifespan ~1-2 years.",
   },
   diabetes: {
     options: [
-      { value: "no", label: "No" },
-      { value: "type2_under40", label: "Type 2, diagnosed < 40" },
-      { value: "type2_40_50", label: "Type 2, diagnosed 40-50" },
-      { value: "type2_over50", label: "Type 2, diagnosed > 50" },
+      { value: "no", labelKey: "diabetesNo" },
+      { value: "type2_under40", labelKey: "diabetesUnder40" },
+      { value: "type2_40_50", labelKey: "diabetes4050" },
+      { value: "type2_over50", labelKey: "diabetesOver50" },
     ],
     source:
       "Emerging Risk Factors Collab., NEJM 2011 — Diabetes at age 40 reduces lifespan ~6-12 years.",
@@ -203,9 +203,9 @@ const FACTOR_OPTIONS: Record<
 };
 
 const CONDITION_OPTIONS = [
-  { value: "heart_disease", label: "Heart disease" },
-  { value: "active_cancer", label: "Active cancer" },
-  { value: "cancer_remission", label: "Cancer (in remission)" },
+  { value: "heart_disease", labelKey: "conditionHeart" },
+  { value: "active_cancer", labelKey: "conditionCancerActive" },
+  { value: "cancer_remission", labelKey: "conditionCancerRemission" },
 ];
 
 // Sections grouping
@@ -217,14 +217,14 @@ const SECTIONS = [
   { key: "environmental", factors: ["airPollution", "sittingHours"] },
 ];
 
-const SECTION_LABELS: Record<string, string> = {
-  basic: "Basic",
-  lifestyle: "Lifestyle",
-  medical: "Medical",
-  social_section: "Social",
-  psychological: "Psychological",
-  environmental: "Environmental",
-  family: "Family",
+const SECTION_LABEL_KEYS: Record<string, string> = {
+  basic: "sectionBasic",
+  lifestyle: "sectionLifestyle",
+  medical: "sectionMedical",
+  social_section: "sectionSocial",
+  psychological: "sectionPsychological",
+  environmental: "sectionEnvironmental",
+  family: "sectionFamily",
 };
 
 // Modifier lookup for real-time preview
@@ -248,14 +248,6 @@ const MODIFIERS: Record<string, Record<string, number>> = {
   diabetes: { no: 0, type2_under40: -12, type2_40_50: -8, type2_over50: -5 },
 };
 
-function getBMICategory(bmi: number): string {
-  if (bmi < 18.5) return "Underweight";
-  if (bmi < 25) return "Normal";
-  if (bmi < 30) return "Overweight";
-  if (bmi < 35) return "Obese I";
-  return "Obese II+";
-}
-
 function getBMIModifier(bmi: number): number {
   if (bmi < 18.5) return -4;
   if (bmi < 25) return 0;
@@ -271,6 +263,7 @@ interface CalculatorFormProps {
 export function CalculatorForm({ initialValues }: CalculatorFormProps) {
   const tf = useTranslations("factors");
   const ts = useTranslations("settings");
+  const tc = useTranslations("calculator");
 
   const [countries, setCountries] = useState<{ code: string; name: string }[]>(
     [],
@@ -326,6 +319,15 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
     }
     return null;
   }, [height, weight]);
+
+  // BMI category using translations
+  const getBMICategory = (bmiVal: number): string => {
+    if (bmiVal < 18.5) return tc("bmiUnderweight");
+    if (bmiVal < 25) return tc("bmiNormal");
+    if (bmiVal < 30) return tc("bmiOverweight");
+    if (bmiVal < 35) return tc("bmiObese1");
+    return tc("bmiObese2");
+  };
 
   // Real-time impact preview
   const impacts = useMemo(() => {
@@ -432,11 +434,11 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
         {/* Basic section: gender + country */}
         <Card>
           <CardHeader>
-            <CardTitle>{SECTION_LABELS.basic}</CardTitle>
+            <CardTitle>{tc(SECTION_LABEL_KEYS.basic)}</CardTitle>
           </CardHeader>
           <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
-              <Label>Gender</Label>
+              <Label>{tc("gender")}</Label>
               <Select
                 value={sex}
                 onValueChange={(v) => {
@@ -444,16 +446,16 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                 }}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Gender" />
+                  <SelectValue placeholder={tc("gender")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
+                  <SelectItem value="male">{tc("male")}</SelectItem>
+                  <SelectItem value="female">{tc("female")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex flex-col gap-2">
-              <Label>Country</Label>
+              <Label>{tc("country")}</Label>
               <Select
                 value={country}
                 onValueChange={(v) => {
@@ -461,7 +463,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                 }}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Country" />
+                  <SelectValue placeholder={tc("country")} />
                 </SelectTrigger>
                 <SelectContent>
                   {countries.map((c) => (
@@ -479,7 +481,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
         {SECTIONS.map((section) => (
           <Card key={section.key}>
             <CardHeader>
-              <CardTitle>{SECTION_LABELS[section.key]}</CardTitle>
+              <CardTitle>{tc(SECTION_LABEL_KEYS[section.key])}</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {section.factors.map((factor) => {
@@ -518,7 +520,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                       <SelectContent>
                         {config.options.map((opt) => (
                           <SelectItem key={opt.value} value={opt.value}>
-                            {opt.label}
+                            {tc(opt.labelKey)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -533,12 +535,12 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
         {/* BMI section */}
         <Card>
           <CardHeader>
-            <CardTitle>{tf("bmi")}</CardTitle>
+            <CardTitle>{tc("bmiLabel")}</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-2">
-                <Label>Height (cm)</Label>
+                <Label>{tc("height")}</Label>
                 <Input
                   type="number"
                   min={100}
@@ -549,7 +551,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <Label>Weight (kg)</Label>
+                <Label>{tc("weight")}</Label>
                 <Input
                   type="number"
                   min={30}
@@ -562,7 +564,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
             </div>
             {bmi !== null && (
               <div className="text-sm">
-                BMI: <span className="font-bold">{bmi.toFixed(1)}</span>{" "}
+                {tc("bmiLabel")}: <span className="font-bold">{bmi.toFixed(1)}</span>{" "}
                 <span className="text-muted-foreground">
                   ({getBMICategory(bmi)})
                 </span>
@@ -588,7 +590,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                   onChange={() => toggleCondition(opt.value)}
                   className="h-4 w-4 rounded border-input"
                 />
-                <span className="text-sm">{opt.label}</span>
+                <span className="text-sm">{tc(opt.labelKey)}</span>
               </label>
             ))}
           </CardContent>
@@ -607,7 +609,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                 onChange={(e) => setFamilyLongevity(e.target.checked)}
                 className="h-4 w-4 rounded border-input"
               />
-              <span className="text-sm">Parent lived to 85+</span>
+              <span className="text-sm">{tc("familyLongevity")}</span>
             </label>
           </CardContent>
         </Card>
@@ -637,7 +639,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                 size="sm"
                 onClick={() => setManualOverride(null)}
               >
-                Use calculator instead
+                {tc("useCalculator")}
               </Button>
             )}
           </CardContent>
@@ -645,7 +647,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
 
         {/* Save */}
         <Button onClick={handleSave} disabled={saving} size="lg">
-          {saved ? ts("saved") : saving ? "..." : ts("save")}
+          {saved ? ts("saved") : saving ? tc("saving") : tc("save")}
         </Button>
       </div>
 
@@ -659,7 +661,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
             <CardContent className="flex flex-col gap-2">
               {impacts.length === 0 && (
                 <p className="text-sm text-muted-foreground">
-                  Fill in factors to see their impact.
+                  {tc("impactPreview")}
                 </p>
               )}
               {impacts.map((item) => (
@@ -684,7 +686,7 @@ export function CalculatorForm({ initialValues }: CalculatorFormProps) {
                 <>
                   <Separator />
                   <div className="flex items-center justify-between font-bold">
-                    <span>Total</span>
+                    <span>{tc("total")}</span>
                     <span
                       className={
                         totalImpact >= 0
