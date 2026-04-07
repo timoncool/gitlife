@@ -69,12 +69,15 @@ function DemoPageContent() {
   const [showMiniBar, setShowMiniBar] = useState(false);
   const infoRef = useRef<HTMLDivElement>(null);
 
-  // Show compact bar when full info scrolls out
+  // Show compact bar based on scroll position
   useEffect(() => {
-    if (!infoRef.current) return;
-    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0, rootMargin: "-60px 0px 0px 0px" });
-    obs.observe(infoRef.current);
-    return () => obs.disconnect();
+    function handleScroll() {
+      if (!infoRef.current) return;
+      const rect = infoRef.current.getBoundingClientRect();
+      setShowMiniBar(rect.bottom < 60);
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [data]);
 
   const fetchDemo = useCallback(async (user: string) => {

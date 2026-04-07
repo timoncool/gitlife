@@ -35,12 +35,15 @@ export default function DashboardPage() {
   const [showMiniBar, setShowMiniBar] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   useEffect(() => { requestAnimationFrame(() => setProgressMounted(true)); }, []);
-  // Show compact bar when full stats scroll out of view
+  // Show compact bar based on scroll position
   useEffect(() => {
-    if (!statsRef.current) return;
-    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0, rootMargin: "-60px 0px 0px 0px" });
-    obs.observe(statsRef.current);
-    return () => obs.disconnect();
+    function handleScroll() {
+      if (!statsRef.current) return;
+      const rect = statsRef.current.getBoundingClientRect();
+      setShowMiniBar(rect.bottom < 60);
+    }
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Redirect to landing if not authenticated
