@@ -276,7 +276,7 @@ export default function LeaderboardPage() {
 
   const [sortKey, setSortKey] = useState<SortKey>("commits");
   const [sortAsc, setSortAsc] = useState(false);
-  const [tab, setTab] = useState<"famous" | "community">("famous");
+  const [tab, setTab] = useState<"famous" | "community">("community");
   const [famousEntries, setFamousEntries] = useState<LeaderboardEntry[]>([]);
   const [communityEntries, setCommunityEntries] = useState<LeaderboardEntry[]>([]);
   const [famousLoading, setFamousLoading] = useState(true);
@@ -408,17 +408,6 @@ export default function LeaderboardPage() {
         {/* Tab switcher */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setTab("famous")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              tab === "famous"
-                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30"
-                : "text-muted-foreground hover:text-foreground border border-transparent"
-            }`}
-          >
-            <Crown className="h-4 w-4" />
-            {t("famousDevs")}
-          </button>
-          <button
             onClick={() => setTab("community")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               tab === "community"
@@ -428,6 +417,17 @@ export default function LeaderboardPage() {
           >
             <Flame className="h-4 w-4" />
             {t("community")}
+          </button>
+          <button
+            onClick={() => setTab("famous")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              tab === "famous"
+                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30"
+                : "text-muted-foreground hover:text-foreground border border-transparent"
+            }`}
+          >
+            <Crown className="h-4 w-4" />
+            {t("famousDevs")}
           </button>
         </div>
 
@@ -443,7 +443,7 @@ export default function LeaderboardPage() {
                 <button
                   key={key}
                   onClick={() => handleSort(key)}
-                  className={`w-16 text-right cursor-pointer hover:text-foreground transition-colors ${sortKey === key ? "text-emerald-600 dark:text-emerald-400 font-semibold" : ""}`}
+                  className={`w-16 text-right cursor-pointer hover:text-foreground transition-colors whitespace-nowrap ${sortKey === key ? "text-emerald-600 dark:text-emerald-400 font-semibold" : ""}`}
                 >
                   {t(key === "commits" ? "totalCommits" : key === "active" ? "activeWeeks" : key === "streak" ? "currentStreak" : "longestStreak")}
                   {sortKey === key ? (sortAsc ? " ↑" : " ↓") : ""}
