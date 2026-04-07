@@ -265,22 +265,21 @@ function FamousDevCard({
             <span className="font-semibold truncate">{dev.label}</span>
             <span className="text-xs text-muted-foreground shrink-0">{currentAge} {t("age")}</span>
           </div>
-          <span className="text-xs text-muted-foreground">@{dev.username}</span>
+          <a
+            href={`https://github.com/${dev.username}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => e.stopPropagation()}
+            className="text-xs text-muted-foreground flex items-center gap-1 hover:text-foreground transition-colors"
+          >
+            <GitHubIcon className="h-3 w-3" />
+            @{dev.username}
+          </a>
         </div>
         <div className="ml-auto flex items-center gap-2 shrink-0">
           <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400">
             {dev.tag}
           </span>
-          <a
-            href={`https://github.com/${dev.username}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors"
-            onClick={(e) => e.stopPropagation()}
-            aria-label={`${dev.label} on GitHub`}
-          >
-            <GitHubIcon className="h-4 w-4" />
-          </a>
         </div>
       </div>
       {dev.description && (
