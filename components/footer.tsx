@@ -89,8 +89,11 @@ export function Footer() {
           <a href="https://github.com/timoncool/commit-your-life" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
         </div>
 
-        <div className="text-xs text-muted-foreground/60">
-          © {new Date().getFullYear()} GitLife. Open source.
+        <div className="flex items-center justify-between text-xs text-muted-foreground/60">
+          <span>© {new Date().getFullYear()} GitLife. Open source.</span>
+          <a href="https://neuro-cartel.com/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
+            by Cartel
+          </a>
         </div>
       </div>
     </footer>
