@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useCountUp } from "@/lib/use-count-up";
 import type { GridStats, GridScale } from "@/lib/types";
@@ -11,11 +12,13 @@ interface StatsPanelProps {
 }
 
 function ProgressBar({ value }: { value: number }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { requestAnimationFrame(() => setMounted(true)); }, []);
   return (
     <div className="w-full h-2 bg-muted rounded-full overflow-hidden mt-2">
       <div
-        className="h-full bg-primary rounded-full transition-all duration-500"
-        style={{ width: `${Math.min(value, 100)}%` }}
+        className="h-full bg-primary rounded-full transition-all duration-700 ease-out"
+        style={{ width: mounted ? `${Math.min(value, 100)}%` : "0%" }}
       />
     </div>
   );
