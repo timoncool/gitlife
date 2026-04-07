@@ -156,48 +156,53 @@
 .animate-glow-pulse {
   animation: glow-pulse 2s ease-in-out infinite;
 }
-/* ReactFlagsSelect dark theme overrides */
-.dark [class*="flagsSelect"] button,
-.dark [class*="selectBtn"] {
+/* ReactFlagsSelect — match shadcn Input style */
+[class*="flagsSelect"] button,
+[class*="selectBtn"] {
   background: transparent !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 8px !important;
-  color: rgba(255,255,255,0.87) !important;
+  border: 1px solid var(--input) !important;
+  border-radius: 0.5rem !important;
+  color: var(--foreground) !important;
   padding: 8px 12px !important;
+  height: 36px !important;
+  font-size: 14px !important;
 }
-.dark [class*="flagsSelect"] button:hover {
-  border-color: rgba(255,255,255,0.12) !important;
+[class*="flagsSelect"] button:hover {
+  border-color: var(--ring) !important;
 }
-.dark [class*="selectOptions"] {
-  background: #0A0A0A !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
-  border-radius: 8px !important;
+[class*="selectOptions"] {
+  background: var(--popover) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 0.5rem !important;
   max-height: 300px !important;
   overflow-y: auto !important;
   position: absolute !important;
   z-index: 50 !important;
   width: 100% !important;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.8) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
 }
-.dark [class*="selectOption"] {
-  color: rgba(255,255,255,0.87) !important;
+[class*="selectOption"] {
+  color: var(--foreground) !important;
   padding: 8px 12px !important;
+  font-size: 14px !important;
 }
-.dark [class*="selectOption"]:hover {
-  background: rgba(255,255,255,0.08) !important;
+[class*="selectOption"]:hover {
+  background: var(--accent) !important;
 }
-.dark [class*="filterBox"] {
-  background: #0A0A0A !important;
-  border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+[class*="filterBox"] {
+  background: var(--popover) !important;
+  border-bottom: 1px solid var(--border) !important;
 }
-.dark [class*="filterBox"] input {
+[class*="filterBox"] input {
   background: transparent !important;
-  color: rgba(255,255,255,0.87) !important;
+  color: var(--foreground) !important;
+  font-size: 14px !important;
 }
-.dark [class*="filterBox"] input::placeholder {
-  color: rgba(255,255,255,0.38) !important;
+[class*="filterBox"] input::placeholder {
+  color: var(--muted-foreground) !important;
 }
-.dark [class*="label"] {
-  color: rgba(255,255,255,0.87) !important;
+[class*="label"] {
+  color: var(--foreground) !important;
 }
+
 
