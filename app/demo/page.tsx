@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useCallback, useRef, Suspense } from "rea
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { LifeGrid } from "@/components/life-grid";
+import { StickyStatsBar } from "@/components/sticky-stats-bar";
 import { Header } from "@/components/header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -213,32 +214,17 @@ function DemoPageContent() {
 
         {data && (
           <div className="max-w-6xl mx-auto space-y-6">
-            {/* Sticky compact bar — only visible when full stats scroll out */}
-            <div
-              className={`fixed top-14 left-0 right-0 z-30 bg-background/95 backdrop-blur-sm px-4 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 py-2" : "opacity-0 py-0 pointer-events-none -translate-y-full"}`}
-            >
-                <div className="flex items-center gap-3">
-                  {data.avatarUrl && (
-                    <img src={data.avatarUrl} alt="" className="h-7 w-7 rounded-full shrink-0" />
-                  )}
-                  <span className="text-sm font-semibold truncate">{knownDev?.label || data.username}</span>
-                  <a href={`https://github.com/${data.username}`} target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-                    @{data.username}
-                  </a>
-                  <div className="flex items-center gap-4 ml-auto text-[11px] text-muted-foreground tabular-nums shrink-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground text-sm">{stats.percentLived}%</span>
-                      <div className="h-1.5 bg-muted rounded-full overflow-hidden w-16">
-                        <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
-                      </div>
-                    </div>
-                    <div>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} <span className="text-muted-foreground/60">{td("weeks")}</span></div>
-                    <div><span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span> <span className="text-muted-foreground/60">{tdb("activeWeeks")}</span></div>
-                    <div>{stats.currentStreak} <span className="text-muted-foreground/60">{tdb("currentStreak")}</span></div>
-                    <div>{stats.longestStreak} <span className="text-muted-foreground/60">{tdb("longestStreak")}</span></div>
-                  </div>
-                </div>
-            </div>
+            <StickyStatsBar
+              show={showMiniBar}
+              stats={stats}
+              name={knownDev?.label || data.username}
+              avatarUrl={data.avatarUrl}
+              githubUsername={data.username}
+              weeksLabel={td("weeks")}
+              activeLabel={tdb("activeWeeks")}
+              streakLabel={tdb("currentStreak")}
+              bestLabel={tdb("longestStreak")}
+            />
 
             {/* Dev info — observed for sticky bar visibility */}
             <div ref={infoRef} className="flex items-center gap-4">

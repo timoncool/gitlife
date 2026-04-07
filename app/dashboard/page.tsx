@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Header } from "@/components/header";
 import { LifeGrid } from "@/components/life-grid";
 import { ScaleSelector } from "@/components/scale-selector";
+import { StickyStatsBar } from "@/components/sticky-stats-bar";
 import { StatsPanel } from "@/components/stats-panel";
 import { OnboardingForm } from "@/components/onboarding-form";
 import { useSession } from "@/lib/auth-client";
@@ -25,6 +26,7 @@ export default function DashboardPage() {
     birthDate: string | null;
     expectedAge: number;
     githubCreatedAt: string | null;
+    githubUsername: string | null;
   } | null>(null);
   const [contributions, setContributions] = useState<YearContribution[]>([]);
   const [githubCreatedAt, setGithubCreatedAt] = useState<Date | null>(null);
@@ -204,26 +206,19 @@ export default function DashboardPage() {
     <>
       <Header />
       <main className="flex-1 container mx-auto p-6 flex flex-col space-y-6">
-        {/* Compact sticky bar — appears when full stats scroll out */}
-        <div
-          className={`fixed top-14 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm px-6 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 py-2.5" : "opacity-0 py-0 pointer-events-none -translate-y-full"}`}
-        >
-            <div className="container mx-auto flex items-center gap-4 text-[11px] text-muted-foreground tabular-nums">
-              <div className="flex items-center gap-1.5">
-                <span className="font-semibold text-foreground text-sm">{stats.percentLived}%</span>
-                <div className="h-1.5 bg-muted rounded-full overflow-hidden w-16">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
-                </div>
-              </div>
-              <div>{stats.weeksLived.toLocaleString()}/{stats.weeksTotal.toLocaleString()} <span className="text-muted-foreground/60">{t("weeksShort")}</span></div>
-              <div><span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span> <span className="text-muted-foreground/60">{t("activeWeeks")}</span></div>
-              <div>{stats.currentStreak} <span className="text-muted-foreground/60">{t("currentStreak")}</span></div>
-              <div>{stats.longestStreak} <span className="text-muted-foreground/60">{t("longestStreak")}</span></div>
-              {githubCreatedAt && (
-                <div><span className="text-muted-foreground/60">{t("githubSince")}</span> {new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short" }).format(githubCreatedAt)}</div>
-              )}
-            </div>
-        </div>
+        <StickyStatsBar
+          show={showMiniBar}
+          stats={stats}
+          name={session.user.name ?? undefined}
+          avatarUrl={session.user.image ?? undefined}
+          githubUsername={profile?.githubUsername ?? undefined}
+          githubSince={githubCreatedAt}
+          weeksLabel={t("weeksShort")}
+          activeLabel={t("activeWeeks")}
+          streakLabel={t("currentStreak")}
+          bestLabel={t("longestStreak")}
+          sinceLabel={t("githubSince")}
+        />
 
         {/* Full stats cards */}
         <div className="w-full">
