@@ -40,7 +40,8 @@ export function Footer() {
     setCurrentLocale(document.documentElement.lang || "en");
   }, []);
 
-  function handleLangChange(value: string) {
+  function handleLangChange(value: string | null) {
+    if (!value) return;
     document.cookie = `locale=${value};path=/;max-age=31536000;SameSite=Lax`;
     window.location.reload();
   }
