@@ -79,7 +79,7 @@ function DemoPageContent() {
       requestAnimationFrame(() => {
         if (infoRef.current) {
           const rect = infoRef.current.getBoundingClientRect();
-          setShowMiniBar(rect.bottom < 56);
+          setShowMiniBar(rect.bottom < 200);
         }
         ticking = false;
       });
