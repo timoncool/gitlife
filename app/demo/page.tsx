@@ -60,6 +60,7 @@ function DemoPageContent() {
   const searchParams = useSearchParams();
   const t = useTranslations("landing");
   const td = useTranslations("demo");
+  const tdb = useTranslations("dashboard");
   const initialUsername = searchParams.get("username") || "";
 
   const [username, setUsername] = useState(initialUsername);
@@ -223,17 +224,17 @@ function DemoPageContent() {
                   <a href={`https://github.com/${data.username}`} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold truncate hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
                     {knownDev?.label || data.username}
                   </a>
-                  <div className="flex items-center gap-3 ml-auto text-xs text-muted-foreground tabular-nums shrink-0">
+                  <div className="flex items-center gap-4 ml-auto text-[11px] text-muted-foreground tabular-nums shrink-0">
                     <div className="flex items-center gap-1.5">
                       <span className="font-semibold text-foreground text-sm">{stats.percentLived}%</span>
                       <div className="h-1.5 bg-muted rounded-full overflow-hidden w-16">
                         <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
                       </div>
                     </div>
-                    <span>{stats.weeksLived.toLocaleString()}/{stats.weeksTotal.toLocaleString()}</span>
-                    <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span>
-                    <span>{stats.currentStreak} {td("weeks")}</span>
-                    <span>{stats.longestStreak} {td("weeks")}</span>
+                    <div>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} <span className="text-muted-foreground/60">{td("weeks")}</span></div>
+                    <div><span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span> <span className="text-muted-foreground/60">{tdb("activeWeeks")}</span></div>
+                    <div>{stats.currentStreak} <span className="text-muted-foreground/60">{tdb("currentStreak")}</span></div>
+                    <div>{stats.longestStreak} <span className="text-muted-foreground/60">{tdb("longestStreak")}</span></div>
                   </div>
                 </div>
             </div>
