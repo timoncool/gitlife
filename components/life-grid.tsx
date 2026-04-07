@@ -394,19 +394,6 @@ export function LifeGrid({ cells, expectedAge, loading, scale = "weeks" }: LifeG
   const weeksViewBoxWidth = LABEL_WIDTH + 52 * cellStep;
   const widthPercent = scale === "weeks" ? "100%" : `${(svgWidth / weeksViewBoxWidth) * 100}%`;
 
-  // Auto-scroll to current week row
-  useEffect(() => {
-    if (loading || cells.length === 0 || scrolledRef.current) return;
-    const currentCell = cells.find(c => c.state === "current");
-    if (!currentCell || !containerRef.current) return;
-    scrolledRef.current = true;
-    const svg = containerRef.current.querySelector("svg");
-    if (!svg) return;
-    const svgRect = svg.getBoundingClientRect();
-    const rowRatio = currentCell.year / gridRows;
-    const targetY = svgRect.top + window.scrollY + svgRect.height * rowRatio - window.innerHeight / 3;
-    window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
-  }, [loading, cells, gridRows]);
 
   if (loading) {
     return <SkeletonGrid expectedAge={expectedAge} />;
