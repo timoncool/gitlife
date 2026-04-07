@@ -27,7 +27,7 @@
 
 ## What is this?
 
-The "life in weeks" idea has been around for a while — your entire life fits into a grid of ~4,000 cells. GitLife overlays real GitHub commit history on top.
+The ["life in weeks"](https://waitbutwhy.com/2014/05/life-weeks.html) idea has been around for a while — your entire life fits into a grid of ~4,000 cells. GitLife overlays real GitHub commit history on top.
 
 Enter any GitHub username in the search bar — no sign-up needed. Sign in with GitHub to include your private commits. The life expectancy calculator uses real country baselines from World Bank (217 countries) and 21 personal health factors from peer-reviewed studies.
 
