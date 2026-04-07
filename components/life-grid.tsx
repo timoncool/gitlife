@@ -384,14 +384,33 @@ export function LifeGrid({ cells, expectedAge, loading, scale = "weeks" }: LifeG
     return { grid: rows, cols: 52, xLabels: X_LABELS, yLabelStep: 5 };
   }, [cellMap, expectedAge, cells, scale]);
 
+  // All hooks MUST be before any conditional return
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrolledRef = useRef(false);
+
+  const gridRows = grid.length;
+  const svgWidth = LABEL_WIDTH + cols * cellStep;
+  const svgHeight = LABEL_HEIGHT + gridRows * cellStep;
+  const weeksViewBoxWidth = LABEL_WIDTH + 52 * cellStep;
+  const widthPercent = scale === "weeks" ? "100%" : `${(svgWidth / weeksViewBoxWidth) * 100}%`;
+
+  // Auto-scroll to current week row
+  useEffect(() => {
+    if (loading || cells.length === 0 || scrolledRef.current) return;
+    const currentCell = cells.find(c => c.state === "current");
+    if (!currentCell || !containerRef.current) return;
+    scrolledRef.current = true;
+    const svg = containerRef.current.querySelector("svg");
+    if (!svg) return;
+    const svgRect = svg.getBoundingClientRect();
+    const rowRatio = currentCell.year / gridRows;
+    const targetY = svgRect.top + window.scrollY + svgRect.height * rowRatio - window.innerHeight / 3;
+    window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+  }, [loading, cells, gridRows]);
+
   if (loading) {
     return <SkeletonGrid expectedAge={expectedAge} />;
   }
-
-  const gridRows = grid.length;
-  // Same cell size for ALL scales
-  const svgWidth = LABEL_WIDTH + cols * cellStep;
-  const svgHeight = LABEL_HEIGHT + gridRows * cellStep;
 
   // Y-axis labels
   const yLabels: { row: number; label: string }[] = [];
@@ -400,31 +419,6 @@ export function LifeGrid({ cells, expectedAge, loading, scale = "weeks" }: LifeG
   } else {
     for (let age = 0; age <= gridRows; age += yLabelStep) yLabels.push({ row: age, label: String(age) });
   }
-
-  // Weeks: stretch to full width. Months/Years: match weeks cell size on screen.
-  // We calculate the pixel ratio from the weeks viewBox to achieve same cell size.
-  const weeksViewBoxWidth = LABEL_WIDTH + 52 * cellStep;
-  // When weeks SVG is w-full, 1 viewBox unit = containerWidth/weeksViewBoxWidth pixels
-  // For months/years to have same cell size, their pixel width = svgWidth/weeksViewBoxWidth * containerWidth
-  // Which is the same as: width = (svgWidth/weeksViewBoxWidth) * 100%
-  const widthPercent = scale === "weeks" ? "100%" : `${(svgWidth / weeksViewBoxWidth) * 100}%`;
-
-  // Auto-scroll to current week row
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrolledRef = useRef(false);
-  useEffect(() => {
-    if (loading || cells.length === 0 || scrolledRef.current) return;
-    const currentCell = cells.find(c => c.state === "current");
-    if (!currentCell || !containerRef.current) return;
-    scrolledRef.current = true;
-    // Calculate pixel position of current row
-    const svg = containerRef.current.querySelector("svg");
-    if (!svg) return;
-    const svgRect = svg.getBoundingClientRect();
-    const rowRatio = currentCell.year / gridRows;
-    const targetY = svgRect.top + window.scrollY + svgRect.height * rowRatio - window.innerHeight / 3;
-    window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
-  }, [loading, cells, gridRows]);
 
   return (
       <div ref={containerRef} className="w-full flex justify-center">
