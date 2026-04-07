@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Menu, LogOut, LayoutDashboard, Settings, Search, Trophy, Home } from "lucide-react";
 import * as Flags from "country-flag-icons/react/3x2";
+import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -162,7 +163,8 @@ export function Header() {
       <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Left: Logo + nav (desktop) */}
         <div className="flex items-center gap-6">
-          <Link href="/" className="text-lg font-bold tracking-tight">
+          <Link href="/" className="flex items-center gap-2 text-lg font-bold tracking-tight">
+            <Logo className="h-5 w-5" />
             GitLife
           </Link>
           {user && (
