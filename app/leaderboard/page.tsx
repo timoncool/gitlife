@@ -287,6 +287,8 @@ export default function LeaderboardPage() {
   const { data: session } = useSession();
 
   const [sortKey, setSortKey] = useState<SortKey>("commits");
+  const [sortAsc, setSortAsc] = useState(false);
+  const [tab, setTab] = useState<"famous" | "community">("famous");
   const [famousEntries, setFamousEntries] = useState<LeaderboardEntry[]>([]);
   const [communityEntries, setCommunityEntries] = useState<LeaderboardEntry[]>([]);
   const [famousLoading, setFamousLoading] = useState(true);
@@ -378,26 +380,32 @@ export default function LeaderboardPage() {
     return () => { cancelled = true; };
   }, [sortKey]);
 
-  // Sort famous devs client-side
-  const sortedFamous = useMemo(() => {
-    const sorted = [...famousEntries];
-    switch (sortKey) {
-      case "active":
-        sorted.sort((a, b) => b.activeWeeks - a.activeWeeks);
-        break;
-      case "streak":
-        sorted.sort((a, b) => b.currentStreak - a.currentStreak);
-        break;
-      case "best":
-        sorted.sort((a, b) => b.longestStreak - a.longestStreak);
-        break;
-      case "commits":
-      default:
-        sorted.sort((a, b) => b.totalCommits - a.totalCommits);
-        break;
+  function handleSort(key: SortKey) {
+    if (key === sortKey) {
+      setSortAsc(!sortAsc);
+    } else {
+      setSortKey(key);
+      setSortAsc(false);
     }
+  }
+
+  // Sort entries client-side
+  function sortEntries(entries: LeaderboardEntry[]) {
+    const sorted = [...entries];
+    const getValue = (e: LeaderboardEntry) => {
+      switch (sortKey) {
+        case "active": return e.activeWeeks;
+        case "streak": return e.currentStreak;
+        case "best": return e.longestStreak;
+        default: return e.totalCommits;
+      }
+    };
+    sorted.sort((a, b) => sortAsc ? getValue(a) - getValue(b) : getValue(b) - getValue(a));
     return sorted;
-  }, [famousEntries, sortKey]);
+  }
+
+  const sortedFamous = useMemo(() => sortEntries(famousEntries), [famousEntries, sortKey, sortAsc]);
+  const sortedCommunity = useMemo(() => sortEntries(communityEntries), [communityEntries, sortKey, sortAsc]);
 
   return (
     <>
@@ -412,73 +420,72 @@ export default function LeaderboardPage() {
         {/* Sort controls */}
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs text-muted-foreground mr-1">{t("sortBy")}:</span>
-          <SortButton sortKey="commits" currentSort={sortKey} onSort={setSortKey} icon={Zap}>
-            {t("totalCommits")}
+          <SortButton sortKey="commits" currentSort={sortKey} onSort={handleSort} icon={Zap}>
+            {t("totalCommits")} {sortKey === "commits" ? (sortAsc ? "↑" : "↓") : ""}
           </SortButton>
-          <SortButton sortKey="active" currentSort={sortKey} onSort={setSortKey} icon={Calendar}>
-            {t("activeWeeks")}
+          <SortButton sortKey="active" currentSort={sortKey} onSort={handleSort} icon={Calendar}>
+            {t("activeWeeks")} {sortKey === "active" ? (sortAsc ? "↑" : "↓") : ""}
           </SortButton>
-          <SortButton sortKey="streak" currentSort={sortKey} onSort={setSortKey} icon={Flame}>
-            {t("currentStreak")}
+          <SortButton sortKey="streak" currentSort={sortKey} onSort={handleSort} icon={Flame}>
+            {t("currentStreak")} {sortKey === "streak" ? (sortAsc ? "↑" : "↓") : ""}
           </SortButton>
-          <SortButton sortKey="best" currentSort={sortKey} onSort={setSortKey} icon={Crown}>
-            {t("longestStreak")}
+          <SortButton sortKey="best" currentSort={sortKey} onSort={handleSort} icon={Crown}>
+            {t("longestStreak")} {sortKey === "best" ? (sortAsc ? "↑" : "↓") : ""}
           </SortButton>
         </div>
 
-        {/* Famous Devs section */}
-        <section>
-          <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-            <Crown className="h-4 w-4 text-yellow-500" />
+        {/* Tab switcher */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setTab("famous")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              tab === "famous"
+                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30"
+                : "text-muted-foreground hover:text-foreground border border-transparent"
+            }`}
+          >
+            <Crown className="h-4 w-4" />
             {t("famousDevs")}
-          </h2>
-          <div className="rounded-lg border border-border bg-card/50 overflow-hidden divide-y divide-border">
-            {famousLoading ? (
-              Array.from({ length: 6 }).map((_, i) => <SkeletonRow key={i} />)
+          </button>
+          <button
+            onClick={() => setTab("community")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              tab === "community"
+                ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30"
+                : "text-muted-foreground hover:text-foreground border border-transparent"
+            }`}
+          >
+            <Flame className="h-4 w-4" />
+            {t("community")}
+          </button>
+        </div>
+
+        {/* Table */}
+        <div className="rounded-lg border border-border bg-card/50 overflow-hidden divide-y divide-border">
+          {tab === "famous" ? (
+            famousLoading ? (
+              Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
             ) : sortedFamous.length === 0 ? (
-              <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                No data available
-              </div>
+              <div className="px-4 py-8 text-center text-sm text-muted-foreground">No data</div>
             ) : (
               sortedFamous.map((entry, idx) => (
-                <LeaderboardRow
-                  key={entry.username}
-                  entry={entry}
-                  rank={idx + 1}
-                  isCurrentUser={false}
-                  sortKey={sortKey}
-                />
+                <LeaderboardRow key={entry.username} entry={entry} rank={idx + 1} isCurrentUser={false} sortKey={sortKey} />
               ))
-            )}
-          </div>
-        </section>
-
-        {/* Community section */}
-        <section>
-          <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-            <Flame className="h-4 w-4 text-orange-500" />
-            {t("community")}
-          </h2>
-          <div className="rounded-lg border border-border bg-card/50 overflow-hidden divide-y divide-border">
-            {communityLoading ? (
+            )
+          ) : (
+            communityLoading ? (
               Array.from({ length: 4 }).map((_, i) => <SkeletonRow key={i} />)
             ) : communityEntries.length === 0 ? (
               <div className="px-4 py-8 text-center text-sm text-muted-foreground">
-                No community members yet. Sign in and sync your contributions to appear here!
+                No community members yet
               </div>
             ) : (
-              communityEntries.map((entry, idx) => (
-                <LeaderboardRow
-                  key={entry.username}
-                  entry={entry}
-                  rank={idx + 1}
-                  isCurrentUser={entry.username.toLowerCase() === currentUsername}
-                  sortKey={sortKey}
-                />
+              sortedCommunity.map((entry, idx) => (
+                <LeaderboardRow key={entry.username} entry={entry} rank={idx + 1} isCurrentUser={entry.username.toLowerCase() === currentUsername} sortKey={sortKey} />
               ))
-            )}
-          </div>
-        </section>
+            )
+          )}
+        </div>
       </main>
     </>
   );
