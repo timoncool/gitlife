@@ -72,7 +72,7 @@ function DemoPageContent() {
   // Show compact bar when full info scrolls out
   useEffect(() => {
     if (!infoRef.current) return;
-    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0 });
+    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0, rootMargin: "-60px 0px 0px 0px" });
     obs.observe(infoRef.current);
     return () => obs.disconnect();
   }, [data]);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Header } from "@/components/header";
@@ -38,7 +38,7 @@ export default function DashboardPage() {
   // Show compact bar when full stats scroll out of view
   useEffect(() => {
     if (!statsRef.current) return;
-    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0 });
+    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0, rootMargin: "-60px 0px 0px 0px" });
     obs.observe(statsRef.current);
     return () => obs.disconnect();
   }, []);
