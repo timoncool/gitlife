@@ -62,38 +62,39 @@ type DevCategory = "Frontend" | "Backend" | "DevTools" | "Creators";
 const FAMOUS_DEVS: {
   username: string; label: string; tag: string; birthYear: number;
   country: string; expectedAge: number; description: string; category: DevCategory;
+  tags: string[];
 }[] = [
   // Frontend
-  { username: "yyx990803", label: "Evan You", tag: "Vue.js", birthYear: 1987, country: "USA", expectedAge: 78, description: "Creator of Vue.js and Vite. One of the most popular JS frameworks.", category: "Frontend" },
-  { username: "rich-harris", label: "Rich Harris", tag: "Svelte", birthYear: 1985, country: "USA", expectedAge: 78, description: "Creator of Svelte and SvelteKit. Rethinking frontend frameworks.", category: "Frontend" },
-  { username: "gaearon", label: "Dan Abramov", tag: "React", birthYear: 1992, country: "GBR", expectedAge: 81, description: "Co-creator of Redux, React core team. Born in Russia, lives in London.", category: "Frontend" },
-  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1986, country: "USA", expectedAge: 78, description: "Engineering lead on Google Chrome. Web performance expert.", category: "Frontend" },
-  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1991, country: "USA", expectedAge: 78, description: "Creator of TanStack Query, Table, Router. Full-stack open source.", category: "Frontend" },
-  { username: "sebmck", label: "Sebastian McKenzie", tag: "Babel", birthYear: 1994, country: "GBR", expectedAge: 81, description: "Creator of Babel and Biome. Transformed modern JavaScript tooling.", category: "Frontend" },
+  { username: "yyx990803", label: "Evan You", tag: "Vue.js", birthYear: 1987, country: "USA", expectedAge: 78, description: "Creator of Vue.js and Vite. One of the most popular JS frameworks.", category: "Frontend", tags: ["JavaScript", "TypeScript"] },
+  { username: "rich-harris", label: "Rich Harris", tag: "Svelte", birthYear: 1985, country: "USA", expectedAge: 78, description: "Creator of Svelte and SvelteKit. Rethinking frontend frameworks.", category: "Frontend", tags: ["JavaScript", "TypeScript"] },
+  { username: "gaearon", label: "Dan Abramov", tag: "React", birthYear: 1992, country: "GBR", expectedAge: 81, description: "Co-creator of Redux, React core team. Born in Russia, lives in London.", category: "Frontend", tags: ["JavaScript", "TypeScript", "React"] },
+  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1986, country: "USA", expectedAge: 78, description: "Engineering lead on Google Chrome. Web performance expert.", category: "Frontend", tags: ["JavaScript", "TypeScript"] },
+  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1991, country: "USA", expectedAge: 78, description: "Creator of TanStack Query, Table, Router. Full-stack open source.", category: "Frontend", tags: ["JavaScript", "TypeScript", "React"] },
+  { username: "sebmck", label: "Sebastian McKenzie", tag: "Babel", birthYear: 1994, country: "GBR", expectedAge: 81, description: "Creator of Babel and Biome. Transformed modern JavaScript tooling.", category: "Frontend", tags: ["JavaScript", "TypeScript"] },
   // Backend
-  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 78, description: "Creator of Linux and Git. Changed the world of open source.", category: "Backend" },
-  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83, description: "Creator of Redis — the most popular in-memory database.", category: "Backend" },
-  { username: "gvanrossum", label: "Guido van Rossum", tag: "Python", birthYear: 1956, country: "USA", expectedAge: 78, description: "Creator of Python. Benevolent Dictator For Life.", category: "Backend" },
-  { username: "ry", label: "Ryan Dahl", tag: "Node / Deno", birthYear: 1981, country: "USA", expectedAge: 78, description: "Creator of Node.js and Deno. Redefined server-side JS twice.", category: "Backend" },
-  { username: "taylorotwell", label: "Taylor Otwell", tag: "Laravel", birthYear: 1985, country: "USA", expectedAge: 78, description: "Creator of Laravel. Single-handedly revived PHP.", category: "Backend" },
-  { username: "BrendanEich", label: "Brendan Eich", tag: "JavaScript", birthYear: 1961, country: "USA", expectedAge: 78, description: "Created JavaScript in 10 days. CEO of Brave browser.", category: "Backend" },
-  { username: "bellard", label: "Fabrice Bellard", tag: "FFmpeg / QEMU", birthYear: 1972, country: "FRA", expectedAge: 83, description: "Creator of FFmpeg, QEMU, QuickJS. Most productive programmer alive.", category: "Backend" },
+  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 78, description: "Creator of Linux and Git. Changed the world of open source.", category: "Backend", tags: ["C", "Linux"] },
+  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83, description: "Creator of Redis — the most popular in-memory database.", category: "Backend", tags: ["C"] },
+  { username: "gvanrossum", label: "Guido van Rossum", tag: "Python", birthYear: 1956, country: "USA", expectedAge: 78, description: "Creator of Python. Benevolent Dictator For Life.", category: "Backend", tags: ["Python"] },
+  { username: "ry", label: "Ryan Dahl", tag: "Node / Deno", birthYear: 1981, country: "USA", expectedAge: 78, description: "Creator of Node.js and Deno. Redefined server-side JS twice.", category: "Backend", tags: ["JavaScript", "TypeScript", "Rust"] },
+  { username: "taylorotwell", label: "Taylor Otwell", tag: "Laravel", birthYear: 1985, country: "USA", expectedAge: 78, description: "Creator of Laravel. Single-handedly revived PHP.", category: "Backend", tags: ["PHP"] },
+  { username: "BrendanEich", label: "Brendan Eich", tag: "JavaScript", birthYear: 1961, country: "USA", expectedAge: 78, description: "Created JavaScript in 10 days. CEO of Brave browser.", category: "Backend", tags: ["JavaScript"] },
+  { username: "bellard", label: "Fabrice Bellard", tag: "FFmpeg / QEMU", birthYear: 1972, country: "FRA", expectedAge: 83, description: "Creator of FFmpeg, QEMU, QuickJS. Most productive programmer alive.", category: "Backend", tags: ["C"] },
   // DevTools
-  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84, description: "Mass producer of open source. 1000+ npm packages.", category: "DevTools" },
-  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of Express.js, Koa, and dozens of Node.js tools.", category: "DevTools" },
-  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub", birthYear: 1985, country: "USA", expectedAge: 78, description: "Co-founder of GitHub. Changed how software is built.", category: "DevTools" },
-  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp", birthYear: 1989, country: "USA", expectedAge: 78, description: "Co-founder of HashiCorp. Creator of Terraform and Vault.", category: "DevTools" },
-  { username: "shykes", label: "Solomon Hykes", tag: "Docker", birthYear: 1983, country: "USA", expectedAge: 78, description: "Creator of Docker. Containerized the entire industry.", category: "DevTools" },
-  { username: "evanw", label: "Evan Wallace", tag: "esbuild", birthYear: 1990, country: "USA", expectedAge: 78, description: "Co-founder of Figma. Creator of esbuild — fastest JS bundler.", category: "DevTools" },
-  { username: "sokra", label: "Tobias Koppers", tag: "webpack", birthYear: 1990, country: "DEU", expectedAge: 81, description: "Creator of webpack and Turbopack. Bundled the modern web.", category: "DevTools" },
+  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84, description: "Mass producer of open source. 1000+ npm packages.", category: "DevTools", tags: ["JavaScript"] },
+  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of Express.js, Koa, and dozens of Node.js tools.", category: "DevTools", tags: ["JavaScript"] },
+  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub", birthYear: 1985, country: "USA", expectedAge: 78, description: "Co-founder of GitHub. Changed how software is built.", category: "DevTools", tags: ["Ruby"] },
+  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp", birthYear: 1989, country: "USA", expectedAge: 78, description: "Co-founder of HashiCorp. Creator of Terraform and Vault.", category: "DevTools", tags: ["Go"] },
+  { username: "shykes", label: "Solomon Hykes", tag: "Docker", birthYear: 1983, country: "USA", expectedAge: 78, description: "Creator of Docker. Containerized the entire industry.", category: "DevTools", tags: ["Go", "Docker"] },
+  { username: "evanw", label: "Evan Wallace", tag: "esbuild", birthYear: 1990, country: "USA", expectedAge: 78, description: "Co-founder of Figma. Creator of esbuild — fastest JS bundler.", category: "DevTools", tags: ["JavaScript"] },
+  { username: "sokra", label: "Tobias Koppers", tag: "webpack", birthYear: 1990, country: "DEU", expectedAge: 81, description: "Creator of webpack and Turbopack. Bundled the modern web.", category: "DevTools", tags: ["JavaScript", "TypeScript"] },
   // Creators
-  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Streamer", birthYear: 1986, country: "USA", expectedAge: 78, description: "Dev streamer and content creator. Ex-Netflix engineer.", category: "Creators" },
-  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing", birthYear: 1988, country: "USA", expectedAge: 78, description: "Testing guru. Creator of Testing Library and Epic React.", category: "Creators" },
-  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel", birthYear: 1990, country: "ARG", expectedAge: 77, description: "CEO of Vercel, creator of Socket.io. Next.js visionary.", category: "Creators" },
-  { username: "codediodeio", label: "Jeff Delaney", tag: "Fireship", birthYear: 1990, country: "USA", expectedAge: 78, description: "Creator of Fireship. Complex topics in 100 seconds.", category: "Creators" },
-  { username: "bradtraversy", label: "Brad Traversy", tag: "Traversy Media", birthYear: 1981, country: "USA", expectedAge: 78, description: "Traversy Media founder. Taught millions to code.", category: "Creators" },
-  { username: "wesbos", label: "Wes Bos", tag: "Syntax.fm", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of JavaScript30, Syntax podcast. Web dev educator.", category: "Creators" },
-  { username: "t3dotgg", label: "Theo Browne", tag: "T3 Stack", birthYear: 1995, country: "USA", expectedAge: 78, description: "Creator of T3 Stack. YouTuber and CEO of T3 Chat.", category: "Creators" },
+  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Streamer", birthYear: 1986, country: "USA", expectedAge: 78, description: "Dev streamer and content creator. Ex-Netflix engineer.", category: "Creators", tags: ["Rust", "Go", "TypeScript"] },
+  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing", birthYear: 1988, country: "USA", expectedAge: 78, description: "Testing guru. Creator of Testing Library and Epic React.", category: "Creators", tags: ["JavaScript"] },
+  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel", birthYear: 1990, country: "ARG", expectedAge: 77, description: "CEO of Vercel, creator of Socket.io. Next.js visionary.", category: "Creators", tags: ["JavaScript"] },
+  { username: "codediodeio", label: "Jeff Delaney", tag: "Fireship", birthYear: 1990, country: "USA", expectedAge: 78, description: "Creator of Fireship. Complex topics in 100 seconds.", category: "Creators", tags: ["JavaScript", "TypeScript"] },
+  { username: "bradtraversy", label: "Brad Traversy", tag: "Traversy Media", birthYear: 1981, country: "USA", expectedAge: 78, description: "Traversy Media founder. Taught millions to code.", category: "Creators", tags: ["JavaScript"] },
+  { username: "wesbos", label: "Wes Bos", tag: "Syntax.fm", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of JavaScript30, Syntax podcast. Web dev educator.", category: "Creators", tags: ["JavaScript"] },
+  { username: "t3dotgg", label: "Theo Browne", tag: "T3 Stack", birthYear: 1995, country: "USA", expectedAge: 78, description: "Creator of T3 Stack. YouTuber and CEO of T3 Chat.", category: "Creators", tags: ["TypeScript", "React"] },
 ];
 
 const DEFAULT_EXPECTED_AGE = 80;
@@ -370,14 +371,20 @@ const CATEGORY_KEYS: Record<DevCategory | "All", string> = {
   All: "catAll", Frontend: "catFrontend", Backend: "catBackend", DevTools: "catDevtools", Creators: "catCreators",
 };
 
+// Extract unique tech tags from all devs
+const ALL_TECHS = Array.from(new Set(FAMOUS_DEVS.flatMap(d => d.tags))).sort();
+
 function FamousDevsSection() {
   const t = useTranslations("landing");
   const td = useTranslations("dashboard");
   const [category, setCategory] = useState<DevCategory | "All">("All");
+  const [tech, setTech] = useState<string | null>(null);
 
-  const filteredDevs = category === "All"
-    ? FAMOUS_DEVS
-    : FAMOUS_DEVS.filter(d => d.category === category);
+  const filteredDevs = FAMOUS_DEVS.filter(d => {
+    if (category !== "All" && d.category !== category) return false;
+    if (tech && !d.tags.includes(tech)) return false;
+    return true;
+  });
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4">
@@ -401,6 +408,33 @@ function FamousDevsSection() {
             }`}
           >
             {td(CATEGORY_KEYS[cat])}
+          </button>
+        ))}
+      </div>
+
+      {/* Tech/language chips */}
+      <div className="flex flex-wrap items-center justify-center gap-1.5 mb-8">
+        <button
+          onClick={() => setTech(null)}
+          className={`px-2.5 py-0.5 text-xs font-mono rounded-full transition-all ${
+            !tech
+              ? "bg-foreground/10 text-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          All
+        </button>
+        {ALL_TECHS.map(t => (
+          <button
+            key={t}
+            onClick={() => setTech(tech === t ? null : t)}
+            className={`px-2.5 py-0.5 text-xs font-mono rounded-full transition-all ${
+              tech === t
+                ? "bg-foreground/10 text-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {t}
           </button>
         ))}
       </div>
