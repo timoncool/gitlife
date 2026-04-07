@@ -46,9 +46,11 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
     isDarkRef.current = document.documentElement.classList.contains("dark");
     const colors = isDarkRef.current ? COLORS_DARK : COLORS_LIGHT;
 
-    // 1 pixel per cell — scale up with CSS image-rendering: pixelated
-    const w = 52;
-    const h = expectedAge;
+    const cellPx = 3;
+    const gap = 1;
+    const step = cellPx + gap;
+    const w = 52 * step;
+    const h = expectedAge * step;
     const canvas = document.createElement("canvas");
     canvas.width = w;
     canvas.height = h;
@@ -59,13 +61,13 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
     ctx.fillStyle = colors.future;
     ctx.fillRect(0, 0, w, h);
 
-    // Draw cells
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++) {
+    // Draw cells with proper size and gap
+    for (let y = 0; y < expectedAge; y++) {
+      for (let x = 0; x < 52; x++) {
         const cell = cellMap.get(`${y}-${x + 1}`);
         if (!cell) continue;
         ctx.fillStyle = colors[cell.state];
-        ctx.fillRect(x, y, 1, 1);
+        ctx.fillRect(x * step, y * step, cellPx, cellPx);
       }
     }
 
@@ -79,12 +81,12 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
         const c = dark ? COLORS_DARK : COLORS_LIGHT;
         ctx.fillStyle = c.future;
         ctx.fillRect(0, 0, w, h);
-        for (let y2 = 0; y2 < h; y2++) {
-          for (let x2 = 0; x2 < w; x2++) {
+        for (let y2 = 0; y2 < expectedAge; y2++) {
+          for (let x2 = 0; x2 < 52; x2++) {
             const cell2 = cellMap.get(`${y2}-${x2 + 1}`);
             if (!cell2) continue;
             ctx.fillStyle = c[cell2.state];
-            ctx.fillRect(x2, y2, 1, 1);
+            ctx.fillRect(x2 * step, y2 * step, cellPx, cellPx);
           }
         }
         setSrc(canvas.toDataURL("image/png"));
@@ -99,10 +101,7 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
   return (
     <img
       src={src}
-      width={52 * 3}
-      height={expectedAge * 3}
       className="w-full h-auto"
-      style={{ imageRendering: "pixelated" }}
       alt="Life grid"
       draggable={false}
     />

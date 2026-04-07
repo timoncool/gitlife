@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { Menu, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { Menu, LogOut, LayoutDashboard, Settings, Search } from "lucide-react";
 import * as Flags from "country-flag-icons/react/3x2";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,9 @@ import {
 } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Input } from "@/components/ui/input";
 import { signOut, useSession } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const LANGUAGES = [
   { value: "en", label: "English", flagCode: "US" },
@@ -99,6 +102,31 @@ function NavLinks({ className }: { className?: string }) {
   );
 }
 
+function HeaderSearch() {
+  const router = useRouter();
+  const [value, setValue] = useState("");
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && value.trim()) {
+      router.push(`/demo?username=${encodeURIComponent(value.trim())}`);
+      setValue("");
+    }
+  }
+
+  return (
+    <div className="relative">
+      <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+      <Input
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder="GitHub username"
+        className="h-8 w-[180px] pl-8 text-sm"
+      />
+    </div>
+  );
+}
+
 export function Header() {
   const t = useTranslations("header");
   const { data: session } = useSession();
@@ -120,6 +148,7 @@ export function Header() {
 
         {/* Right: desktop controls */}
         <div className="hidden md:flex items-center gap-3">
+          <HeaderSearch />
           <LanguageSelector />
           <ThemeToggle />
           {user && (

@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { SignInButton } from "@/components/sign-in-button";
 import { useSession } from "@/lib/auth-client";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -14,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowRight, Search, Globe, ExternalLink, LayoutDashboard } from "lucide-react";
+import { ExternalLink, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Header } from "@/components/header";
@@ -192,101 +191,6 @@ function WhatIsThisSection() {
   );
 }
 
-function DemoSection() {
-  const t = useTranslations("landing");
-  const [username, setUsername] = useState("");
-  const [data, setData] = useState<DemoData | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  const fetchDemo = useCallback(async (user: string) => {
-    if (!user.trim()) return;
-    setLoading(true);
-    setError("");
-    setData(null);
-    try {
-      const res = await fetch(
-        `/api/demo?username=${encodeURIComponent(user.trim())}`,
-      );
-      if (!res.ok) {
-        const body = await res.json().catch(() => null);
-        throw new Error(body?.error || `HTTP ${res.status}`);
-      }
-      const json = await res.json();
-      if (!json?.username || !json?.contributions) {
-        throw new Error("Invalid response format");
-      }
-      setData(json);
-    } catch (err) {
-      console.error("Demo fetch error:", err);
-      setError(t("demoError"));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    fetchDemo(username);
-  }
-
-  // Estimate birth year from GitHub created date (rough guess: joined at ~25)
-  const birthYear = data
-    ? new Date(data.createdAt).getFullYear() - 25
-    : 1990;
-
-  return (
-    <section className="w-full max-w-5xl mx-auto px-4">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{t("demoTitle")}</h2>
-      </div>
-      <form
-        onSubmit={handleSubmit}
-        className="flex gap-3 max-w-md mx-auto mb-8"
-      >
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder={t("demoPlaceholder")}
-            className="pl-9"
-          />
-        </div>
-        <Button type="submit" disabled={loading || !username.trim()}>
-          {loading ? (
-            <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
-          ) : (
-            <>
-              {t("demoButton")}
-              <ArrowRight className="ml-1 h-4 w-4" />
-            </>
-          )}
-        </Button>
-      </form>
-
-      {loading && (
-        <div className="text-center text-muted-foreground animate-pulse py-8">
-          {t("demoLoading")}
-        </div>
-      )}
-
-      {error && (
-        <div className="text-center text-destructive py-4">{error}</div>
-      )}
-
-      {data && (
-        <div className="rounded-lg border bg-card/50 backdrop-blur-sm p-6">
-          <div className="flex items-center gap-3 mb-4">
-            <GitHubIcon className="h-5 w-5" />
-            <span className="font-semibold text-lg">{data.username}</span>
-          </div>
-          <DemoMiniGrid data={data} birthYear={birthYear} />
-        </div>
-      )}
-    </section>
-  );
-}
 
 function FamousDevCard({
   dev,
@@ -297,7 +201,7 @@ function FamousDevCard({
   const td = useTranslations("dashboard");
   const [data, setData] = useState<DemoData | null>(null);
   const [loading, setLoading] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLAnchorElement>(null);
   const fetched = useRef(false);
 
   useEffect(() => {
@@ -338,7 +242,7 @@ function FamousDevCard({
   const avatarUrl = data?.avatarUrl;
 
   return (
-    <div ref={ref} className="group rounded-lg border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
+    <Link ref={ref} href={`/demo?username=${encodeURIComponent(dev.username)}`} className="group rounded-lg border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
       <div className="flex items-center gap-3">
         {avatarUrl ? (
           <img
@@ -376,17 +280,12 @@ function FamousDevCard({
       {dev.description && (
         <p className="text-xs text-muted-foreground leading-relaxed">{dev.description}</p>
       )}
-      <Link href={`/demo?username=${encodeURIComponent(dev.username)}`} className="flex flex-col gap-3 cursor-pointer">
-        {data ? (
-          <div className="animate-fade-in">
-            <DemoMiniGrid
-              data={data}
-              birthYear={dev.birthYear}
-              expectedAge={dev.expectedAge}
-              showStats
-            />
-          </div>
-        ) : (
+      <div className="relative">
+        {/* Skeleton — always rendered, fades out when data arrives */}
+        <div
+          className="transition-opacity duration-500"
+          style={{ opacity: data ? 0 : 1, position: data ? "absolute" : "relative", inset: 0 }}
+        >
           <div className="animate-pulse">
             <div
               className="w-full rounded bg-muted"
@@ -398,13 +297,24 @@ function FamousDevCard({
               <div className="h-2.5 w-14 rounded bg-muted" />
             </div>
           </div>
-        )}
-        <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-          <span>{t("viewGrid")}</span>
-          <ExternalLink className="h-3 w-3" />
         </div>
-      </Link>
-    </div>
+        {/* Data — fades in */}
+        {data && (
+          <div className="transition-opacity duration-500" style={{ opacity: 1 }}>
+            <DemoMiniGrid
+              data={data}
+              birthYear={dev.birthYear}
+              expectedAge={dev.expectedAge}
+              showStats
+            />
+          </div>
+        )}
+      </div>
+      <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+        <span>{t("viewGrid")}</span>
+        <ExternalLink className="h-3 w-3" />
+      </div>
+    </Link>
   );
 }
 
@@ -497,7 +407,7 @@ function FamousDevsSection() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredDevs.map((dev, i) => (
-          <div key={dev.username} className="animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
+          <div key={dev.username} >
             <FamousDevCard dev={dev} />
           </div>
         ))}
@@ -599,11 +509,6 @@ export default function LandingPage() {
       {/* What is this? */}
       <section className="py-10 md:py-16">
         <WhatIsThisSection />
-      </section>
-
-      {/* Demo Section */}
-      <section className="py-10 md:py-16">
-        <DemoSection />
       </section>
 
       {/* Famous Devs Section */}
