@@ -409,8 +409,25 @@ export function LifeGrid({ cells, expectedAge, loading, scale = "weeks" }: LifeG
   // Which is the same as: width = (svgWidth/weeksViewBoxWidth) * 100%
   const widthPercent = scale === "weeks" ? "100%" : `${(svgWidth / weeksViewBoxWidth) * 100}%`;
 
+  // Auto-scroll to current week row
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrolledRef = useRef(false);
+  useEffect(() => {
+    if (loading || cells.length === 0 || scrolledRef.current) return;
+    const currentCell = cells.find(c => c.state === "current");
+    if (!currentCell || !containerRef.current) return;
+    scrolledRef.current = true;
+    // Calculate pixel position of current row
+    const svg = containerRef.current.querySelector("svg");
+    if (!svg) return;
+    const svgRect = svg.getBoundingClientRect();
+    const rowRatio = currentCell.year / gridRows;
+    const targetY = svgRect.top + window.scrollY + svgRect.height * rowRatio - window.innerHeight / 3;
+    window.scrollTo({ top: Math.max(0, targetY), behavior: "smooth" });
+  }, [loading, cells, gridRows]);
+
   return (
-      <div className="w-full flex justify-center">
+      <div ref={containerRef} className="w-full flex justify-center">
         <svg
           viewBox={`0 0 ${svgWidth} ${svgHeight}`}
           style={{ width: widthPercent, height: "auto" }}
