@@ -193,14 +193,20 @@ function DemoPageContent() {
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Sticky mini bar — visible when scrolling past dev info */}
             <div className="sticky top-14 z-30 bg-background/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border/50">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 flex-wrap">
                 {data.avatarUrl && (
-                  <img src={data.avatarUrl} alt="" className="h-6 w-6 rounded-full" />
+                  <img src={data.avatarUrl} alt="" className="h-6 w-6 rounded-full shrink-0" />
                 )}
                 <span className="text-sm font-medium truncate">{knownDev?.label || data.username}</span>
-                <span className="text-xs text-muted-foreground">{stats.percentLived}% · {stats.weeksLived.toLocaleString()} wks</span>
-                <div className="flex-1 h-1 bg-muted rounded-full overflow-hidden max-w-[200px]">
+                <div className="h-1 bg-muted rounded-full overflow-hidden w-24 shrink-0">
                   <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
+                </div>
+                <div className="flex items-center gap-3 text-[10px] font-mono text-muted-foreground tabular-nums">
+                  <span>{stats.percentLived}%</span>
+                  <span>{stats.weeksLived.toLocaleString()}/{stats.weeksTotal.toLocaleString()}</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span>
+                  <span>🔥{stats.currentStreak}</span>
+                  <span>⭐{stats.longestStreak}</span>
                 </div>
               </div>
             </div>
