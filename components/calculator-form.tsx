@@ -707,6 +707,12 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
             fullWidth
             className="country-flags-select"
           />
+          {country && sex && (
+            <p className="text-xs text-muted-foreground">
+              {tc("baselineAge")}: <span className="font-semibold">{baseline}</span> {tc("male") === tc("male") ? "" : ""}
+              <span className="text-muted-foreground/60"> (WHO/World Bank)</span>
+            </p>
+          )}
         </div>
       </div>
     );
