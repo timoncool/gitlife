@@ -71,7 +71,7 @@ export default function DashboardPage() {
       .then((res) => {
         if (res.status === 404) {
           // No profile yet — need onboarding
-          setProfile({ birthDate: null, expectedAge: 75, githubCreatedAt: null });
+          setProfile({ birthDate: null, expectedAge: 75, githubCreatedAt: null, githubUsername: null });
           return null;
         }
         if (!res.ok) throw new Error("Failed to fetch profile");
@@ -83,7 +83,7 @@ export default function DashboardPage() {
         }
       })
       .catch(() => {
-        setProfile({ birthDate: null, expectedAge: 75, githubCreatedAt: null });
+        setProfile({ birthDate: null, expectedAge: 75, githubCreatedAt: null, githubUsername: null });
       })
       .finally(() => setProfileLoading(false));
   }, [session?.user]);
