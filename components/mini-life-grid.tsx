@@ -57,8 +57,8 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Fill background
-    ctx.fillStyle = colors.future;
+    // Fill background with card color (gap between cells shows this)
+    ctx.fillStyle = isDarkRef.current ? "#0a0a0a" : "#ffffff";
     ctx.fillRect(0, 0, w, h);
 
     // Draw cells with proper size and gap
@@ -79,7 +79,7 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
       if (dark !== isDarkRef.current) {
         isDarkRef.current = dark;
         const c = dark ? COLORS_DARK : COLORS_LIGHT;
-        ctx.fillStyle = c.future;
+        ctx.fillStyle = dark ? "#0a0a0a" : "#ffffff";
         ctx.fillRect(0, 0, w, h);
         for (let y2 = 0; y2 < expectedAge; y2++) {
           for (let x2 = 0; x2 < 52; x2++) {
