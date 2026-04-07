@@ -57,7 +57,7 @@ function FlagIcon({ code, className }: { code: string; className?: string }) {
 }
 
 // Public data from Wikipedia, interviews, public profiles
-type DevCategory = "Frontend" | "Backend" | "DevTools" | "Creators";
+type DevCategory = "Frontend" | "Backend" | "DevTools" | "AI" | "OS & Systems" | "Creators";
 
 const FAMOUS_DEVS: {
   username: string; label: string; tag: string; birthYear: number;
@@ -71,14 +71,19 @@ const FAMOUS_DEVS: {
   { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1986, country: "USA", expectedAge: 78, description: "Engineering lead on Google Chrome. Web performance expert.", category: "Frontend", tags: ["JavaScript", "TypeScript"] },
   { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1991, country: "USA", expectedAge: 78, description: "Creator of TanStack Query, Table, Router. Full-stack open source.", category: "Frontend", tags: ["JavaScript", "TypeScript", "React"] },
   { username: "sebmck", label: "Sebastian McKenzie", tag: "Babel", birthYear: 1994, country: "GBR", expectedAge: 81, description: "Creator of Babel and Biome. Transformed modern JavaScript tooling.", category: "Frontend", tags: ["JavaScript", "TypeScript"] },
+  // OS & Systems
+  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 78, description: "Creator of Linux and Git. Changed the world of open source.", category: "OS & Systems", tags: ["C", "Linux"] },
+  { username: "bellard", label: "Fabrice Bellard", tag: "FFmpeg / QEMU", birthYear: 1972, country: "FRA", expectedAge: 83, description: "Creator of FFmpeg, QEMU, QuickJS. Most productive programmer alive.", category: "OS & Systems", tags: ["C"] },
+  // AI
+  { username: "karpathy", label: "Andrej Karpathy", tag: "Tesla AI", birthYear: 1986, country: "USA", expectedAge: 78, description: "Ex-Tesla AI director, OpenAI founding member. AI educator.", category: "AI", tags: ["Python", "AI"] },
+  { username: "lllyasviel", label: "Lvmin Zhang", tag: "ControlNet", birthYear: 1995, country: "CHN", expectedAge: 77, description: "Creator of ControlNet and Fooocus. Revolutionized AI image generation.", category: "AI", tags: ["Python", "AI"] },
+  { username: "ggerganov", label: "Georgi Gerganov", tag: "llama.cpp", birthYear: 1990, country: "BGR", expectedAge: 75, description: "Creator of llama.cpp and whisper.cpp. Runs LLMs on consumer hardware.", category: "AI", tags: ["C++", "AI"] },
   // Backend
-  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 78, description: "Creator of Linux and Git. Changed the world of open source.", category: "Backend", tags: ["C", "Linux"] },
   { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83, description: "Creator of Redis — the most popular in-memory database.", category: "Backend", tags: ["C"] },
   { username: "gvanrossum", label: "Guido van Rossum", tag: "Python", birthYear: 1956, country: "USA", expectedAge: 78, description: "Creator of Python. Benevolent Dictator For Life.", category: "Backend", tags: ["Python"] },
   { username: "ry", label: "Ryan Dahl", tag: "Node / Deno", birthYear: 1981, country: "USA", expectedAge: 78, description: "Creator of Node.js and Deno. Redefined server-side JS twice.", category: "Backend", tags: ["JavaScript", "TypeScript", "Rust"] },
   { username: "taylorotwell", label: "Taylor Otwell", tag: "Laravel", birthYear: 1985, country: "USA", expectedAge: 78, description: "Creator of Laravel. Single-handedly revived PHP.", category: "Backend", tags: ["PHP"] },
   { username: "BrendanEich", label: "Brendan Eich", tag: "JavaScript", birthYear: 1961, country: "USA", expectedAge: 78, description: "Created JavaScript in 10 days. CEO of Brave browser.", category: "Backend", tags: ["JavaScript"] },
-  { username: "bellard", label: "Fabrice Bellard", tag: "FFmpeg / QEMU", birthYear: 1972, country: "FRA", expectedAge: 83, description: "Creator of FFmpeg, QEMU, QuickJS. Most productive programmer alive.", category: "Backend", tags: ["C"] },
   // DevTools
   { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84, description: "Mass producer of open source. 1000+ npm packages.", category: "DevTools", tags: ["JavaScript"] },
   { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of Express.js, Koa, and dozens of Node.js tools.", category: "DevTools", tags: ["JavaScript"] },
@@ -366,9 +371,9 @@ function ColorLegend() {
   );
 }
 
-const CATEGORIES: (DevCategory | "All")[] = ["All", "Frontend", "Backend", "DevTools", "Creators"];
+const CATEGORIES: (DevCategory | "All")[] = ["All", "Frontend", "Backend", "DevTools", "AI", "OS & Systems", "Creators"];
 const CATEGORY_KEYS: Record<DevCategory | "All", string> = {
-  All: "catAll", Frontend: "catFrontend", Backend: "catBackend", DevTools: "catDevtools", Creators: "catCreators",
+  All: "catAll", Frontend: "catFrontend", Backend: "catBackend", DevTools: "catDevtools", AI: "catAI", "OS & Systems": "catSystems", Creators: "catCreators",
 };
 
 // Extract unique tech tags from all devs

@@ -77,6 +77,8 @@
     "catFrontend": "Фронтенд",
     "catBackend": "Бэкенд",
     "catDevtools": "DevTools",
+    "catAI": "ИИ",
+    "catSystems": "ОС и системы",
     "catCreators": "Контент"
   },
   "settings": {

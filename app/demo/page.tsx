@@ -152,8 +152,36 @@ function DemoPageContent() {
         </Link>
 
         {loading && (
-          <div className="text-center text-muted-foreground animate-pulse py-8">
-            {t("demoLoading")}
+          <div className="max-w-6xl mx-auto space-y-6 animate-pulse">
+            {/* Avatar + name skeleton */}
+            <div className="flex items-center gap-4">
+              <div className="h-14 w-14 rounded-full bg-muted" />
+              <div className="space-y-2">
+                <div className="h-5 w-40 rounded bg-muted" />
+                <div className="h-3 w-64 rounded bg-muted" />
+              </div>
+            </div>
+            {/* Progress bar skeleton */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between">
+                <div className="h-3 w-28 rounded bg-muted" />
+                <div className="h-3 w-24 rounded bg-muted" />
+              </div>
+              <div className="h-1.5 w-full rounded-full bg-muted" />
+            </div>
+            {/* Stats skeleton */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <div key={i} className="rounded-lg border border-border bg-card p-5">
+                  <div className="h-3 w-20 rounded bg-muted mb-2" />
+                  <div className="h-7 w-28 rounded bg-muted" />
+                </div>
+              ))}
+            </div>
+            {/* Grid skeleton */}
+            <div className="rounded-lg border border-border bg-card/50 p-4">
+              <div className="w-full rounded bg-muted" style={{ aspectRatio: "52 / 45" }} />
+            </div>
           </div>
         )}
 
