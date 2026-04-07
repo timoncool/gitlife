@@ -35,16 +35,16 @@ const FACTOR_URLS: Record<string, string | null> = {
   sleep: "https://doi.org/10.1093/sleep/33.5.585",
   diet: "https://doi.org/10.1371/journal.pmed.1003889",
   social: "https://doi.org/10.1371/journal.pmed.1000316",
-  stress: null, // Yale Translational Psychiatry 2021 — no DOI
+  stress: "https://doi.org/10.1038/s41398-021-01735-7",
   education: "https://doi.org/10.1016/S2468-2667(23)00306-7",
-  maritalStatus: null,
-  hypertension: null, // Framingham Heart Study, Hypertension 2005
-  depression: null, // Lancet eClinicalMedicine 2023
-  sittingHours: null,
-  optimism: null, // Lee et al., PNAS 2019
+  maritalStatus: "https://doi.org/10.1093/aje/kwr111",
+  hypertension: "https://doi.org/10.1016/S0140-6736(02)11911-8",
+  depression: "https://doi.org/10.1176/appi.ajp.2013.13030325",
+  sittingHours: "https://doi.org/10.1371/journal.pone.0080000",
+  optimism: "https://doi.org/10.1073/pnas.1900712116",
   purpose: "https://doi.org/10.1177/0956797614531799",
   coffee: "https://doi.org/10.1056/NEJMoa1112010",
-  airPollution: null, // AQLI 2024
+  airPollution: "https://doi.org/10.1073/pnas.1616784114",
   diabetes: "https://doi.org/10.1016/S2213-8587(22)00252-2",
 };
 
@@ -709,8 +709,8 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
           />
           {country && sex && (
             <p className="text-xs text-muted-foreground">
-              {tc("baselineAge")}: <span className="font-semibold">{baseline}</span> {tc("male") === tc("male") ? "" : ""}
-              <span className="text-muted-foreground/60"> (WHO/World Bank)</span>
+              {tc("baselineAge")}: <span className="font-semibold">{baseline}</span>
+              <span className="text-muted-foreground/60"> (WHO / World Bank)</span>
             </p>
           )}
         </div>
