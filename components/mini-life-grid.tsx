@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { CellData, CellState } from "@/lib/types";
 
 const COLORS_DARK: Record<CellState, string> = {
@@ -11,7 +11,7 @@ const COLORS_DARK: Record<CellState, string> = {
   "level-2": "#006d32",
   "level-3": "#26a641",
   "level-4": "#39d353",
-  current: "#21262d",
+  current: "#1a6334",
 };
 
 const COLORS_LIGHT: Record<CellState, string> = {
@@ -22,32 +22,8 @@ const COLORS_LIGHT: Record<CellState, string> = {
   "level-2": "#40c463",
   "level-3": "#30a14e",
   "level-4": "#216e39",
-  current: "#ebedf0",
+  current: "#40c463",
 };
-
-const CURRENT_STROKE_DARK = "#39D353";
-const CURRENT_STROKE_LIGHT = "#e16f24";
-
-function useIsDark() {
-  const [isDark, setIsDark] = useState(() => {
-    if (typeof document !== "undefined") return document.documentElement.classList.contains("dark");
-    return false;
-  });
-
-  useEffect(() => {
-    setIsDark(document.documentElement.classList.contains("dark"));
-    const observer = new MutationObserver(() => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-    return () => observer.disconnect();
-  }, []);
-
-  return isDark;
-}
 
 interface MiniLifeGridProps {
   cells: CellData[];
@@ -55,9 +31,8 @@ interface MiniLifeGridProps {
 }
 
 export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
-  const isDark = useIsDark();
-  const colors = isDark ? COLORS_DARK : COLORS_LIGHT;
-  const currentStroke = isDark ? CURRENT_STROKE_DARK : CURRENT_STROKE_LIGHT;
+  const [src, setSrc] = useState<string>("");
+  const isDarkRef = useRef(false);
 
   const cellMap = useMemo(() => {
     const map = new Map<string, CellData>();
@@ -67,52 +42,69 @@ export function MiniLifeGrid({ cells, expectedAge }: MiniLifeGridProps) {
     return map;
   }, [cells]);
 
-  const cellSize = 2;
-  const cellGap = 0.5;
-  const cellStep = cellSize + cellGap;
-  const svgWidth = 52 * cellStep;
-  const svgHeight = expectedAge * cellStep;
+  useEffect(() => {
+    isDarkRef.current = document.documentElement.classList.contains("dark");
+    const colors = isDarkRef.current ? COLORS_DARK : COLORS_LIGHT;
+
+    // 1 pixel per cell — scale up with CSS image-rendering: pixelated
+    const w = 52;
+    const h = expectedAge;
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    // Fill background
+    ctx.fillStyle = colors.future;
+    ctx.fillRect(0, 0, w, h);
+
+    // Draw cells
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const cell = cellMap.get(`${y}-${x + 1}`);
+        if (!cell) continue;
+        ctx.fillStyle = colors[cell.state];
+        ctx.fillRect(x, y, 1, 1);
+      }
+    }
+
+    setSrc(canvas.toDataURL("image/png"));
+
+    // Re-render on theme change
+    const obs = new MutationObserver(() => {
+      const dark = document.documentElement.classList.contains("dark");
+      if (dark !== isDarkRef.current) {
+        isDarkRef.current = dark;
+        const c = dark ? COLORS_DARK : COLORS_LIGHT;
+        ctx.fillStyle = c.future;
+        ctx.fillRect(0, 0, w, h);
+        for (let y2 = 0; y2 < h; y2++) {
+          for (let x2 = 0; x2 < w; x2++) {
+            const cell2 = cellMap.get(`${y2}-${x2 + 1}`);
+            if (!cell2) continue;
+            ctx.fillStyle = c[cell2.state];
+            ctx.fillRect(x2, y2, 1, 1);
+          }
+        }
+        setSrc(canvas.toDataURL("image/png"));
+      }
+    });
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, [cellMap, expectedAge]);
+
+  if (!src) return null;
 
   return (
-    <svg
-      viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+    <img
+      src={src}
+      width={52 * 3}
+      height={expectedAge * 3}
       className="w-full h-auto"
-      preserveAspectRatio="xMidYMid meet"
-      aria-hidden="true"
-    >
-      {Array.from({ length: expectedAge }, (_, y) =>
-        Array.from({ length: 52 }, (_, x) => {
-          const week = x + 1;
-          const cell = cellMap.get(`${y}-${week}`);
-          if (!cell) return null;
-
-          const isCurrent = cell.state === "current";
-          const isFuture = cell.state === "future";
-          const fill = isCurrent
-            ? (isDark ? "rgba(57,211,83,0.3)" : "rgba(225,111,36,0.35)")
-            : colors[cell.state];
-
-          return (
-            <rect
-              key={`${y}-${x}`}
-              x={x * cellStep}
-              y={y * cellStep}
-              width={cellSize}
-              height={cellSize}
-              rx={0.5}
-              fill={fill}
-              stroke={
-                isCurrent
-                  ? currentStroke
-                  : isFuture
-                    ? (isDark ? "rgba(255,255,255,0.04)" : "#d0d7de")
-                    : "none"
-              }
-              strokeWidth={isCurrent ? 0.5 : isFuture ? 0.2 : 0}
-            />
-          );
-        }),
-      )}
-    </svg>
+      style={{ imageRendering: "pixelated" }}
+      alt="Life grid"
+      draggable={false}
+    />
   );
 }
