@@ -221,8 +221,9 @@ function DemoPageContent() {
                   {data.avatarUrl && (
                     <img src={data.avatarUrl} alt="" className="h-7 w-7 rounded-full shrink-0" />
                   )}
-                  <a href={`https://github.com/${data.username}`} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold truncate hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
-                    {knownDev?.label || data.username}
+                  <span className="text-sm font-semibold truncate">{knownDev?.label || data.username}</span>
+                  <a href={`https://github.com/${data.username}`} target="_blank" rel="noopener noreferrer" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+                    @{data.username}
                   </a>
                   <div className="flex items-center gap-4 ml-auto text-[11px] text-muted-foreground tabular-nums shrink-0">
                     <div className="flex items-center gap-1.5">
