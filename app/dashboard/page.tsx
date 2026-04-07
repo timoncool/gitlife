@@ -215,10 +215,13 @@ export default function DashboardPage() {
                   <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
                 </div>
               </div>
-              <div>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} <span className="text-muted-foreground/60">{t("weeksShort")}</span></div>
+              <div>{stats.weeksLived.toLocaleString()}/{stats.weeksTotal.toLocaleString()} <span className="text-muted-foreground/60">{t("weeksShort")}</span></div>
               <div><span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span> <span className="text-muted-foreground/60">{t("activeWeeks")}</span></div>
               <div>{stats.currentStreak} <span className="text-muted-foreground/60">{t("currentStreak")}</span></div>
               <div>{stats.longestStreak} <span className="text-muted-foreground/60">{t("longestStreak")}</span></div>
+              {githubCreatedAt && (
+                <div><span className="text-muted-foreground/60">{t("githubSince")}</span> {new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short" }).format(githubCreatedAt)}</div>
+              )}
             </div>
         </div>
 
