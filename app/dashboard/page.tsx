@@ -44,7 +44,7 @@ export default function DashboardPage() {
       requestAnimationFrame(() => {
         if (statsRef.current) {
           const rect = statsRef.current.getBoundingClientRect();
-          setShowMiniBar(rect.bottom < 200);
+          setShowMiniBar(rect.top < -20);
         }
         ticking = false;
       });
