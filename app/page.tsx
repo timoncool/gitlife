@@ -39,32 +39,62 @@ function GitHubIcon({ className }: { className?: string }) {
   );
 }
 
+import * as Flags from "country-flag-icons/react/3x2";
+
 const LANGUAGES = [
-  { value: "en", label: "English" },
-  { value: "zh", label: "中文" },
-  { value: "es", label: "Espanol" },
-  { value: "pt", label: "Portugues" },
-  { value: "ru", label: "Русский" },
-  { value: "de", label: "Deutsch" },
-  { value: "ja", label: "日本語" },
+  { value: "en", label: "English", flagCode: "US" },
+  { value: "zh", label: "中文", flagCode: "CN" },
+  { value: "es", label: "Español", flagCode: "ES" },
+  { value: "pt", label: "Português", flagCode: "BR" },
+  { value: "ru", label: "Русский", flagCode: "RU" },
+  { value: "de", label: "Deutsch", flagCode: "DE" },
+  { value: "ja", label: "日本語", flagCode: "JP" },
 ] as const;
 
+function FlagIcon({ code, className }: { code: string; className?: string }) {
+  const Flag = (Flags as Record<string, React.ComponentType<{ className?: string }>>)[code];
+  if (!Flag) return null;
+  return <Flag className={className || "h-3 w-4 inline-block"} />;
+}
+
 // Public data from Wikipedia, interviews, public profiles
-const FAMOUS_DEVS = [
-  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 80, description: "Creator of Linux and Git. Changed the world of open source." },
-  { username: "yyx990803", label: "Evan You", tag: "Vue.js", birthYear: 1990, country: "USA", expectedAge: 82, description: "Creator of Vue.js and Vite. One of the most popular JS frameworks." },
-  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel", birthYear: 1990, country: "USA", expectedAge: 80, description: "CEO of Vercel, creator of Socket.io and Next.js visionary." },
-  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84, description: "Mass producer of open source. 1000+ npm packages and counting." },
-  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of Express.js, Koa, and dozens of foundational Node.js tools." },
-  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1985, country: "USA", expectedAge: 80, description: "Engineering lead on Google Chrome. Author of web performance best practices." },
-  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Streamer", birthYear: 1988, country: "USA", expectedAge: 78, description: "Developer streamer and content creator. Ex-Netflix senior engineer." },
-  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83, description: "Creator of Redis — the most popular in-memory database in the world." },
-  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub", birthYear: 1985, country: "USA", expectedAge: 80, description: "Co-founder of GitHub. Changed the way software is built." },
-  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp", birthYear: 1990, country: "USA", expectedAge: 80, description: "Co-founder of HashiCorp. Creator of Vagrant, Terraform, and Vault." },
-  { username: "rich-harris", label: "Rich Harris", tag: "Svelte", birthYear: 1985, country: "USA", expectedAge: 81, description: "Creator of Svelte and SvelteKit. Rethinking frontend frameworks." },
-  { username: "dan-abramov", label: "Dan Abramov", tag: "React", birthYear: 1992, country: "GBR", expectedAge: 81, description: "Co-creator of Redux, React core team member at Meta." },
-  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing", birthYear: 1990, country: "USA", expectedAge: 78, description: "Testing guru. Creator of Testing Library and Epic React." },
-  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1990, country: "USA", expectedAge: 80, description: "Creator of TanStack Query, Table, Router. Full-stack open source." },
+type DevCategory = "Frontend" | "Backend" | "DevTools" | "Creators";
+
+const FAMOUS_DEVS: {
+  username: string; label: string; tag: string; birthYear: number;
+  country: string; expectedAge: number; description: string; category: DevCategory;
+}[] = [
+  // Frontend
+  { username: "yyx990803", label: "Evan You", tag: "Vue.js", birthYear: 1987, country: "USA", expectedAge: 78, description: "Creator of Vue.js and Vite. One of the most popular JS frameworks.", category: "Frontend" },
+  { username: "rich-harris", label: "Rich Harris", tag: "Svelte", birthYear: 1985, country: "USA", expectedAge: 78, description: "Creator of Svelte and SvelteKit. Rethinking frontend frameworks.", category: "Frontend" },
+  { username: "gaearon", label: "Dan Abramov", tag: "React", birthYear: 1992, country: "GBR", expectedAge: 81, description: "Co-creator of Redux, React core team. Born in Russia, lives in London.", category: "Frontend" },
+  { username: "addyosmani", label: "Addy Osmani", tag: "Chrome", birthYear: 1986, country: "USA", expectedAge: 78, description: "Engineering lead on Google Chrome. Web performance expert.", category: "Frontend" },
+  { username: "tannerlinsley", label: "Tanner Linsley", tag: "TanStack", birthYear: 1991, country: "USA", expectedAge: 78, description: "Creator of TanStack Query, Table, Router. Full-stack open source.", category: "Frontend" },
+  { username: "sebmck", label: "Sebastian McKenzie", tag: "Babel", birthYear: 1994, country: "GBR", expectedAge: 81, description: "Creator of Babel and Biome. Transformed modern JavaScript tooling.", category: "Frontend" },
+  // Backend
+  { username: "torvalds", label: "Linus Torvalds", tag: "Linux", birthYear: 1969, country: "USA", expectedAge: 78, description: "Creator of Linux and Git. Changed the world of open source.", category: "Backend" },
+  { username: "antirez", label: "Salvatore Sanfilippo", tag: "Redis", birthYear: 1977, country: "ITA", expectedAge: 83, description: "Creator of Redis — the most popular in-memory database.", category: "Backend" },
+  { username: "gvanrossum", label: "Guido van Rossum", tag: "Python", birthYear: 1956, country: "USA", expectedAge: 78, description: "Creator of Python. Benevolent Dictator For Life.", category: "Backend" },
+  { username: "ry", label: "Ryan Dahl", tag: "Node / Deno", birthYear: 1981, country: "USA", expectedAge: 78, description: "Creator of Node.js and Deno. Redefined server-side JS twice.", category: "Backend" },
+  { username: "taylorotwell", label: "Taylor Otwell", tag: "Laravel", birthYear: 1985, country: "USA", expectedAge: 78, description: "Creator of Laravel. Single-handedly revived PHP.", category: "Backend" },
+  { username: "BrendanEich", label: "Brendan Eich", tag: "JavaScript", birthYear: 1961, country: "USA", expectedAge: 78, description: "Created JavaScript in 10 days. CEO of Brave browser.", category: "Backend" },
+  { username: "bellard", label: "Fabrice Bellard", tag: "FFmpeg / QEMU", birthYear: 1972, country: "FRA", expectedAge: 83, description: "Creator of FFmpeg, QEMU, QuickJS. Most productive programmer alive.", category: "Backend" },
+  // DevTools
+  { username: "sindresorhus", label: "Sindre Sorhus", tag: "1000+ npm", birthYear: 1990, country: "NOR", expectedAge: 84, description: "Mass producer of open source. 1000+ npm packages.", category: "DevTools" },
+  { username: "tj", label: "TJ Holowaychuk", tag: "Express.js", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of Express.js, Koa, and dozens of Node.js tools.", category: "DevTools" },
+  { username: "defunkt", label: "Chris Wanstrath", tag: "GitHub", birthYear: 1985, country: "USA", expectedAge: 78, description: "Co-founder of GitHub. Changed how software is built.", category: "DevTools" },
+  { username: "mitchellh", label: "Mitchell Hashimoto", tag: "HashiCorp", birthYear: 1989, country: "USA", expectedAge: 78, description: "Co-founder of HashiCorp. Creator of Terraform and Vault.", category: "DevTools" },
+  { username: "shykes", label: "Solomon Hykes", tag: "Docker", birthYear: 1983, country: "USA", expectedAge: 78, description: "Creator of Docker. Containerized the entire industry.", category: "DevTools" },
+  { username: "evanw", label: "Evan Wallace", tag: "esbuild", birthYear: 1990, country: "USA", expectedAge: 78, description: "Co-founder of Figma. Creator of esbuild — fastest JS bundler.", category: "DevTools" },
+  { username: "sokra", label: "Tobias Koppers", tag: "webpack", birthYear: 1990, country: "DEU", expectedAge: 81, description: "Creator of webpack and Turbopack. Bundled the modern web.", category: "DevTools" },
+  // Creators
+  { username: "ThePrimeagen", label: "ThePrimeagen", tag: "Streamer", birthYear: 1986, country: "USA", expectedAge: 78, description: "Dev streamer and content creator. Ex-Netflix engineer.", category: "Creators" },
+  { username: "kentcdodds", label: "Kent C. Dodds", tag: "Testing", birthYear: 1988, country: "USA", expectedAge: 78, description: "Testing guru. Creator of Testing Library and Epic React.", category: "Creators" },
+  { username: "rauchg", label: "Guillermo Rauch", tag: "Vercel", birthYear: 1990, country: "ARG", expectedAge: 77, description: "CEO of Vercel, creator of Socket.io. Next.js visionary.", category: "Creators" },
+  { username: "codediodeio", label: "Jeff Delaney", tag: "Fireship", birthYear: 1990, country: "USA", expectedAge: 78, description: "Creator of Fireship. Complex topics in 100 seconds.", category: "Creators" },
+  { username: "bradtraversy", label: "Brad Traversy", tag: "Traversy Media", birthYear: 1981, country: "USA", expectedAge: 78, description: "Traversy Media founder. Taught millions to code.", category: "Creators" },
+  { username: "wesbos", label: "Wes Bos", tag: "Syntax.fm", birthYear: 1988, country: "CAN", expectedAge: 82, description: "Creator of JavaScript30, Syntax podcast. Web dev educator.", category: "Creators" },
+  { username: "t3dotgg", label: "Theo Browne", tag: "T3 Stack", birthYear: 1995, country: "USA", expectedAge: 78, description: "Creator of T3 Stack. YouTuber and CEO of T3 Chat.", category: "Creators" },
 ];
 
 const DEFAULT_EXPECTED_AGE = 80;
@@ -113,6 +143,7 @@ function DemoMiniGrid({
     );
   }, [birthDate, expectedAge, githubCreated, weekMap]);
 
+  const t = useTranslations("dashboard");
   const stats = useMemo(() => calculateStats(cells), [cells]);
   const commitPercent = stats.weeksLived > 0
     ? Math.round((stats.activeWeeks / stats.weeksLived) * 1000) / 10
@@ -123,9 +154,9 @@ function DemoMiniGrid({
       <MiniLifeGrid cells={cells} expectedAge={expectedAge} />
       {showStats && (
         <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground font-mono tabular-nums">
-          <span>{stats.weeksLived}/{stats.weeksTotal} wks</span>
-          <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks} active</span>
-          <span>{commitPercent}% coded</span>
+          <span>{stats.weeksLived}/{stats.weeksTotal} {t("wksCompact")}</span>
+          <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks} {t("active")}</span>
+          <span>{commitPercent}% {t("coded")}</span>
         </div>
       )}
     </div>
@@ -263,30 +294,25 @@ function FamousDevCard({
   dev: (typeof FAMOUS_DEVS)[number];
 }) {
   const t = useTranslations("landing");
+  const td = useTranslations("dashboard");
   const [data, setData] = useState<DemoData | null>(null);
   const [loading, setLoading] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const fetched = useRef(false);
 
   useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !fetched.current) {
-          fetched.current = true;
-          setLoading(true);
-          fetch(`/data/devs/${encodeURIComponent(dev.username)}.json`)
-            .then((res) => (res.ok ? res.json() : null))
-            .then((json) => {
-              if (json) setData(json);
-            })
-            .finally(() => setLoading(false));
-        }
-      },
-      { rootMargin: "200px" },
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
+    if (fetched.current) return;
+    fetched.current = true;
+    setLoading(true);
+    fetch(`/data/devs/${encodeURIComponent(dev.username)}.json`)
+      .then((res) => {
+        if (res.ok) return res.json();
+        return fetch(`/api/demo?username=${encodeURIComponent(dev.username)}`).then(r => r.ok ? r.json() : null);
+      })
+      .then((json) => {
+        if (json) setData(json);
+      })
+      .finally(() => setLoading(false));
   }, [dev.username]);
 
   const currentAge = new Date().getFullYear() - dev.birthYear;
@@ -332,22 +358,36 @@ function FamousDevCard({
         <p className="text-xs text-muted-foreground leading-relaxed">{dev.description}</p>
       )}
       <Link href={`/demo?username=${encodeURIComponent(dev.username)}`} className="flex flex-col gap-3 cursor-pointer">
-        {loading && (
-          <div className="h-24 flex items-center justify-center text-muted-foreground animate-pulse text-sm">
-            Loading...
-          </div>
-        )}
-        {data && (
+        {data ? (
           <DemoMiniGrid
             data={data}
             birthYear={dev.birthYear}
             expectedAge={dev.expectedAge}
             showStats
           />
-        )}
-        {!loading && !data && (
-          <div className="h-24 flex items-center justify-center text-muted-foreground text-sm">
-            Scroll to load
+        ) : (
+          <div className="animate-pulse">
+            <svg viewBox={`0 0 ${52 * 2.5} ${dev.expectedAge * 2.5}`} className="w-full h-auto">
+              {Array.from({ length: dev.expectedAge }, (_, y) =>
+                Array.from({ length: 52 }, (_, x) => (
+                  <rect
+                    key={`${y}-${x}`}
+                    x={x * 2.5}
+                    y={y * 2.5}
+                    width={2}
+                    height={2}
+                    rx={0.5}
+                    fill="#d0d7de"
+                    className="dark:fill-[#21262d]"
+                  />
+                ))
+              )}
+            </svg>
+            <div className="flex items-center gap-3 mt-2">
+              <div className="h-2.5 w-16 rounded bg-[#d0d7de] dark:bg-[#21262d]" />
+              <div className="h-2.5 w-12 rounded bg-[#d0d7de] dark:bg-[#21262d]" />
+              <div className="h-2.5 w-14 rounded bg-[#d0d7de] dark:bg-[#21262d]" />
+            </div>
           </div>
         )}
         <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
@@ -361,14 +401,31 @@ function FamousDevCard({
 
 function ColorLegend() {
   const t = useTranslations("landing");
+  const [isDark, setIsDark] = useState(false);
 
-  const items = [
-    { color: "transparent", border: true, label: t("legendFuture") },
+  useEffect(() => {
+    setIsDark(document.documentElement.classList.contains("dark"));
+    const obs = new MutationObserver(() => setIsDark(document.documentElement.classList.contains("dark")));
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    return () => obs.disconnect();
+  }, []);
+
+  const items = isDark ? [
+    { color: "#0d1117", border: true, borderColor: "rgba(255,255,255,0.1)", label: t("legendFuture") },
+    { color: "#0d1117", border: false, label: t("legendPreGithub") },
     { color: "#21262d", border: false, label: t("legendNoCommits") },
     { color: "#0e4429", border: false, label: t("legendLow") },
     { color: "#26a641", border: false, label: t("legendMedium") },
     { color: "#39d353", border: false, label: t("legendHigh") },
     { color: "rgba(57,211,83,0.3)", border: true, borderColor: "#39D353", label: t("legendCurrent") },
+  ] : [
+    { color: "#f6f8fa", border: true, borderColor: "#d0d7de", label: t("legendFuture") },
+    { color: "#f6f8fa", border: false, label: t("legendPreGithub") },
+    { color: "#ebedf0", border: false, label: t("legendNoCommits") },
+    { color: "#9be9a8", border: false, label: t("legendLow") },
+    { color: "#40c463", border: false, label: t("legendMedium") },
+    { color: "#216e39", border: false, label: t("legendHigh") },
+    { color: "rgba(225,111,36,0.2)", border: true, borderColor: "#e16f24", label: t("legendCurrent") },
   ];
 
   return (
@@ -379,10 +436,7 @@ function ColorLegend() {
             className="inline-block w-3 h-3 rounded-sm shrink-0"
             style={{
               backgroundColor: item.color,
-              border: item.border
-                ? `1.5px solid ${item.borderColor || (typeof document !== "undefined" && document.documentElement.classList.contains("dark") ? "rgba(255,255,255,0.04)" : "#d0d7de")}`
-                : "none",
-              ...(item.borderColor ? { borderColor: item.borderColor } : {}),
+              border: item.border ? `1.5px solid ${item.borderColor}` : "none",
             }}
           />
           <span>{item.label}</span>
@@ -392,8 +446,19 @@ function ColorLegend() {
   );
 }
 
+const CATEGORIES: (DevCategory | "All")[] = ["All", "Frontend", "Backend", "DevTools", "Creators"];
+const CATEGORY_KEYS: Record<DevCategory | "All", string> = {
+  All: "catAll", Frontend: "catFrontend", Backend: "catBackend", DevTools: "catDevtools", Creators: "catCreators",
+};
+
 function FamousDevsSection() {
   const t = useTranslations("landing");
+  const td = useTranslations("dashboard");
+  const [category, setCategory] = useState<DevCategory | "All">("All");
+
+  const filteredDevs = category === "All"
+    ? FAMOUS_DEVS
+    : FAMOUS_DEVS.filter(d => d.category === category);
 
   return (
     <section className="w-full max-w-7xl mx-auto px-4">
@@ -403,8 +468,26 @@ function FamousDevsSection() {
         </h2>
         <p className="text-muted-foreground">{t("famousSubtitle")}</p>
       </div>
+
+      {/* Category tabs */}
+      <div className="flex items-center justify-center gap-2 mb-8">
+        {CATEGORIES.map(cat => (
+          <button
+            key={cat}
+            onClick={() => setCategory(cat)}
+            className={`px-4 py-1.5 text-sm font-medium rounded-full transition-all ${
+              category === cat
+                ? "bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30"
+                : "text-muted-foreground hover:text-foreground border border-transparent"
+            }`}
+          >
+            {td(CATEGORY_KEYS[cat])}
+          </button>
+        ))}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {FAMOUS_DEVS.map((dev) => (
+        {filteredDevs.map((dev) => (
           <FamousDevCard key={dev.username} dev={dev} />
         ))}
       </div>
@@ -429,14 +512,19 @@ function LanguageFooterSelector() {
 
   return (
     <Select defaultValue={currentLocale} onValueChange={handleChange}>
-      <SelectTrigger className="w-[140px]">
-        <Globe className="h-4 w-4 mr-1" />
-        <SelectValue />
+      <SelectTrigger className="w-[160px]">
+        <SelectValue>
+          {(() => {
+            const lang = LANGUAGES.find(l => l.value === currentLocale);
+            if (!lang) return currentLocale;
+            return <span className="flex items-center gap-2"><FlagIcon code={lang.flagCode} />{lang.label}</span>;
+          })()}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {LANGUAGES.map((lang) => (
           <SelectItem key={lang.value} value={lang.value}>
-            {lang.label}
+            <span className="flex items-center gap-2"><FlagIcon code={lang.flagCode} />{lang.label}</span>
           </SelectItem>
         ))}
       </SelectContent>
@@ -455,11 +543,11 @@ export default function LandingPage() {
     <div className="flex flex-col min-h-full">
       <Header />
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center px-4 pt-24 pb-20 md:pt-36 md:pb-28 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center px-4 pt-16 pb-12 md:pt-24 md:pb-16 overflow-hidden">
         {/* Gradient mesh background orbs */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-          <div className="absolute top-[-20%] left-[20%] w-[600px] h-[600px] rounded-full bg-emerald-500/[0.12] blur-[120px]" />
-          <div className="absolute bottom-[-10%] right-[10%] w-[500px] h-[500px] rounded-full bg-cyan-500/[0.08] blur-[120px]" />
+          <div className="absolute top-[-20%] left-[20%] w-[600px] h-[600px] rounded-full bg-emerald-500/[0.12] blur-[120px] hidden dark:block" />
+          <div className="absolute bottom-[-10%] right-[10%] w-[500px] h-[500px] rounded-full bg-cyan-500/[0.08] blur-[120px] hidden dark:block" />
         </div>
 
         {/* Glass card hero */}
@@ -498,17 +586,17 @@ export default function LandingPage() {
       </section>
 
       {/* What is this? */}
-      <section className="py-16 md:py-24">
+      <section className="py-10 md:py-16">
         <WhatIsThisSection />
       </section>
 
       {/* Demo Section */}
-      <section className="py-16 md:py-24">
+      <section className="py-10 md:py-16">
         <DemoSection />
       </section>
 
       {/* Famous Devs Section */}
-      <section className="py-16 md:py-24 bg-muted/30">
+      <section className="py-10 md:py-16 bg-muted/30">
         <FamousDevsSection />
       </section>
 

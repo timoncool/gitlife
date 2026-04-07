@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Menu, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import * as Flags from "country-flag-icons/react/3x2";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,14 +25,20 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { signOut, useSession } from "@/lib/auth-client";
 
 const LANGUAGES = [
-  { value: "en", label: "English" },
-  { value: "zh", label: "中文" },
-  { value: "es", label: "Español" },
-  { value: "pt", label: "Português" },
-  { value: "ru", label: "Русский" },
-  { value: "de", label: "Deutsch" },
-  { value: "ja", label: "日本語" },
+  { value: "en", label: "English", flagCode: "US" },
+  { value: "zh", label: "中文", flagCode: "CN" },
+  { value: "es", label: "Español", flagCode: "ES" },
+  { value: "pt", label: "Português", flagCode: "BR" },
+  { value: "ru", label: "Русский", flagCode: "RU" },
+  { value: "de", label: "Deutsch", flagCode: "DE" },
+  { value: "ja", label: "日本語", flagCode: "JP" },
 ] as const;
+
+function FlagIcon({ code, className }: { code: string; className?: string }) {
+  const Flag = (Flags as Record<string, React.ComponentType<{ className?: string }>>)[code];
+  if (!Flag) return null;
+  return <Flag className={className || "h-3 w-4 inline-block"} />;
+}
 
 const ALLOWED_LOCALES = LANGUAGES.map((l) => l.value);
 
@@ -49,13 +56,19 @@ function LanguageSelector() {
 
   return (
     <Select defaultValue={currentLocale} onValueChange={handleChange}>
-      <SelectTrigger className="w-[130px]">
-        <SelectValue />
+      <SelectTrigger className="w-[160px]">
+        <SelectValue>
+          {(() => {
+            const lang = LANGUAGES.find(l => l.value === currentLocale);
+            if (!lang) return currentLocale;
+            return <span className="flex items-center gap-2"><FlagIcon code={lang.flagCode} />{lang.label}</span>;
+          })()}
+        </SelectValue>
       </SelectTrigger>
       <SelectContent>
         {LANGUAGES.map((lang) => (
           <SelectItem key={lang.value} value={lang.value}>
-            {lang.label}
+            <span className="flex items-center gap-2"><FlagIcon code={lang.flagCode} />{lang.label}</span>
           </SelectItem>
         ))}
       </SelectContent>
@@ -93,8 +106,8 @@ export function Header() {
   const user = session?.user;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/[0.08] bg-black/80 backdrop-blur-md">
-      <div className="container flex h-14 items-center justify-between px-4">
+    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="container mx-auto flex h-14 items-center justify-between px-4">
         {/* Left: Logo + nav (desktop) */}
         <div className="flex items-center gap-6">
           <Link href="/" className="text-lg font-bold tracking-tight">

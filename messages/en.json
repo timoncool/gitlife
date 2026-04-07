@@ -19,6 +19,7 @@
     "viewGrid": "View full life grid",
     "age": "y.o.",
     "legendFuture": "Future",
+    "legendPreGithub": "Before GitHub",
     "legendNoCommits": "Lived, no commits",
     "legendLow": "Few commits",
     "legendMedium": "Moderate",
@@ -58,7 +59,25 @@
     "noData": "No data available",
     "noCommits": "No commits yet",
     "lifeLivedProgress": "of life lived",
-    "weeksShort": "weeks"
+    "weeksShort": "weeks",
+    "wksCompact": "wks",
+    "active": "active",
+    "coded": "coded",
+    "scrollToLoad": "Scroll to load",
+    "scaleWeeks": "Weeks",
+    "scaleMonths": "Months",
+    "scaleYears": "Years",
+    "axisWeek": "Week",
+    "axisMonth": "Month",
+    "axisYear": "Year",
+    "axisAge": "Age",
+    "preGithub": "Life before GitHub",
+    "githubSince": "On GitHub since",
+    "catAll": "All",
+    "catFrontend": "Frontend",
+    "catBackend": "Backend",
+    "catDevtools": "DevTools",
+    "catCreators": "Creators"
   },
   "settings": {
     "title": "Settings",
@@ -77,7 +96,8 @@
     "yourEstimate": "Your Estimate",
     "years": "years",
     "impact": "Impact",
-    "learnMore": "Learn More"
+    "learnMore": "Learn More",
+    "loading": "Loading..."
   },
   "onboarding": {
     "welcome": "Welcome",

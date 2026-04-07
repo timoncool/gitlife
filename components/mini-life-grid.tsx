@@ -4,18 +4,18 @@ import { useEffect, useMemo, useState } from "react";
 import type { CellData, CellState } from "@/lib/types";
 
 const COLORS_DARK: Record<CellState, string> = {
-  future: "transparent",
-  "pre-github": "#12100A",
-  "no-commits": "#1A1A1A",
+  future: "#0d1117",
+  "pre-github": "#0d1117",
+  "no-commits": "#21262d",
   "level-1": "#0e4429",
   "level-2": "#006d32",
   "level-3": "#26a641",
   "level-4": "#39d353",
-  current: "#1A1A1A",
+  current: "#21262d",
 };
 
 const COLORS_LIGHT: Record<CellState, string> = {
-  future: "transparent",
+  future: "#f6f8fa",
   "pre-github": "#f6f8fa",
   "no-commits": "#ebedf0",
   "level-1": "#9be9a8",
@@ -29,7 +29,10 @@ const CURRENT_STROKE_DARK = "#39D353";
 const CURRENT_STROKE_LIGHT = "#e16f24";
 
 function useIsDark() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof document !== "undefined") return document.documentElement.classList.contains("dark");
+    return false;
+  });
 
   useEffect(() => {
     setIsDark(document.documentElement.classList.contains("dark"));

@@ -74,6 +74,8 @@ export interface GridStats {
   longestStreak: number;
 }
 
+export type GridScale = "weeks" | "months" | "years";
+
 export interface YearContribution {
   date: string;
   count: number;

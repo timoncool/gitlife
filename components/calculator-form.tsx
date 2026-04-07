@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { Info, ChevronRight, ChevronLeft, ArrowRight, Search } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -407,10 +408,11 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
   const [iso2ToIso3, setIso2ToIso3] = useState<Record<string, string>>({});
   const [countryLabels, setCountryLabels] = useState<Record<string, string>>({});
 
+  // Build labels whenever countries change (countries loaded from first useEffect)
   useEffect(() => {
+    if (countries.length === 0) return;
     import("i18n-iso-countries").then(async (mod) => {
       const lang = document.documentElement.lang || "en";
-      // Register locale
       try {
         const localeData = await import(`i18n-iso-countries/langs/${lang}.json`);
         mod.registerLocale(localeData);
@@ -573,13 +575,18 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
       });
       if (res.ok) {
         setSaved(true);
+        toast.success(tc("saved"));
         onSaved?.();
         if (onComplete) {
           onComplete();
         } else {
           setTimeout(() => setSaved(false), 2000);
         }
+      } else {
+        toast.error("Failed to save");
       }
+    } catch {
+      toast.error("Failed to save");
     } finally {
       setSaving(false);
     }

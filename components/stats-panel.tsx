@@ -1,10 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import type { GridStats } from "@/lib/types";
+import { useCountUp } from "@/lib/use-count-up";
+import type { GridStats, GridScale } from "@/lib/types";
 
 interface StatsPanelProps {
   stats: GridStats;
+  scale?: GridScale;
+  githubSince?: Date | null;
 }
 
 function ProgressBar({ value }: { value: number }) {
@@ -18,31 +21,60 @@ function ProgressBar({ value }: { value: number }) {
   );
 }
 
-export function StatsPanel({ stats }: StatsPanelProps) {
+export function StatsPanel({ stats, scale = "weeks", githubSince }: StatsPanelProps) {
   const t = useTranslations("dashboard");
+
+  // Convert weeks to months or years
+  const toScale = (weeks: number) => {
+    if (scale === "years") return Math.round(weeks / 52 * 10) / 10;
+    if (scale === "months") return Math.round(weeks / (52 / 12));
+    return weeks;
+  };
+
+  const unitLabel = scale === "years" ? t("scaleYears").toLowerCase()
+    : scale === "months" ? t("scaleMonths").toLowerCase()
+    : t("weeksShort");
+
+  const livedLabel = scale === "years" ? t("scaleYears")
+    : scale === "months" ? t("scaleMonths")
+    : t("weeksLived");
+
+  const lived = toScale(stats.weeksLived);
+  const total = toScale(stats.weeksTotal);
+
+  const animLived = useCountUp(Math.round(lived));
+  const animTotal = useCountUp(Math.round(total));
+  const animPercent = useCountUp(Math.round(stats.percentLived));
+  const animActive = useCountUp(Math.round(toScale(stats.activeWeeks)));
+  const animCurrent = useCountUp(Math.round(toScale(stats.currentStreak)));
+  const animLongest = useCountUp(Math.round(toScale(stats.longestStreak)));
 
   const items = [
     {
-      label: t("weeksLived"),
-      value: `${stats.weeksLived.toLocaleString()} / ${stats.weeksTotal.toLocaleString()}`,
+      label: livedLabel,
+      value: `${animLived.toLocaleString()} / ${animTotal.toLocaleString()}`,
     },
     {
       label: t("lifeLived"),
-      value: `${stats.percentLived}%`,
+      value: `${animPercent}%`,
       progress: stats.percentLived,
     },
     {
       label: t("activeWeeks"),
-      value: stats.activeWeeks.toLocaleString(),
+      value: animActive.toLocaleString(),
     },
     {
       label: t("currentStreak"),
-      value: `${stats.currentStreak} ${t("week")}${stats.currentStreak !== 1 ? "s" : ""}`,
+      value: `${animCurrent} ${unitLabel}`,
     },
     {
       label: t("longestStreak"),
-      value: `${stats.longestStreak} ${t("week")}${stats.longestStreak !== 1 ? "s" : ""}`,
+      value: `${animLongest} ${unitLabel}`,
     },
+    ...(githubSince ? [{
+      label: t("githubSince"),
+      value: new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short" }).format(githubSince),
+    }] : []),
   ];
 
   return (
@@ -50,7 +82,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
       {items.map((item) => (
         <div
           key={item.label}
-          className="rounded-lg border border-white/[0.08] bg-card p-5 hover:border-white/[0.12] hover:bg-[#0E0E0E] transition-colors relative overflow-hidden"
+          className="rounded-lg border border-border bg-card p-5 hover:border-border/80 hover:bg-muted transition-colors relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500/40 rounded-l-lg" />
           <div className="text-xs text-muted-foreground uppercase tracking-wider">

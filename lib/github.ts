@@ -52,11 +52,24 @@ export async function fetchContributionYears(
 export async function fetchViewerMeta(
   token: string,
 ): Promise<{ id: string; login: string; avatarUrl: string; createdAt: string }> {
-  const data = await graphql<{
-    viewer: { id: string; login: string; avatarUrl: string; createdAt: string };
-  }>(token, `{ viewer { id login avatarUrl createdAt } }`);
+  const res = await fetch("https://api.github.com/user", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+    },
+  });
 
-  return data.viewer;
+  if (!res.ok) {
+    throw new Error(`GitHub REST API error: ${res.status} ${res.statusText}`);
+  }
+
+  const user = await res.json();
+  return {
+    id: String(user.id),
+    login: user.login,
+    avatarUrl: user.avatar_url,
+    createdAt: user.created_at,
+  };
 }
 
 // ── Batch fetch contributions using aliases (up to 5 years per query) ──────

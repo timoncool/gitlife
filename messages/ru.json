@@ -19,6 +19,7 @@
     "viewGrid": "Посмотреть полную сетку",
     "age": "лет",
     "legendFuture": "Будущее",
+    "legendPreGithub": "До GitHub",
     "legendNoCommits": "Прожито, без коммитов",
     "legendLow": "Мало коммитов",
     "legendMedium": "Средне",
@@ -58,7 +59,25 @@
     "noData": "Нет данных",
     "noCommits": "Пока нет коммитов",
     "lifeLivedProgress": "жизни прожито",
-    "weeksShort": "недель"
+    "weeksShort": "недель",
+    "wksCompact": "нед",
+    "active": "активных",
+    "coded": "кодил",
+    "scrollToLoad": "Прокрутите для загрузки",
+    "scaleWeeks": "Недели",
+    "scaleMonths": "Месяцы",
+    "scaleYears": "Годы",
+    "axisWeek": "Неделя",
+    "axisMonth": "Месяц",
+    "axisYear": "Год",
+    "axisAge": "Возраст",
+    "preGithub": "Жизнь до GitHub",
+    "githubSince": "На GitHub с",
+    "catAll": "Все",
+    "catFrontend": "Фронтенд",
+    "catBackend": "Бэкенд",
+    "catDevtools": "DevTools",
+    "catCreators": "Контент"
   },
   "settings": {
     "title": "Настройки",
@@ -77,7 +96,8 @@
     "yourEstimate": "Ваша оценка",
     "years": "лет",
     "impact": "Влияние",
-    "learnMore": "Подробнее"
+    "learnMore": "Подробнее",
+    "loading": "Загрузка..."
   },
   "onboarding": {
     "welcome": "Добро пожаловать",

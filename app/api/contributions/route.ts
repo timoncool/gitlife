@@ -114,13 +114,14 @@ export async function GET(request: NextRequest) {
       .from(userProfiles)
       .where(eq(userProfiles.githubId, githubId));
 
-    if (existingProfile.length === 0 || force) {
+    if (existingProfile.length === 0 || force || !existingProfile[0]?.githubCreatedAt) {
       const meta = await fetchViewerMeta(token);
 
+      // Use numeric githubId from account table, not GraphQL node ID
       await db
         .insert(userProfiles)
         .values({
-          githubId: meta.id,
+          githubId,
           githubUsername: meta.login,
           githubCreatedAt: meta.createdAt,
           githubAvatarUrl: meta.avatarUrl,

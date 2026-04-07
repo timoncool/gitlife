@@ -9,6 +9,7 @@ import { useSession } from "@/lib/auth-client";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
 import type { CalculatorAnswers } from "@/lib/types";
 
 interface UserProfile {
@@ -63,7 +64,7 @@ export default function SettingsPage() {
         <main className="flex-1 container mx-auto px-4 py-8">
           <div className="flex items-center justify-center min-h-[50vh]">
             <div className="text-muted-foreground animate-pulse text-lg">
-              Loading...
+              {t("loading")}
             </div>
           </div>
         </main>
@@ -108,7 +109,7 @@ export default function SettingsPage() {
               />
             </TabsContent>
             <TabsContent value="manual">
-              <div className="rounded-lg border border-white/[0.08] bg-card p-6 flex flex-col gap-6">
+              <div className="rounded-lg border border-border bg-card p-6 flex flex-col gap-6">
                 <Slider
                   min={50}
                   max={110}
@@ -121,12 +122,21 @@ export default function SettingsPage() {
                 </div>
                 <Button
                   onClick={async () => {
-                    await fetch("/api/user", {
-                      method: "PUT",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ expectedAge: manualAge }),
-                    });
-                    fetchProfile();
+                    try {
+                      const res = await fetch("/api/user", {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ expectedAge: manualAge }),
+                      });
+                      if (res.ok) {
+                        toast.success(t("saved"));
+                        fetchProfile();
+                      } else {
+                        toast.error("Failed to save");
+                      }
+                    } catch {
+                      toast.error("Failed to save");
+                    }
                   }}
                   className="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white"
                 >
