@@ -180,7 +180,7 @@ function DemoPageContent() {
             </div>
             {/* Grid skeleton */}
             <div className="rounded-lg border border-border bg-card/50 p-4">
-              <div className="w-full rounded bg-muted" style={{ aspectRatio: "52 / 45" }} />
+              <LifeGrid cells={[]} expectedAge={80} loading={true} />
             </div>
           </div>
         )}
@@ -230,7 +230,7 @@ function DemoPageContent() {
 
             {/* Grid */}
             <div className="rounded-lg border border-border bg-card/50 p-4">
-              <LifeGrid cells={cells} expectedAge={expectedAge} />
+              <LifeGrid cells={cells} expectedAge={expectedAge} loading={loading} />
             </div>
           </div>
         )}

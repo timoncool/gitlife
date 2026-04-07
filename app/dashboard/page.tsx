@@ -31,6 +31,8 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [profileLoading, setProfileLoading] = useState(true);
   const [scale, setScale] = useState<GridScale>("weeks");
+  const [progressMounted, setProgressMounted] = useState(false);
+  useEffect(() => { requestAnimationFrame(() => setProgressMounted(true)); }, []);
 
   // Redirect to landing if not authenticated
   useEffect(() => {
@@ -193,7 +195,7 @@ export default function DashboardPage() {
             <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full bg-emerald-500 rounded-full transition-all duration-700"
-                style={{ width: `${Math.min(stats.percentLived, 100)}%` }}
+                style={{ width: progressMounted ? `${Math.min(stats.percentLived, 100)}%` : "0%" }}
               />
             </div>
           </div>
