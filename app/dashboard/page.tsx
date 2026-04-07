@@ -208,13 +208,17 @@ export default function DashboardPage() {
         <div
           className={`fixed top-14 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm px-6 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 py-2.5" : "opacity-0 py-0 pointer-events-none -translate-y-full"}`}
         >
-            <div className="flex items-center gap-4 text-sm text-muted-foreground tabular-nums">
-              <span className="font-semibold text-foreground">{stats.percentLived}%</span>
-              <div className="h-1.5 bg-muted rounded-full overflow-hidden w-28 shrink-0">
-                <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
+            <div className="container mx-auto flex items-center gap-4 text-[11px] text-muted-foreground tabular-nums">
+              <div className="flex items-center gap-1.5">
+                <span className="font-semibold text-foreground text-sm">{stats.percentLived}%</span>
+                <div className="h-1.5 bg-muted rounded-full overflow-hidden w-16">
+                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
+                </div>
               </div>
-              <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} {t("weeksShort")}</span>
-              <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks} {t("active")}</span>
+              <div>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} <span className="text-muted-foreground/60">{t("weeksShort")}</span></div>
+              <div><span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span> <span className="text-muted-foreground/60">{t("activeWeeks")}</span></div>
+              <div>{stats.currentStreak} <span className="text-muted-foreground/60">{t("currentStreak")}</span></div>
+              <div>{stats.longestStreak} <span className="text-muted-foreground/60">{t("longestStreak")}</span></div>
             </div>
         </div>
 
