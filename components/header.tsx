@@ -167,9 +167,7 @@ export function Header() {
             <Logo className="h-5 w-5" />
             GitLife
           </Link>
-          {user && (
-            <NavLinks className="hidden md:flex items-center gap-4" />
-          )}
+          <NavLinks className="hidden md:flex items-center gap-4" />
         </div>
 
         {/* Right: desktop controls */}
