@@ -8,7 +8,7 @@ import { StickyStatsBar } from "@/components/sticky-stats-bar";
 import { Header } from "@/components/header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, Github, MapPin } from "lucide-react";
 import Link from "next/link";
 import {
   generateGridCells,
@@ -255,20 +255,27 @@ function DemoPageContent() {
                 <h1 className="text-2xl font-bold tracking-tight text-foreground">
                   {knownDev?.label || data.username}
                 </h1>
-                <div className="flex items-center gap-2 mt-0.5">
+                <div className="flex items-center gap-3 mt-1 flex-wrap text-sm text-muted-foreground">
                   <a
                     href={`https://github.com/${data.username}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                    className="flex items-center gap-1 hover:text-foreground transition-colors"
                   >
+                    <Github className="h-3.5 w-3.5" />
                     @{data.username}
                   </a>
-                  <span className="text-muted-foreground/40">·</span>
-                  <span className="text-sm text-muted-foreground">
-                    {knownDev ? `${knownDev.country} · ${age} ${td("yearsOld")} · ` : ""}
-                    {td("githubSince")} {new Date(data.createdAt).getFullYear()} · {td("lifeExpectancy")}: {expectedAge} {td("yearsOld")}
-                  </span>
+                  {knownDev && (
+                    <>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="h-3.5 w-3.5" />
+                        {knownDev.country}
+                      </span>
+                      <span>{age} {td("yearsOld")}</span>
+                    </>
+                  )}
+                  <span>{td("githubSince")} {new Date(data.createdAt).getFullYear()}</span>
+                  <span>{td("lifeExpectancy")}: {expectedAge} {td("yearsOld")}</span>
                 </div>
               </div>
             </div>
