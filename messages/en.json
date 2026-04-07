@@ -1,7 +1,7 @@
 {
   "landing": {
     "title": "GitLife",
-    "tagline": "Visualize your life in weeks. Track what matters.",
+    "tagline": "Visualize your life in commits.",
     "signIn": "Sign In with GitHub",
     "tryDemo": "Try Demo",
     "placeholder": "See your life from a new perspective",
