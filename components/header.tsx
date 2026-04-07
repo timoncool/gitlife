@@ -104,12 +104,18 @@ function NavLinks({ className }: { className?: string }) {
 
 function HeaderSearch() {
   const router = useRouter();
-  const [value, setValue] = useState("");
+  // Pre-fill from URL if on demo page
+  const [value, setValue] = useState(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (window.location.pathname === "/demo") return params.get("username") || "";
+    }
+    return "";
+  });
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && value.trim()) {
       router.push(`/demo?username=${encodeURIComponent(value.trim())}`);
-      setValue("");
     }
   }
 
