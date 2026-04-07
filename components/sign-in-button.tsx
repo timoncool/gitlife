@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Button } from "@/components/ui/button";
 import { signIn } from "@/lib/auth-client";
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -17,17 +16,38 @@ function GitHubIcon({ className }: { className?: string }) {
   );
 }
 
-export function SignInButton() {
+export function SignInButton({ size = "default" }: { size?: "default" | "lg" }) {
   const t = useTranslations("landing");
 
+  const isLg = size === "lg";
+
   return (
-    <Button
+    <button
       onClick={() => signIn.social({ provider: "github" })}
-      size="lg"
-      className="gap-2 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
+      className={`
+        group relative inline-flex items-center justify-center gap-2.5
+        rounded-xl font-semibold
+        bg-[#24292f] text-white
+        shadow-lg shadow-black/20
+        transition-all duration-200
+        hover:bg-[#1b1f23] hover:shadow-xl hover:shadow-black/30 hover:scale-[1.02]
+        active:scale-[0.98]
+        dark:bg-white dark:text-[#24292f] dark:hover:bg-gray-100
+        dark:shadow-white/10 dark:hover:shadow-white/20
+        ${isLg ? "h-13 px-8 text-base" : "h-11 px-6 text-sm"}
+      `}
     >
-      <GitHubIcon className="h-5 w-5" />
-      {t("signIn")}
-    </Button>
+      <GitHubIcon className={isLg ? "h-5.5 w-5.5" : "h-5 w-5"} />
+      <span>{t("signIn")}</span>
+      <svg
+        className="h-4 w-4 opacity-50 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:opacity-80"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={2}
+        stroke="currentColor"
+      >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+      </svg>
+    </button>
   );
 }

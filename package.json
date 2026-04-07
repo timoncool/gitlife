@@ -1,6 +1,14 @@
 {
-  "name": "life-in-weeks",
-  "version": "0.1.0",
+  "name": "gitlife",
+  "version": "1.0.0",
+  "description": "Your life as a GitHub contribution grid. ~4,000 weeks from birth to death — visualized.",
+  "homepage": "https://gitlifeio.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timoncool/gitlife"
+  },
+  "keywords": ["life-visualization", "github", "contribution-graph", "life-in-weeks", "life-expectancy", "developer-tools", "nextjs"],
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",

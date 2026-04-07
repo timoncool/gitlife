@@ -168,6 +168,30 @@ function DemoMiniGrid({
   );
 }
 
+function StatsBar() {
+  const t = useTranslations("landing");
+
+  const stats = [
+    { value: "4,000", label: t("statsWeeksInLife") },
+    { value: "30", label: t("statsDevs") },
+    { value: "21", label: t("statsFactors") },
+    { value: "7", label: t("statsLanguages") },
+  ];
+
+  return (
+    <section className="w-full max-w-4xl mx-auto px-4 py-10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+        {stats.map((s) => (
+          <div key={s.label} className="text-center">
+            <div className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">{s.value}</div>
+            <div className="text-sm text-muted-foreground mt-1">{s.label}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function WhatIsThisSection() {
   const t = useTranslations("landing");
 
@@ -175,24 +199,50 @@ function WhatIsThisSection() {
     { icon: "\u{1F4CA}", title: t("featureVisualization"), desc: t("featureVisualizationDesc") },
     { icon: "\u{1F49A}", title: t("featureGithub"), desc: t("featureGithubDesc") },
     { icon: "\u{1F9EE}", title: t("featureCalculator"), desc: t("featureCalculatorDesc") },
+    { icon: "\u{1F4D1}", title: t("featureData"), desc: t("featureDataDesc") },
   ];
 
   return (
     <section className="w-full max-w-5xl mx-auto px-4">
-      <div className="text-center mb-10">
+      <div className="text-center mb-12">
         <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">{t("whatIsThisTitle")}</h2>
         <p className="text-muted-foreground max-w-2xl mx-auto mb-2 leading-relaxed">{t("whatIsThisDesc1")}</p>
         <p className="text-muted-foreground max-w-2xl mx-auto leading-relaxed">{t("whatIsThisDesc2")}</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map((f) => (
-          <div key={f.title} className="rounded-lg border bg-card/50 backdrop-blur-sm p-6 text-center flex flex-col items-center gap-3">
+          <div key={f.title} className="rounded-xl border border-white/10 bg-white/[0.03] p-6 flex flex-col gap-3 transition-all hover:border-emerald-500/30 hover:shadow-md">
             <span className="text-3xl">{f.icon}</span>
             <h3 className="font-semibold text-lg">{f.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+function CTASection() {
+  const t = useTranslations("landing");
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  return (
+    <section className="w-full max-w-xl mx-auto px-4 py-16 md:py-20 text-center">
+      <h2 className="text-xl md:text-2xl font-semibold tracking-tight mb-4">{t("ctaTitle")}</h2>
+      <p className="text-sm text-muted-foreground mb-6">{t("ctaSubtitle")}</p>
+      {session?.user ? (
+        <Button
+          onClick={() => router.push("/dashboard")}
+          size="lg"
+          className="gap-2 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
+        >
+          <LayoutDashboard className="h-5 w-5" />
+          {t("goToDashboard")}
+        </Button>
+      ) : (
+        <SignInButton />
+      )}
     </section>
   );
 }
@@ -248,7 +298,7 @@ function FamousDevCard({
   const avatarUrl = data?.avatarUrl;
 
   return (
-    <Link ref={ref} href={`/demo?username=${encodeURIComponent(dev.username)}`} className="group rounded-lg border bg-card/50 backdrop-blur-sm p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:shadow-lg hover:shadow-emerald-500/5">
+    <Link ref={ref} href={`/demo?username=${encodeURIComponent(dev.username)}`} className="group rounded-lg border border-white/10 bg-white/[0.03] p-5 flex flex-col gap-3 transition-all hover:border-emerald-500/40 hover:bg-white/[0.06] hover:shadow-lg hover:shadow-emerald-500/5">
       <div className="flex items-center gap-3">
         {avatarUrl ? (
           <img
@@ -293,13 +343,13 @@ function FamousDevCard({
         >
           <div className="animate-pulse">
             <div
-              className="w-full rounded bg-muted"
+              className="w-full rounded bg-white/[0.06]"
               style={{ aspectRatio: `${52} / ${dev.expectedAge}` }}
             />
             <div className="flex items-center gap-3 mt-2">
-              <div className="h-2.5 w-16 rounded bg-muted" />
-              <div className="h-2.5 w-12 rounded bg-muted" />
-              <div className="h-2.5 w-14 rounded bg-muted" />
+              <div className="h-2.5 w-16 rounded bg-white/[0.06]" />
+              <div className="h-2.5 w-12 rounded bg-white/[0.06]" />
+              <div className="h-2.5 w-14 rounded bg-white/[0.06]" />
             </div>
           </div>
         </div>
@@ -512,15 +562,17 @@ export default function LandingPage() {
         {/* Glass card hero */}
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-8 backdrop-blur-sm">
-            <GitHubIcon className="h-4 w-4" />
             {t("heroBadge")}
           </div>
 
-          <h1 className="relative z-10 text-4xl md:text-6xl font-semibold tracking-tight mb-6 text-foreground dark:bg-gradient-to-r dark:from-white dark:to-white/80 dark:bg-clip-text dark:text-transparent">
+          <h1 className="relative z-10 text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-2 text-foreground">
             {t("title")}
           </h1>
+          <p className="relative z-10 text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 bg-gradient-to-r from-emerald-600 to-cyan-500 bg-clip-text text-transparent">
+            {t("titleHighlight")}
+          </p>
 
-          <p className="text-lg text-muted-foreground max-w-[600px] mx-auto mb-10 leading-relaxed">
+          <p className="text-lg md:text-xl text-muted-foreground max-w-[640px] mx-auto mb-10 leading-relaxed">
             {t("heroSubtitle")}
           </p>
 
@@ -529,14 +581,23 @@ export default function LandingPage() {
               <Button
                 onClick={() => router.push("/dashboard")}
                 size="lg"
-                className="gap-2 bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
+                className="gap-2 h-13 px-8 text-base rounded-xl bg-gradient-to-r from-emerald-600 to-cyan-600 text-white hover:from-emerald-500 hover:to-cyan-500"
               >
                 <LayoutDashboard className="h-5 w-5" />
                 {t("goToDashboard")}
               </Button>
             ) : (
-              <SignInButton />
+              <SignInButton size="lg" />
             )}
+            <a
+              href="https://github.com/timoncool/gitlife"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 h-13 px-6 rounded-xl text-sm font-medium border border-border text-muted-foreground hover:text-foreground hover:border-foreground/30 transition-all"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+              {t("starOnGithub")}
+            </a>
           </div>
         </div>
 
@@ -550,9 +611,12 @@ export default function LandingPage() {
       </section>
 
       {/* Famous Devs Section */}
-      <section className="py-10 md:py-16 bg-muted/30">
+      <section className="py-10 md:py-16 bg-white/[0.02] border-y border-white/[0.06]">
         <FamousDevsSection />
       </section>
+
+      {/* CTA */}
+      <CTASection />
 
     </div>
   );
