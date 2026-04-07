@@ -301,18 +301,37 @@ function FamousDevCard({
   const fetched = useRef(false);
 
   useEffect(() => {
-    if (fetched.current) return;
-    fetched.current = true;
-    setLoading(true);
-    fetch(`/data/devs/${encodeURIComponent(dev.username)}.json`)
-      .then((res) => {
-        if (res.ok) return res.json();
-        return fetch(`/api/demo?username=${encodeURIComponent(dev.username)}`).then(r => r.ok ? r.json() : null);
-      })
-      .then((json) => {
-        if (json) setData(json);
-      })
-      .finally(() => setLoading(false));
+    if (!ref.current || fetched.current) return;
+    const el = ref.current;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !fetched.current) {
+          fetched.current = true;
+          // 1. Try cache first (instant)
+          fetch(`/data/devs/${encodeURIComponent(dev.username)}.json`)
+            .then((res) => {
+              if (res.ok) return res.json();
+              return null;
+            })
+            .then((cached) => {
+              if (cached) {
+                setData(cached);
+                setLoading(false);
+              } else {
+                // 2. No cache — fetch from API
+                setLoading(true);
+                fetch(`/api/demo?username=${encodeURIComponent(dev.username)}`)
+                  .then(r => r.ok ? r.json() : null)
+                  .then(json => { if (json) setData(json); })
+                  .finally(() => setLoading(false));
+              }
+            });
+        }
+      },
+      { rootMargin: "100px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [dev.username]);
 
   const currentAge = new Date().getFullYear() - dev.birthYear;
@@ -359,34 +378,24 @@ function FamousDevCard({
       )}
       <Link href={`/demo?username=${encodeURIComponent(dev.username)}`} className="flex flex-col gap-3 cursor-pointer">
         {data ? (
-          <DemoMiniGrid
-            data={data}
-            birthYear={dev.birthYear}
-            expectedAge={dev.expectedAge}
-            showStats
-          />
+          <div className="animate-fade-in">
+            <DemoMiniGrid
+              data={data}
+              birthYear={dev.birthYear}
+              expectedAge={dev.expectedAge}
+              showStats
+            />
+          </div>
         ) : (
           <div className="animate-pulse">
-            <svg viewBox={`0 0 ${52 * 2.5} ${dev.expectedAge * 2.5}`} className="w-full h-auto">
-              {Array.from({ length: dev.expectedAge }, (_, y) =>
-                Array.from({ length: 52 }, (_, x) => (
-                  <rect
-                    key={`${y}-${x}`}
-                    x={x * 2.5}
-                    y={y * 2.5}
-                    width={2}
-                    height={2}
-                    rx={0.5}
-                    fill="#d0d7de"
-                    className="dark:fill-[#21262d]"
-                  />
-                ))
-              )}
-            </svg>
+            <div
+              className="w-full rounded bg-muted"
+              style={{ aspectRatio: `${52} / ${dev.expectedAge}` }}
+            />
             <div className="flex items-center gap-3 mt-2">
-              <div className="h-2.5 w-16 rounded bg-[#d0d7de] dark:bg-[#21262d]" />
-              <div className="h-2.5 w-12 rounded bg-[#d0d7de] dark:bg-[#21262d]" />
-              <div className="h-2.5 w-14 rounded bg-[#d0d7de] dark:bg-[#21262d]" />
+              <div className="h-2.5 w-16 rounded bg-muted" />
+              <div className="h-2.5 w-12 rounded bg-muted" />
+              <div className="h-2.5 w-14 rounded bg-muted" />
             </div>
           </div>
         )}
@@ -487,8 +496,10 @@ function FamousDevsSection() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredDevs.map((dev) => (
-          <FamousDevCard key={dev.username} dev={dev} />
+        {filteredDevs.map((dev, i) => (
+          <div key={dev.username} className="animate-fade-in" style={{ animationDelay: `${i * 50}ms` }}>
+            <FamousDevCard dev={dev} />
+          </div>
         ))}
       </div>
       <ColorLegend />
