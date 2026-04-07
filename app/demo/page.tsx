@@ -239,10 +239,21 @@ function DemoPageContent() {
                 <h1 className="text-2xl font-bold tracking-tight text-foreground">
                   {knownDev?.label || data.username}
                 </h1>
-                <p className="text-sm text-muted-foreground">
-                  {knownDev ? `${knownDev.country} · ${age} ${td("yearsOld")} · ` : ""}
-                  {td("githubSince")} {new Date(data.createdAt).getFullYear()} · {td("lifeExpectancy")}: {expectedAge} {td("yearsOld")}
-                </p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <a
+                    href={`https://github.com/${data.username}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    @{data.username}
+                  </a>
+                  <span className="text-muted-foreground/40">·</span>
+                  <span className="text-sm text-muted-foreground">
+                    {knownDev ? `${knownDev.country} · ${age} ${td("yearsOld")} · ` : ""}
+                    {td("githubSince")} {new Date(data.createdAt).getFullYear()} · {td("lifeExpectancy")}: {expectedAge} {td("yearsOld")}
+                  </span>
+                </div>
               </div>
             </div>
 
