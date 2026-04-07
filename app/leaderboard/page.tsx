@@ -247,24 +247,12 @@ function LeaderboardRow({
         <span className="text-xs text-muted-foreground">@{entry.username}</span>
       </div>
 
-      {/* Stats */}
-      <div className="hidden sm:grid grid-cols-4 gap-6 text-right text-xs tabular-nums shrink-0">
-        <div className="w-16">
-          <div className="text-muted-foreground">{t("totalCommits")}</div>
-          <div>{highlightValue("commits", entry.totalCommits)}</div>
-        </div>
-        <div className="w-14">
-          <div className="text-muted-foreground">{t("activeWeeks")}</div>
-          <div>{highlightValue("active", entry.activeWeeks)}</div>
-        </div>
-        <div className="w-14">
-          <div className="text-muted-foreground">{t("currentStreak")}</div>
-          <div>{highlightValue("streak", entry.currentStreak)}</div>
-        </div>
-        <div className="w-14">
-          <div className="text-muted-foreground">{t("longestStreak")}</div>
-          <div>{highlightValue("best", entry.longestStreak)}</div>
-        </div>
+      {/* Stats — labels are in table header */}
+      <div className="hidden sm:grid grid-cols-4 gap-6 text-right text-sm tabular-nums shrink-0">
+        <div className="w-16">{highlightValue("commits", entry.totalCommits)}</div>
+        <div className="w-16">{highlightValue("active", entry.activeWeeks)}</div>
+        <div className="w-16">{highlightValue("streak", entry.currentStreak)}</div>
+        <div className="w-16">{highlightValue("best", entry.longestStreak)}</div>
       </div>
 
       {/* Mobile stats — only show sorted metric */}
@@ -417,23 +405,6 @@ export default function LeaderboardPage() {
           <h1 className="text-2xl font-bold tracking-tight">{t("title")}</h1>
         </div>
 
-        {/* Sort controls */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-muted-foreground mr-1">{t("sortBy")}:</span>
-          <SortButton sortKey="commits" currentSort={sortKey} onSort={handleSort} icon={Zap}>
-            {t("totalCommits")} {sortKey === "commits" ? (sortAsc ? "↑" : "↓") : ""}
-          </SortButton>
-          <SortButton sortKey="active" currentSort={sortKey} onSort={handleSort} icon={Calendar}>
-            {t("activeWeeks")} {sortKey === "active" ? (sortAsc ? "↑" : "↓") : ""}
-          </SortButton>
-          <SortButton sortKey="streak" currentSort={sortKey} onSort={handleSort} icon={Flame}>
-            {t("currentStreak")} {sortKey === "streak" ? (sortAsc ? "↑" : "↓") : ""}
-          </SortButton>
-          <SortButton sortKey="best" currentSort={sortKey} onSort={handleSort} icon={Crown}>
-            {t("longestStreak")} {sortKey === "best" ? (sortAsc ? "↑" : "↓") : ""}
-          </SortButton>
-        </div>
-
         {/* Tab switcher */}
         <div className="flex items-center gap-2">
           <button
@@ -462,6 +433,24 @@ export default function LeaderboardPage() {
 
         {/* Table */}
         <div className="rounded-lg border border-border bg-card/50 overflow-hidden divide-y divide-border">
+          {/* Table header with sortable columns */}
+          <div className="flex items-center gap-4 px-4 py-2 bg-muted/30 text-xs text-muted-foreground">
+            <div className="w-8 text-center shrink-0">#</div>
+            <div className="w-8 shrink-0" />
+            <div className="flex-1">{t("username")}</div>
+            <div className="hidden sm:grid grid-cols-4 gap-6 text-right shrink-0">
+              {(["commits", "active", "streak", "best"] as SortKey[]).map(key => (
+                <button
+                  key={key}
+                  onClick={() => handleSort(key)}
+                  className={`w-16 text-right cursor-pointer hover:text-foreground transition-colors ${sortKey === key ? "text-emerald-600 dark:text-emerald-400 font-semibold" : ""}`}
+                >
+                  {t(key === "commits" ? "totalCommits" : key === "active" ? "activeWeeks" : key === "streak" ? "currentStreak" : "longestStreak")}
+                  {sortKey === key ? (sortAsc ? " ↑" : " ↓") : ""}
+                </button>
+              ))}
+            </div>
+          </div>
           {tab === "famous" ? (
             famousLoading ? (
               Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)
