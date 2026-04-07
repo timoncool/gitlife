@@ -159,6 +159,15 @@ export default function DashboardPage() {
       <>
         <Header />
         <main className="flex-1 container mx-auto p-6 flex flex-col space-y-6">
+          {/* Profile skeleton */}
+          <div className="flex items-center gap-4 animate-pulse">
+            <div className="h-14 w-14 rounded-full bg-muted shrink-0" />
+            <div className="space-y-2">
+              <div className="h-6 w-40 bg-muted rounded" />
+              <div className="h-3.5 w-56 bg-muted rounded" />
+            </div>
+          </div>
+
           {/* Progress bar skeleton */}
           <div className="w-full">
             <div className="flex items-center justify-between mb-1.5">
