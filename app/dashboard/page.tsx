@@ -32,7 +32,16 @@ export default function DashboardPage() {
   const [profileLoading, setProfileLoading] = useState(true);
   const [scale, setScale] = useState<GridScale>("weeks");
   const [progressMounted, setProgressMounted] = useState(false);
+  const [showMiniBar, setShowMiniBar] = useState(false);
+  const statsRef = useRef<HTMLDivElement>(null);
   useEffect(() => { requestAnimationFrame(() => setProgressMounted(true)); }, []);
+  // Show compact bar when full stats scroll out of view
+  useEffect(() => {
+    if (!statsRef.current) return;
+    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0 });
+    obs.observe(statsRef.current);
+    return () => obs.disconnect();
+  }, []);
 
   // Redirect to landing if not authenticated
   useEffect(() => {
@@ -184,22 +193,35 @@ export default function DashboardPage() {
     <>
       <Header />
       <main className="flex-1 container mx-auto p-6 flex flex-col space-y-6">
-        {/* Sticky dashboard header */}
-        <div className="sticky top-14 z-40 bg-background/95 backdrop-blur-sm pb-4 -mx-6 px-6 pt-2 border-b border-border/50">
-          {/* Life progress bar */}
-          <div className="w-full mb-4">
-            <div className="flex items-center justify-between text-sm text-muted-foreground mb-1.5">
-              <span>{stats.percentLived}% {t("lifeLivedProgress")}</span>
+        {/* Compact sticky bar — appears when full stats scroll out */}
+        {showMiniBar && (
+          <div className="sticky top-14 z-40 bg-background/95 backdrop-blur-sm -mx-6 px-6 py-2.5 border-b border-border/50">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground tabular-nums">
+              <span className="font-semibold text-foreground">{stats.percentLived}%</span>
+              <div className="h-1.5 bg-muted rounded-full overflow-hidden w-28 shrink-0">
+                <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
+              </div>
               <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} {t("weeksShort")}</span>
-            </div>
-            <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-emerald-500 rounded-full transition-all duration-700"
-                style={{ width: progressMounted ? `${Math.min(stats.percentLived, 100)}%` : "0%" }}
-              />
+              <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks} {t("active")}</span>
             </div>
           </div>
+        )}
 
+        {/* Full stats cards */}
+        <div className="w-full">
+          <div className="flex items-center justify-between text-sm text-muted-foreground mb-1.5">
+            <span>{stats.percentLived}% {t("lifeLivedProgress")}</span>
+            <span>{stats.weeksLived.toLocaleString()} / {stats.weeksTotal.toLocaleString()} {t("weeksShort")}</span>
+          </div>
+          <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden">
+            <div
+              className="h-full bg-emerald-500 rounded-full transition-all duration-700"
+              style={{ width: progressMounted ? `${Math.min(stats.percentLived, 100)}%` : "0%" }}
+            />
+          </div>
+        </div>
+
+        <div ref={statsRef}>
           <StatsPanel stats={stats} scale={scale} githubSince={githubCreatedAt} />
         </div>
 

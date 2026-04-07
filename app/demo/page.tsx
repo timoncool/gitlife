@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback, Suspense } from "react";
+import { useState, useEffect, useMemo, useCallback, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { LifeGrid } from "@/components/life-grid";
@@ -66,6 +66,16 @@ function DemoPageContent() {
   const [data, setData] = useState<DemoData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showMiniBar, setShowMiniBar] = useState(false);
+  const infoRef = useRef<HTMLDivElement>(null);
+
+  // Show compact bar when full info scrolls out
+  useEffect(() => {
+    if (!infoRef.current) return;
+    const obs = new IntersectionObserver(([e]) => setShowMiniBar(!e.isIntersecting), { threshold: 0 });
+    obs.observe(infoRef.current);
+    return () => obs.disconnect();
+  }, [data]);
 
   const fetchDemo = useCallback(async (user: string) => {
     if (!user.trim()) return;
@@ -191,28 +201,30 @@ function DemoPageContent() {
 
         {data && (
           <div className="max-w-6xl mx-auto space-y-6">
-            {/* Sticky mini bar — visible when scrolling past dev info */}
-            <div className="sticky top-14 z-30 bg-background/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border/50">
-              <div className="flex items-center gap-3 flex-wrap">
-                {data.avatarUrl && (
-                  <img src={data.avatarUrl} alt="" className="h-6 w-6 rounded-full shrink-0" />
-                )}
-                <span className="text-sm font-medium truncate">{knownDev?.label || data.username}</span>
-                <div className="h-1 bg-muted rounded-full overflow-hidden w-24 shrink-0">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
-                </div>
-                <div className="flex items-center gap-3 text-[10px] font-mono text-muted-foreground tabular-nums">
-                  <span>{stats.percentLived}%</span>
-                  <span>{stats.weeksLived.toLocaleString()}/{stats.weeksTotal.toLocaleString()}</span>
-                  <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span>
-                  <span>🔥{stats.currentStreak}</span>
-                  <span>⭐{stats.longestStreak}</span>
+            {/* Sticky compact bar — only visible when full stats scroll out */}
+            {showMiniBar && (
+              <div className="sticky top-14 z-30 bg-background/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border/50">
+                <div className="flex items-center gap-3">
+                  {data.avatarUrl && (
+                    <img src={data.avatarUrl} alt="" className="h-7 w-7 rounded-full shrink-0" />
+                  )}
+                  <span className="text-sm font-semibold truncate">{knownDev?.label || data.username}</span>
+                  <div className="flex items-center gap-3 ml-auto text-xs text-muted-foreground tabular-nums shrink-0">
+                    <span className="font-semibold text-foreground text-sm">{stats.percentLived}%</span>
+                    <div className="h-1.5 bg-muted rounded-full overflow-hidden w-20">
+                      <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.percentLived}%` }} />
+                    </div>
+                    <span>{stats.weeksLived.toLocaleString()}/{stats.weeksTotal.toLocaleString()}</span>
+                    <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks} active</span>
+                    <span>{stats.currentStreak}w streak</span>
+                    <span>{stats.longestStreak}w best</span>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Dev info */}
-            <div className="flex items-center gap-4">
+            {/* Dev info — observed for sticky bar visibility */}
+            <div ref={infoRef} className="flex items-center gap-4">
               {data.avatarUrl && (
                 <img
                   src={data.avatarUrl}
