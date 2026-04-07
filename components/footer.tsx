@@ -86,7 +86,7 @@ export function Footer() {
           <Link href="/dashboard" className="hover:text-foreground transition-colors">{t("dashboard")}</Link>
           <Link href="/leaderboard" className="hover:text-foreground transition-colors">{t("leaderboard")}</Link>
           <Link href="/settings" className="hover:text-foreground transition-colors">{t("settings")}</Link>
-          <a href="https://github.com/timoncool/commit-your-life" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
+          <a href="https://github.com/timoncool/gitlife" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
         </div>
 
         <div className="flex items-center justify-between text-xs text-muted-foreground/60">
