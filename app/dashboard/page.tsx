@@ -35,14 +35,22 @@ export default function DashboardPage() {
   const [showMiniBar, setShowMiniBar] = useState(false);
   const statsRef = useRef<HTMLDivElement>(null);
   useEffect(() => { requestAnimationFrame(() => setProgressMounted(true)); }, []);
-  // Show compact bar based on scroll position
+  // Show compact bar based on scroll position — rAF for smooth updates
   useEffect(() => {
+    let ticking = false;
     function handleScroll() {
-      if (!statsRef.current) return;
-      const rect = statsRef.current.getBoundingClientRect();
-      setShowMiniBar(rect.bottom < 60);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        if (statsRef.current) {
+          const rect = statsRef.current.getBoundingClientRect();
+          setShowMiniBar(rect.bottom < 56);
+        }
+        ticking = false;
+      });
     }
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

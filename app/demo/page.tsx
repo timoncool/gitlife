@@ -69,14 +69,22 @@ function DemoPageContent() {
   const [showMiniBar, setShowMiniBar] = useState(false);
   const infoRef = useRef<HTMLDivElement>(null);
 
-  // Show compact bar based on scroll position
+  // Show compact bar based on scroll position — using rAF for smooth updates
   useEffect(() => {
+    let ticking = false;
     function handleScroll() {
-      if (!infoRef.current) return;
-      const rect = infoRef.current.getBoundingClientRect();
-      setShowMiniBar(rect.bottom < 60);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        if (infoRef.current) {
+          const rect = infoRef.current.getBoundingClientRect();
+          setShowMiniBar(rect.bottom < 56);
+        }
+        ticking = false;
+      });
     }
     window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll(); // check initial state
     return () => window.removeEventListener("scroll", handleScroll);
   }, [data]);
 
