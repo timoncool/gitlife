@@ -232,8 +232,8 @@ function DemoPageContent() {
                     </div>
                     <span>{stats.weeksLived.toLocaleString()}/{stats.weeksTotal.toLocaleString()}</span>
                     <span className="text-emerald-600 dark:text-emerald-400">{stats.activeWeeks}</span>
-                    <span>{stats.currentStreak} {td("week")}</span>
-                    <span>{stats.longestStreak} {td("week")}</span>
+                    <span>{stats.currentStreak} {td("weeks")}</span>
+                    <span>{stats.longestStreak} {td("weeks")}</span>
                   </div>
                 </div>
             </div>
