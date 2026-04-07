@@ -213,8 +213,9 @@ function DemoPageContent() {
         {data && (
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Sticky compact bar — only visible when full stats scroll out */}
-            {showMiniBar && (
-              <div className="sticky top-14 z-30 bg-background/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border/50">
+            <div
+              className={`sticky top-14 z-30 bg-background/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}
+            >
                 <div className="flex items-center gap-3">
                   {data.avatarUrl && (
                     <img src={data.avatarUrl} alt="" className="h-7 w-7 rounded-full shrink-0" />
@@ -231,8 +232,7 @@ function DemoPageContent() {
                     <span>{stats.longestStreak}w best</span>
                   </div>
                 </div>
-              </div>
-            )}
+            </div>
 
             {/* Dev info — observed for sticky bar visibility */}
             <div ref={infoRef} className="flex items-center gap-4">
