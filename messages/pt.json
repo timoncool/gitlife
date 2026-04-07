@@ -277,7 +277,7 @@
     "dataP2": "A calculadora de expectativa de vida usa 21 fatores de estudos epidemiologicos. Cada fator tem link para seu DOI — um link permanente para o artigo publicado. Voce pode verificar cada numero.",
     "dataP3": "A expectativa de vida base por pais vem dos dados do Banco Mundial (217 paises).",
     "privacyTitle": "Privacidade",
-    "privacyP1": "Sem analytics. Sem anuncios. Sem pixels de rastreamento. Seus dados de saude ficam no banco de dados do seu navegador e nunca saem do seu dispositivo.",
+    "privacyP1": "Sem analytics. Sem anuncios. Sem pixels de rastreamento. Sem login, nada e salvo. Entre com GitHub para salvar seu perfil e participar do ranking.",
     "privacyP2": "O codigo e licenciado sob MIT e publico no GitHub. Voce pode ler exatamente o que ele faz.",
     "techTitle": "Stack tecnologico",
     "techP1": "Next.js 16 (App Router), Better Auth (GitHub OAuth), Drizzle ORM, Neon Postgres, shadcn/ui v4, Tailwind CSS v4, next-intl.",

@@ -277,7 +277,7 @@
     "dataP2": "The life expectancy calculator uses 21 factors from epidemiological studies. Every factor links to its DOI — a permanent link to the published paper. You can verify every number.",
     "dataP3": "Country-level baseline life expectancy comes from World Bank data (217 countries).",
     "privacyTitle": "Privacy",
-    "privacyP1": "No analytics. No ads. No tracking pixels. Your health data is stored in your browser's database and never leaves your device.",
+    "privacyP1": "No analytics. No ads. No tracking pixels. Without sign-in, nothing is stored. Sign in with GitHub to save your profile and join the leaderboard.",
     "privacyP2": "The code is MIT licensed and public on GitHub. You can read exactly what it does.",
     "techTitle": "Tech stack",
     "techP1": "Next.js 16 (App Router), Better Auth (GitHub OAuth), Drizzle ORM, Neon Postgres, shadcn/ui v4, Tailwind CSS v4, next-intl.",

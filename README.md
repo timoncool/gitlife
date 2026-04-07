@@ -42,7 +42,7 @@ Enter any GitHub username in the search bar — no sign-up needed. Sign in with 
 - **Leaderboard** — Community rankings + famous devs. Sort by commits, streaks, active weeks.
 - **7 Languages** — en, zh, es, pt, ru, de, ja.
 - **Dark/Light/System** theme.
-- **No tracking, no ads.** Your health data stays in your browser.
+- **No tracking, no ads.** Sign in to save your profile and join the leaderboard.
 
 ## Tech Stack
 

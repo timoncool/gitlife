@@ -277,7 +277,7 @@
     "dataP2": "预期寿命计算器使用来自流行病学研究的 21 项因素。每项因素都链接到其 DOI——已发表论文的永久链接。你可以验证每一个数字。",
     "dataP3": "国家层面的基准预期寿命来自世界银行数据（217 个国家）。",
     "privacyTitle": "隐私",
-    "privacyP1": "无分析。无广告。无追踪像素。你的健康数据存储在浏览器数据库中，永远不会离开你的设备。",
+    "privacyP1": "无分析。无广告。无追踪像素。未登录时不保存任何数据。通过GitHub登录以保存个人资料并加入排行榜。",
     "privacyP2": "代码采用 MIT 许可，公开在 GitHub 上。你可以准确地阅读它的每一行。",
     "techTitle": "技术栈",
     "techP1": "Next.js 16（App Router）、Better Auth（GitHub OAuth）、Drizzle ORM、Neon Postgres、shadcn/ui v4、Tailwind CSS v4、next-intl。",

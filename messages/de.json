@@ -277,7 +277,7 @@
     "dataP2": "Der Lebenserwartungsrechner verwendet 21 Faktoren aus epidemiologischen Studien. Jeder Faktor verlinkt auf seinen DOI — einen permanenten Link zur veroeffentlichten Studie. Du kannst jede Zahl ueberpruefen.",
     "dataP3": "Die laenderspezifische Basis-Lebenserwartung stammt aus Weltbank-Daten (217 Laender).",
     "privacyTitle": "Datenschutz",
-    "privacyP1": "Keine Analysen. Keine Werbung. Keine Tracking-Pixel. Deine Gesundheitsdaten werden in der Datenbank deines Browsers gespeichert und verlassen nie dein Geraet.",
+    "privacyP1": "Keine Analysen. Keine Werbung. Keine Tracking-Pixel. Ohne Anmeldung wird nichts gespeichert. Melde dich mit GitHub an, um dein Profil zu speichern und am Ranking teilzunehmen.",
     "privacyP2": "Der Code ist MIT-lizenziert und oeffentlich auf GitHub. Du kannst genau nachlesen, was er tut.",
     "techTitle": "Tech-Stack",
     "techP1": "Next.js 16 (App Router), Better Auth (GitHub OAuth), Drizzle ORM, Neon Postgres, shadcn/ui v4, Tailwind CSS v4, next-intl.",
