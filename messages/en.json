@@ -112,6 +112,7 @@
     "customize": "Customize your experience"
   },
   "header": {
+    "home": "Home",
     "dashboard": "Dashboard",
     "leaderboard": "Leaderboard",
     "settings": "Settings",

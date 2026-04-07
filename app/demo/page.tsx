@@ -8,7 +8,8 @@ import { StickyStatsBar } from "@/components/sticky-stats-bar";
 import { Header } from "@/components/header";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowRight, Search, MapPin } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search } from "lucide-react";
+import * as Flags from "country-flag-icons/react/3x2";
 import Link from "next/link";
 import {
   generateGridCells,
@@ -19,6 +20,22 @@ import { StatsPanel } from "@/components/stats-panel";
 import type { ContributionWeek, YearContribution } from "@/lib/types";
 
 const DEFAULT_EXPECTED_AGE = 80;
+
+const COUNTRY_TO_ISO2: Record<string, string> = {
+  "USA": "US", "UK": "GB", "China": "CN", "France": "FR", "Italy": "IT",
+  "Germany": "DE", "Canada": "CA", "Norway": "NO", "Bulgaria": "BG",
+  "China/USA": "CN", "UK/USA": "GB", "Russia/UK": "RU", "Finland/USA": "FI",
+  "Slovakia/USA": "SK", "France/USA": "FR", "Argentina/USA": "AR",
+  "Norway/Thailand": "NO", "Netherlands/USA": "NL",
+};
+
+function CountryFlag({ country }: { country: string }) {
+  const iso2 = COUNTRY_TO_ISO2[country];
+  if (!iso2) return <span className="text-xs">{country}</span>;
+  const Flag = (Flags as Record<string, React.ComponentType<{ className?: string }>>)[iso2];
+  if (!Flag) return <span className="text-xs">{country}</span>;
+  return <Flag className="h-3 w-4 inline-block" />;
+}
 
 // Known dev data — used when viewing a famous dev's grid
 const KNOWN_DEVS: Record<string, { birthYear: number; country: string; expectedAge: number; label: string }> = {
@@ -267,8 +284,8 @@ function DemoPageContent() {
                   </a>
                   {knownDev && (
                     <>
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5" />
+                      <span className="flex items-center gap-1.5">
+                        <CountryFlag country={knownDev.country} />
                         {knownDev.country}
                       </span>
                       <span>{age} {td("yearsOld")}</span>
