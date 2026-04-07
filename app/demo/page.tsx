@@ -142,7 +142,6 @@ function DemoPageContent() {
     <div className="min-h-screen flex flex-col">
       <Header />
 
-      {/* Back link + Search bar */}
       <div className="container mx-auto px-4 py-8">
         <Link
           href="/"
@@ -151,30 +150,6 @@ function DemoPageContent() {
           <ArrowLeft className="h-4 w-4" />
           {td("backToHome")}
         </Link>
-        <form
-          onSubmit={handleSubmit}
-          className="flex gap-3 max-w-md mx-auto mb-8"
-        >
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder={t("demoPlaceholder")}
-              className="pl-9"
-            />
-          </div>
-          <Button type="submit" disabled={loading || !username.trim()}>
-            {loading ? (
-              <span className="animate-spin h-4 w-4 border-2 border-current border-t-transparent rounded-full" />
-            ) : (
-              <>
-                {t("demoButton")}
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </form>
 
         {loading && (
           <div className="text-center text-muted-foreground animate-pulse py-8">
