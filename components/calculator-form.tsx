@@ -710,7 +710,7 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
           {country && sex && (
             <p className="text-xs text-muted-foreground">
               {tc("baselineAge")}: <span className="font-semibold">{baseline}</span>
-              <span className="text-muted-foreground/60"> (WHO / World Bank)</span>
+              <a href="https://data.worldbank.org/indicator/SP.DYN.LE00.IN" target="_blank" rel="noopener noreferrer" className="text-muted-foreground/60 hover:text-primary transition-colors"> (WHO / World Bank ↗)</a>
             </p>
           )}
         </div>
@@ -788,7 +788,8 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
             <Popover>
               <PopoverTrigger render={<button type="button" className="text-muted-foreground hover:text-foreground"><Info className="h-3.5 w-3.5" /></button>} />
               <PopoverContent className="text-xs max-w-[300px]" side="top">
-                <span>WHO Global Health Estimates 2021 — Heart disease is #1 cause of death globally. Active cancer reduces lifespan 5-10 years.</span>
+                <span>WHO Global Health Estimates 2021 — Heart disease is #1 cause of death globally. Active cancer reduces lifespan 5-10 years.</span>{" "}
+                <a href="https://www.who.int/data/gho/data/themes/mortality-and-global-health-estimates" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">WHO</a>
               </PopoverContent>
             </Popover>
           </div>
@@ -829,15 +830,6 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
   function renderFamilySection() {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-1.5 mb-1">
-          <Popover>
-            <PopoverTrigger render={<button type="button" className="text-muted-foreground hover:text-foreground"><Info className="h-3.5 w-3.5" /></button>} />
-            <PopoverContent className="text-xs max-w-[300px]" side="top">
-              <span>Murabito J. et al., J Gerontol 2012 — Parental longevity is associated with lower all-cause mortality in offspring. Having a parent who lived to 85+ adds ~2.5 years.</span>{" "}
-              <a href="https://doi.org/10.1093/gerona/gls147" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">DOI</a>
-            </PopoverContent>
-          </Popover>
-        </div>
         <label className="flex items-center gap-3 cursor-pointer p-4 rounded-lg border hover:bg-muted/50 transition-colors">
           <input
             type="checkbox"
@@ -846,6 +838,13 @@ export function CalculatorForm({ mode = "wizard", initialValues, initialBirthDat
             className="h-5 w-5 rounded border-input"
           />
           <span className="text-base">{tc("familyLongevity")}</span>
+          <Popover>
+            <PopoverTrigger render={<button type="button" className="text-muted-foreground hover:text-foreground ml-auto" onClick={(e) => e.preventDefault()}><Info className="h-3.5 w-3.5" /></button>} />
+            <PopoverContent className="text-xs max-w-[300px]" side="top">
+              <span>Murabito J. et al., J Gerontol 2012 — Having a parent who lived to 85+ adds ~2.5 years.</span>{" "}
+              <a href="https://doi.org/10.1093/gerona/gls147" target="_blank" rel="noopener noreferrer" className="text-primary underline hover:text-primary/80">DOI</a>
+            </PopoverContent>
+          </Popover>
         </label>
       </div>
     );

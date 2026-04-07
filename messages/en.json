@@ -165,7 +165,7 @@
     "back": "Back",
     "stepOf": "Step {current} of {total}",
     "calculatedAge": "Calculated life expectancy",
-    "baselineAge": "Baseline for your country",
+    "baselineAge": "Baseline life expectancy for your country",
     "totalImpact": "Total impact of your factors",
     "positiveFactors": "Positive factors",
     "negativeFactors": "Risk factors",
