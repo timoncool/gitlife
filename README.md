@@ -5,7 +5,7 @@
 <h1 align="center">GitLife</h1>
 
 <p align="center">
-  <strong>Your life is ~4,000 weeks. See them all in one grid.</strong>
+  <strong>Your life as a GitHub contribution graph.</strong>
 </p>
 
 <p align="center">
@@ -23,26 +23,32 @@
   <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js" />
 </p>
 
+<p align="center">
+  <a href="https://star-history.com/#timoncool/gitlife&Date">
+    <img src="https://api.star-history.com/svg?repos=timoncool/gitlife&type=Date" width="600" alt="Star History" />
+  </a>
+</p>
+
 ---
 
 ## What is this?
 
-Every human life is roughly **4,000 weeks**. GitLife turns that number into a visual grid — one cell per week, from birth to estimated death. Your GitHub contributions are overlaid on top, so you can see which weeks you shipped code and which ones you didn't.
+The "life in weeks" idea has been around for a while — your entire life fits into a grid of ~4,000 cells. GitLife overlays real GitHub commit history on top.
 
-It's inspired by [Tim Urban's "Your Life in Weeks"](https://waitbutwhy.com/2014/05/life-weeks.html) and the GitHub contribution graph. The result is a sobering, beautiful, and surprisingly motivating way to look at your time on earth.
+Enter any GitHub username in the search bar — no sign-up needed. Sign in with GitHub to include your private commits. The life expectancy calculator uses real country baselines from World Bank (217 countries) and 21 personal health factors from peer-reviewed studies.
 
 > **Try it now:** [gitlifeio.vercel.app](https://gitlifeio.vercel.app)
 
 ## Features
 
 - **Life Grid** — ~4,000 cells from birth to expected death. Weeks/months/years scale selector.
-- **GitHub Activity Overlay** — Your real commit history mapped onto your life timeline.
-- **Life Expectancy Calculator** — 21 science-backed health factors with DOI-linked sources.
-- **Compare With Legends** — 30 famous developers (Torvalds, Karpathy, Evan You, Dan Abramov...) with real GitHub data.
-- **Leaderboard** — Community rankings + famous devs comparison. Sort by commits, streaks, active weeks.
-- **7 Languages** — English, Chinese, Spanish, Portuguese, Russian, German, Japanese.
-- **Dark/Light/System** theme with premium design.
-- **Privacy-first** — No tracking, no ads. Your data stays yours.
+- **GitHub Commits** — Your real commit history mapped onto your life timeline.
+- **Life Expectancy Calculator** — World Bank baseline (217 countries) + 21 health factors with DOI-linked sources.
+- **30 Famous Developers** — Torvalds, Karpathy, Evan You, Dan Abramov and 26 others with real GitHub data.
+- **Leaderboard** — Community rankings + famous devs. Sort by commits, streaks, active weeks.
+- **7 Languages** — en, zh, es, pt, ru, de, ja.
+- **Dark/Light/System** theme.
+- **No tracking, no ads.** Your health data stays in your browser.
 
 ## Tech Stack
 
@@ -56,14 +62,6 @@ It's inspired by [Tim Urban's "Your Life in Weeks"](https://waitbutwhy.com/2014/
 | Deploy | [Vercel](https://vercel.com) |
 
 ## Getting Started
-
-### Prerequisites
-
-- Node.js 20+
-- A [Neon](https://neon.tech) database (free tier works)
-- A [GitHub OAuth App](https://github.com/settings/developers)
-
-### Setup
 
 ```bash
 git clone https://github.com/timoncool/gitlife.git
@@ -83,27 +81,12 @@ GITHUB_CLIENT_SECRET=your-client-secret
 GITHUB_PAT=ghp_...  # optional, for higher API limits
 ```
 
-Run database migrations:
-
 ```bash
 npx drizzle-kit push
-```
-
-Start the dev server:
-
-```bash
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
-
-## How It Works
-
-1. **Sign in with GitHub** — We fetch your public contribution history via the GitHub API.
-2. **Enter your birth date** — The grid calculates your total weeks from birth to estimated death.
-3. **See your life** — Green cells = weeks with commits. Gray = lived but no code. Empty = your future.
-4. **Fine-tune with the calculator** — 21 health factors adjust your life expectancy estimate. Every factor links to a peer-reviewed study.
-5. **Compare** — Browse grids of 30 famous developers. See how Torvalds' 55 years of coding compares to your journey.
 
 ## Famous Developers Included
 
@@ -111,28 +94,30 @@ Linus Torvalds (Linux) · Evan You (Vue.js) · Dan Abramov (React) · Andrej Kar
 
 ## Contributing
 
-Contributions are welcome! Here's how you can help:
+The famous devs list, translations, and health factors are all plain JSON. Fork, edit, PR. The codebase is standard Next.js + TypeScript.
 
-- **Translations** — Add or improve translations in the `messages/` directory.
-- **Famous Devs** — Know a developer who should be included? Open an issue with their public birth year and GitHub username.
-- **Bug Fixes** — Check the issues tab for known bugs.
-- **Features** — Ideas? Open a discussion first.
+## Other Open Source by [@timoncool](https://github.com/timoncool)
 
-```bash
-# Fork, clone, branch
-git checkout -b feature/my-feature
-npm run dev
-# Make changes, commit, push, open PR
-```
+| Project | Description |
+|---------|------------|
+| [videosos](https://github.com/timoncool/videosos) | AI video production in the browser (1.1K+ stars) |
+| [Qwen3-TTS_portable_rus](https://github.com/timoncool/Qwen3-TTS_portable_rus) | Portable TTS with Qwen3 voice cloning |
+| [Bulka](https://github.com/timoncool/Bulka) | Telegram bot framework |
+| [VibeVoice_ASR_portable_ru](https://github.com/timoncool/VibeVoice_ASR_portable_ru) | Portable speech recognition |
+| [telegram-api-mcp](https://github.com/timoncool/telegram-api-mcp) | Full Telegram Bot API as MCP server |
+| [civitai-mcp-ultimate](https://github.com/timoncool/civitai-mcp-ultimate) | Civitai API as MCP server |
+| [SuperCaption_Qwen3-VL](https://github.com/timoncool/SuperCaption_Qwen3-VL) | Image captioning with Qwen3 Vision |
+| [LavaSR_portable_ru](https://github.com/timoncool/LavaSR_portable_ru) | Portable audio enhancement |
+| [trail-spec](https://github.com/timoncool/trail-spec) | TRAIL — cross-MCP content tracking protocol |
 
 ## License
 
-MIT - do whatever you want with it.
+MIT
 
 ---
 
 <p align="center">
   <a href="https://gitlifeio.vercel.app">
-    <strong>See your life grid &rarr;</strong>
+    <strong>Try it &rarr;</strong>
   </a>
 </p>
