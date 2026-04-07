@@ -6,6 +6,7 @@ import { ThemeProvider } from "next-themes";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "sonner";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { Footer } from "@/components/footer";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -48,6 +49,7 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <TooltipProvider>
               {children}
+              <Footer />
               <Toaster richColors position="bottom-right" />
               <ScrollToTop />
             </TooltipProvider>

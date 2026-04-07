@@ -555,18 +555,6 @@ export default function LandingPage() {
         <FamousDevsSection />
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="container mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-sm text-muted-foreground">
-            {t("footerText")}
-          </span>
-          <div className="flex items-center gap-3">
-            <LanguageFooterSelector />
-            <ThemeToggle />
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
