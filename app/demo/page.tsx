@@ -76,6 +76,8 @@ interface DemoData {
   createdAt: string;
   avatarUrl?: string;
   contributions: Record<number, ContributionWeek[]>;
+  birthDate?: string;
+  expectedAge?: number;
 }
 
 function flattenContributions(
@@ -166,8 +168,10 @@ function DemoPageContent() {
   }, [initialUsername]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const knownDev = KNOWN_DEVS[initialUsername] || null;
-  const birthYear = knownDev?.birthYear ?? (data ? new Date(data.createdAt).getFullYear() - 25 : 1990);
-  const expectedAge = knownDev?.expectedAge ?? DEFAULT_EXPECTED_AGE;
+  const birthYear = knownDev?.birthYear
+    ?? (data?.birthDate ? new Date(data.birthDate).getFullYear() : null)
+    ?? (data ? new Date(data.createdAt).getFullYear() - 25 : 1990);
+  const expectedAge = knownDev?.expectedAge ?? data?.expectedAge ?? DEFAULT_EXPECTED_AGE;
 
   const birthDate = useMemo(() => new Date(birthYear, 0, 1), [birthYear]);
   const githubCreated = useMemo(

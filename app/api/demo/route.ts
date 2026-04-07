@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getWeekNumber } from "@/lib/grid-utils";
+import { db } from "@/lib/db";
+import { userProfiles } from "@/lib/schema";
+import { eq } from "drizzle-orm";
 import type { ContributionWeek } from "@/lib/types";
 
 // Fetch public user profile — NO auth needed
@@ -106,12 +109,31 @@ export async function GET(request: NextRequest) {
     const contributions = await fetchPublicContributions(username, joinYear);
     const years = Object.keys(contributions).map(Number).sort();
 
+    // Check if this user is registered — pull their real birthDate and expectedAge
+    let birthDate: string | null = null;
+    let expectedAge: number | null = null;
+    try {
+      const [saved] = await db
+        .select({ birthDate: userProfiles.birthDate, expectedAge: userProfiles.expectedAge })
+        .from(userProfiles)
+        .where(eq(userProfiles.githubUsername, username))
+        .limit(1);
+      if (saved) {
+        birthDate = saved.birthDate;
+        expectedAge = saved.expectedAge;
+      }
+    } catch {
+      // DB unavailable — not critical, continue without saved data
+    }
+
     return NextResponse.json({
       username,
       createdAt,
       avatarUrl: profile.avatar_url,
       years,
       contributions,
+      ...(birthDate && { birthDate }),
+      ...(expectedAge && { expectedAge }),
     });
   } catch (error) {
     console.error("Demo API error:", error);
