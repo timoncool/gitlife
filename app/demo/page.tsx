@@ -214,7 +214,7 @@ function DemoPageContent() {
           <div className="max-w-6xl mx-auto space-y-6">
             {/* Sticky compact bar — only visible when full stats scroll out */}
             <div
-              className={`sticky top-14 z-30 bg-background/95 backdrop-blur-sm py-2 -mx-4 px-4 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}
+              className={`fixed top-14 left-0 right-0 z-30 bg-background/95 backdrop-blur-sm px-4 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 py-2" : "opacity-0 py-0 pointer-events-none -translate-y-full"}`}
             >
                 <div className="flex items-center gap-3">
                   {data.avatarUrl && (

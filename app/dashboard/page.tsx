@@ -206,7 +206,7 @@ export default function DashboardPage() {
       <main className="flex-1 container mx-auto p-6 flex flex-col space-y-6">
         {/* Compact sticky bar — appears when full stats scroll out */}
         <div
-          className={`sticky top-14 z-40 bg-background/95 backdrop-blur-sm -mx-6 px-6 py-2.5 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"}`}
+          className={`fixed top-14 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm px-6 border-b border-border/50 transition-all duration-300 ${showMiniBar ? "opacity-100 py-2.5" : "opacity-0 py-0 pointer-events-none -translate-y-full"}`}
         >
             <div className="flex items-center gap-4 text-sm text-muted-foreground tabular-nums">
               <span className="font-semibold text-foreground">{stats.percentLived}%</span>
