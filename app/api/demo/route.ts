@@ -113,10 +113,11 @@ export async function GET(request: NextRequest) {
     let birthDate: string | null = null;
     let expectedAge: number | null = null;
     try {
+      const githubId = String(profile.id);
       const [saved] = await db
         .select({ birthDate: userProfiles.birthDate, expectedAge: userProfiles.expectedAge })
         .from(userProfiles)
-        .where(eq(userProfiles.githubUsername, username))
+        .where(eq(userProfiles.githubId, githubId))
         .limit(1);
       if (saved) {
         birthDate = saved.birthDate;
