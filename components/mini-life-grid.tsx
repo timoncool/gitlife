@@ -4,9 +4,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import type { CellData, CellState } from "@/lib/types";
 
 const COLORS_DARK: Record<CellState, string> = {
-  future: "#0d1117",
-  "pre-github": "#0d1117",
-  "no-commits": "#21262d",
+  future: "#161b22",
+  "pre-github": "#161b22",
+  "no-commits": "#2d333b",
   "level-1": "#0e4429",
   "level-2": "#006d32",
   "level-3": "#26a641",
