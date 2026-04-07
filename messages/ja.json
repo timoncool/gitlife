@@ -106,8 +106,22 @@
   },
   "header": {
     "dashboard": "ダッシュボード",
+    "leaderboard": "ランキング",
     "settings": "設定",
     "signOut": "サインアウト"
+  },
+  "leaderboard": {
+    "title": "ランキング",
+    "rank": "#",
+    "username": "ユーザー",
+    "totalCommits": "コミット",
+    "activeWeeks": "アクティブ",
+    "currentStreak": "連続",
+    "longestStreak": "最高",
+    "famousDevs": "有名な開発者",
+    "community": "コミュニティ",
+    "you": "あなた",
+    "sortBy": "並び替え"
   },
   "calculator": {
     "sectionBasic": "基本情報",

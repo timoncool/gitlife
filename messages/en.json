@@ -113,8 +113,22 @@
   },
   "header": {
     "dashboard": "Dashboard",
+    "leaderboard": "Leaderboard",
     "settings": "Settings",
     "signOut": "Sign Out"
+  },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "rank": "#",
+    "username": "Username",
+    "totalCommits": "Commits",
+    "activeWeeks": "Active",
+    "currentStreak": "Streak",
+    "longestStreak": "Best",
+    "famousDevs": "Famous Developers",
+    "community": "Community",
+    "you": "You",
+    "sortBy": "Sort by"
   },
   "calculator": {
     "sectionBasic": "Basic Information",

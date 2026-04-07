@@ -113,8 +113,22 @@
   },
   "header": {
     "dashboard": "Дашборд",
+    "leaderboard": "Лидерборд",
     "settings": "Настройки",
     "signOut": "Выйти"
+  },
+  "leaderboard": {
+    "title": "Лидерборд",
+    "rank": "#",
+    "username": "Пользователь",
+    "totalCommits": "Коммиты",
+    "activeWeeks": "Активных",
+    "currentStreak": "Серия",
+    "longestStreak": "Лучшая",
+    "famousDevs": "Известные разработчики",
+    "community": "Сообщество",
+    "you": "Вы",
+    "sortBy": "Сортировка"
   },
   "calculator": {
     "sectionBasic": "Основная информация",

@@ -106,8 +106,22 @@
   },
   "header": {
     "dashboard": "Panel",
+    "leaderboard": "Clasificacion",
     "settings": "Configuracion",
     "signOut": "Cerrar sesion"
+  },
+  "leaderboard": {
+    "title": "Clasificacion",
+    "rank": "#",
+    "username": "Usuario",
+    "totalCommits": "Commits",
+    "activeWeeks": "Activas",
+    "currentStreak": "Racha",
+    "longestStreak": "Mejor",
+    "famousDevs": "Desarrolladores famosos",
+    "community": "Comunidad",
+    "you": "Tu",
+    "sortBy": "Ordenar"
   },
   "calculator": {
     "sectionBasic": "Informacion basica",

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { Menu, LogOut, LayoutDashboard, Settings, Search } from "lucide-react";
+import { Menu, LogOut, LayoutDashboard, Settings, Search, Trophy } from "lucide-react";
 import * as Flags from "country-flag-icons/react/3x2";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -90,6 +90,13 @@ function NavLinks({ className }: { className?: string }) {
       >
         <LayoutDashboard className="h-4 w-4" />
         {t("dashboard")}
+      </Link>
+      <Link
+        href="/leaderboard"
+        className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <Trophy className="h-4 w-4" />
+        {t("leaderboard")}
       </Link>
       <Link
         href="/settings"

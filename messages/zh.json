@@ -106,8 +106,22 @@
   },
   "header": {
     "dashboard": "仪表板",
+    "leaderboard": "排行榜",
     "settings": "设置",
     "signOut": "退出登录"
+  },
+  "leaderboard": {
+    "title": "排行榜",
+    "rank": "#",
+    "username": "用户",
+    "totalCommits": "提交",
+    "activeWeeks": "活跃",
+    "currentStreak": "连续",
+    "longestStreak": "最佳",
+    "famousDevs": "知名开发者",
+    "community": "社区",
+    "you": "你",
+    "sortBy": "排序"
   },
   "calculator": {
     "sectionBasic": "基本信息",

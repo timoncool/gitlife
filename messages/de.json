@@ -106,8 +106,22 @@
   },
   "header": {
     "dashboard": "Dashboard",
+    "leaderboard": "Rangliste",
     "settings": "Einstellungen",
     "signOut": "Abmelden"
+  },
+  "leaderboard": {
+    "title": "Rangliste",
+    "rank": "#",
+    "username": "Benutzer",
+    "totalCommits": "Commits",
+    "activeWeeks": "Aktiv",
+    "currentStreak": "Serie",
+    "longestStreak": "Beste",
+    "famousDevs": "Bekannte Entwickler",
+    "community": "Community",
+    "you": "Du",
+    "sortBy": "Sortieren"
   },
   "calculator": {
     "sectionBasic": "Grundlagen",
