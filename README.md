@@ -23,12 +23,6 @@
   <img src="https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js" alt="Next.js" />
 </p>
 
-<p align="center">
-  <a href="https://star-history.com/#timoncool/gitlife&Date">
-    <img src="https://api.star-history.com/svg?repos=timoncool/gitlife&type=Date" width="600" alt="Star History" />
-  </a>
-</p>
-
 ---
 
 ## What is this?
@@ -110,14 +104,14 @@ The famous devs list, translations, and health factors are all plain JSON. Fork,
 | [LavaSR_portable_ru](https://github.com/timoncool/LavaSR_portable_ru) | Portable audio enhancement |
 | [trail-spec](https://github.com/timoncool/trail-spec) | TRAIL — cross-MCP content tracking protocol |
 
+## Star History
+
+<p align="center">
+  <a href="https://star-history.com/#timoncool/gitlife&Date">
+    <img src="https://api.star-history.com/svg?repos=timoncool/gitlife&type=Date" width="600" alt="Star History" />
+  </a>
+</p>
+
 ## License
 
 MIT
-
----
-
-<p align="center">
-  <a href="https://gitlifeio.vercel.app">
-    <strong>Try it &rarr;</strong>
-  </a>
-</p>
