@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { Menu, LogOut, LayoutDashboard, Settings, Search } from "lucide-react";
@@ -104,14 +104,18 @@ function NavLinks({ className }: { className?: string }) {
 
 function HeaderSearch() {
   const router = useRouter();
-  // Pre-fill from URL if on demo page
-  const [value, setValue] = useState(() => {
-    if (typeof window !== "undefined") {
+  const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+  const [value, setValue] = useState("");
+
+  // Sync with URL on demo page, clear on other pages
+  useEffect(() => {
+    if (window.location.pathname === "/demo") {
       const params = new URLSearchParams(window.location.search);
-      if (window.location.pathname === "/demo") return params.get("username") || "";
+      setValue(params.get("username") || "");
+    } else {
+      setValue("");
     }
-    return "";
-  });
+  }, []);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter" && value.trim()) {
