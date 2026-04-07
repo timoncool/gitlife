@@ -20,7 +20,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Commit Your Life",
+  title: "GitLife",
   description:
     "Visualize your life in weeks. Track habits, set goals, and make every week count.",
 };

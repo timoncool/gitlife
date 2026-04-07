@@ -12,7 +12,7 @@ export function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <Link href="/" className="text-sm font-semibold hover:text-foreground transition-colors">
-              Commit Your Life
+              GitLife
             </Link>
             <span className="text-xs text-muted-foreground">{t("footerText")}</span>
           </div>
