@@ -25,6 +25,16 @@ function calculateStatsFromCache(
     (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime(),
   );
 
+  // Filter to only past (completed) weeks — exclude current and future weeks
+  // so an incomplete current week with 0 commits doesn't break the streak
+  const now = new Date();
+  const currentWeekStart = new Date(now);
+  currentWeekStart.setDate(now.getDate() - now.getDay());
+  currentWeekStart.setHours(0, 0, 0, 0);
+  const pastWeeks = allWeeks.filter(
+    (w) => new Date(w.startDate).getTime() < currentWeekStart.getTime(),
+  );
+
   let totalCommits = 0;
   let activeWeeks = 0;
   let longestStreak = 0;
@@ -34,6 +44,11 @@ function calculateStatsFromCache(
     totalCommits += week.totalCommits;
     if (week.totalCommits > 0) {
       activeWeeks++;
+    }
+  }
+
+  for (const week of pastWeeks) {
+    if (week.totalCommits > 0) {
       tempStreak++;
       longestStreak = Math.max(longestStreak, tempStreak);
     } else {
@@ -41,10 +56,10 @@ function calculateStatsFromCache(
     }
   }
 
-  // Current streak: count backwards from most recent
+  // Current streak: count backwards from most recent completed week
   let currentStreak = 0;
-  for (let i = allWeeks.length - 1; i >= 0; i--) {
-    if (allWeeks[i].totalCommits > 0) {
+  for (let i = pastWeeks.length - 1; i >= 0; i--) {
+    if (pastWeeks[i].totalCommits > 0) {
       currentStreak++;
     } else {
       break;
