@@ -138,8 +138,10 @@ export function calculateStats(cells: CellData[]): GridStats {
   }
 
   // Current streak: count backwards from the most recent past cell
+  // Skip current (incomplete) week if it has no commits yet — stale data shouldn't break streak
   for (let i = pastCells.length - 1; i >= 0; i--) {
     const cell = pastCells[i];
+    if (cell.state === "current" && (!cell.commits || cell.commits === 0)) continue;
     if (cell.commits !== undefined && cell.commits > 0) {
       currentStreak++;
     } else {
