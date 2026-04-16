@@ -104,6 +104,17 @@ The famous devs list, translations, and health factors are all plain JSON. Fork,
 | [LavaSR_portable_ru](https://github.com/timoncool/LavaSR_portable_ru) | Portable audio enhancement |
 | [trail-spec](https://github.com/timoncool/trail-spec) | TRAIL — cross-MCP content tracking protocol |
 
+## Support the Author
+
+I build open-source software and do AI research. Most of what I create is free and available to everyone. Your donations help me keep creating without worrying about where the next meal comes from =)
+
+**[All donation methods](https://github.com/timoncool/ACE-Step-Studio/blob/master/DONATE.md)** | **[dalink.to/nerual_dreming](https://dalink.to/nerual_dreming)** | **[boosty.to/neuro_art](https://boosty.to/neuro_art)**
+
+| BTC | ETH (ERC20) | USDT (TRC20) |
+|:---:|:---:|:---:|
+| `1E7dHL22RpyhJGVpcvKdbyZgksSYkYeEBC` | `0xb5db65adf478983186d4897ba92fe2c25c594a0c` | `TQST9Lp2TjK6FiVkn4fwfGUee7NmkxEE7C` |
+
+
 ## Star History
 
 <p align="center">
